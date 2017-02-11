@@ -8,23 +8,21 @@ public class Window extends JFrame {
 
 	private Game game;
 	private GamePanel gpanel;
-	
-	
-	public Window(Loader loader){
+
+	public Window(Loader loader) {
 		this.setTitle("Choice Game");
-		this.setSize(600, 400); //TODO choose window sizes
+		this.setSize(600, 400); // TODO choose window sizes
 		this.setLocationRelativeTo(null);
 		this.setResizable(false);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-		
-		//this.game = new Game();
-		
+
+		// this.game = new Game();
+
 		this.gpanel = new GamePanel(null);
-		
+
 		this.setContentPane(this.gpanel);
-		
+
 		this.setVisible(true);
 	}
-	
-	
+
 }

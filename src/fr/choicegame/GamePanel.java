@@ -14,12 +14,12 @@ public class GamePanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 
 	private Game game;
-	
-	public GamePanel(Game game){
-		
+
+	public GamePanel(Game game) {
+
 		this.game = game;
-		
-		Timer refresh = new Timer(20, new ActionListener(){
+
+		Timer refresh = new Timer(20, new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				GamePanel.this.repaint();
@@ -28,18 +28,19 @@ public class GamePanel extends JPanel {
 		refresh.start();
 
 	}
-	
+
 	@Override
 	public void paintComponent(Graphics g) {
 		Graphics2D g2 = (Graphics2D) g;
-		if(this.game != null){
+		if (this.game != null) {
 			g2.setColor(Color.BLACK);
-		}else{
+			g2.fillRect(0, 0, this.getWidth(), this.getHeight());
+			// TODO tile displaying
+		} else {
 			g2.setColor(Color.DARK_GRAY);
+			g2.fillRect(0, 0, this.getWidth(), this.getHeight());
 		}
-		g2.fillRect(0, 0, this.getWidth(), this.getHeight());
+
 	}
-	
-	
-	
+
 }
