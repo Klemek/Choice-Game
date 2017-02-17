@@ -2,16 +2,15 @@ package fr.choicegame;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+
 import javax.imageio.ImageIO;
 
 
 public class Loader {
 	
-	public BufferedImage [] resources;
-	public String [] resourcesNames;
-	
-	
-	
+	HashMap<String,BufferedImage> resources = new HashMap<String,BufferedImage>();
+		
 	/**
 	 * load all pictures resources contained in the res folder
 	 * files contained in another folder under /res/ WON'T be loaded
@@ -23,20 +22,14 @@ public class Loader {
 		File folder = new File("src/fr/choicegame/res");
 		File[] listOfFiles = folder.listFiles();
 		
-		resourcesNames = new String [listOfFiles.length];
-		resources = new BufferedImage [listOfFiles.length];
-		
-		int j=0;
-		
 		for (int i = 0; i < listOfFiles.length; i++) {
 		  if (listOfFiles[i].isFile()) {
 			  //ajouter vérification type image
 			  
 			  try{
-				  resourcesNames[j] = listOfFiles[i].getName();
-				  resources[j] = ImageIO.read(listOfFiles[i]);//on peut aussi passer par this.getClass().getResource, à voir comment le .jar se comportera 
+				  resources.put(listOfFiles[i].getName(), ImageIO.read(listOfFiles[i]));
 				  System.out.println("File " + listOfFiles[i].getName() + " loaded");
-				  j++;
+				  
 			  }catch(IOException e){
 				  //return false;
 			  }
@@ -48,7 +41,7 @@ public class Loader {
 	
 	
 	
-	public BufferedImage [] getGameAssets(){
+	public HashMap<String,BufferedImage> getGameAssets(){
 		return this.resources;
 	}
 	
@@ -57,16 +50,8 @@ public class Loader {
 	 * @param name the name of the resource
 	 * @return the image if existing, null if not.
 	 */
-	public BufferedImage getGameAsset(String name){
-		BufferedImage swap = null;
-		for (int i = 0; i < this.resources.length; i++){
-			if (this.resourcesNames[i].equals(name)){
-				swap = this.resources[i];
-				break;
-			}
-		}
-		
-		return swap;
+	public BufferedImage getGameAsset(String name){		
+		return this.resources.get(name);
 	}
 	
 }
