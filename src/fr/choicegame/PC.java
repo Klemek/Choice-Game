@@ -2,29 +2,40 @@ package fr.choicegame;
 
 public class PC {
 	
-	int[] position;
+	private int[] position;
+	private Item[] stuff;
 	
-	private int[] getPosition() {
+	public int[] getPosition() {
 		return this.position;
 	}
 	
-	private void setPosition() {
+	public void setPosition(int[] position) {
+		this.position = position;
+	}
+	
+	public Item[] getStuff() {
+		return this.stuff;
+	}
+	
+	public void moveLeft() {
+		this.position[0] -= 1;
+	}
+	
+	public void moveRight() {
+		this.position[0] += 1;
+	}
+	public void moveUp() {
+		this.position[1] -= 1;
+	}
+	public void moveDown() {
+		this.position[1] += 1;
+	}
+	
+	public void interact(Item item) {
 		
 	}
 	
-	private void getStuff() {
-		
-	}
-	
-	void move() {
-		
-	}
-	
-	void interact(Item item) {
-		
-	}
-	
-	int choice() {
+	public int choice() {
 		return 0;
 	}	
 

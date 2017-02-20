@@ -2,13 +2,13 @@ package fr.choicegame;
 
 public class NPC {
 	
-	int[] position;
+	private int[] position;
 	
-	private int[] getPosition() {
+	public int[] getPosition() {
 		return this.position;
 	}
 	
-	private void setPostion(int[] position) {
+	public void setPostion(int[] position) {
 		
 	}
 

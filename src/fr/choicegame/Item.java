@@ -2,10 +2,14 @@ package fr.choicegame;
 
 public class Item {
 	
-	String name;
+	private String name;
 	
-	private String getName() {
+	public String getName() {
 		return this.name;
+	}
+	
+	public void setName(String name) {
+		this.name = name;
 	}
 
 }

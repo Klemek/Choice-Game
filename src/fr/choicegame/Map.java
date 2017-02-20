@@ -2,8 +2,8 @@ package fr.choicegame;
 
 public class Map {
 	
-	Tile[][] map;
-	String name;
+	private Tile[][] map;
+	private String name;
 	
 	public Tile[][] getMap() {
 		return this.map;

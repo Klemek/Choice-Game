@@ -2,15 +2,23 @@ package fr.choicegame;
 
 public class Container {
 	
-	Item[] items;
-	boolean opened;
+	private Item[] items;
+	private boolean opened;
 	
-	private Item[] getItems() {
+	public Item[] getItems() {
 		return this.items;
 	}
 	
-	private void setItems() {
-		
+	public void setItems(Item[] items) {
+		this.items = items;
+	}
+	
+	public boolean isOpened() {
+		return this.opened;
+	}
+	
+	public void setOpened(boolean opened) {
+		this.opened = opened;
 	}
 
 }
