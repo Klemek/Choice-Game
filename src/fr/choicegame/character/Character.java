@@ -41,23 +41,4 @@ public abstract class Character {
 		this.animation = animation;
 	}
 	
-	// Move
-	
-	public void move(Direction dir) {
-		switch(dir) {
-			case NORTH :
-				setPosY(getPosY() - 1);
-			break;
-			case SOUTH :
-				setPosY(getPosY() + 1);
-			break;
-			case EAST :
-				setPosX(getPosX() + 1);
-			break;
-			case WEST :
-				setPosX(getPosX() - 1);
-			break;
-		}
-	}
-	
 }

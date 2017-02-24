@@ -4,20 +4,32 @@ import fr.choicegame.Item;
 
 public class Player extends Character {
 	
-	private int[] position;
-	private Item[] stuff;
+	private Item[] inventory;
 	
-	public Item[] getStuff() {
-		return this.stuff;
+	public Item[] getInventory() {
+		return inventory;
 	}
 
-	
-	public void interact(Item item) {
-		
+	public void setInventory(Item[] inventory) {
+		this.inventory = inventory;
 	}
 	
-	public int choice() {
-		return 0;
-	}	
-
+	// Move
+	
+	public void move(Direction dir) {
+		switch(dir) {
+			case NORTH :
+				setPosY(getPosY() - 1);
+			break;
+			case SOUTH :
+				setPosY(getPosY() + 1);
+			break;
+			case EAST :
+				setPosX(getPosX() + 1);
+			break;
+			case WEST :
+				setPosX(getPosX() - 1);
+			break;
+		}
+	}
 }
