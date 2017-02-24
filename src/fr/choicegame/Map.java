@@ -1,15 +1,25 @@
 package fr.choicegame;
 
+import java.util.EventListener;
+
 public class Map {
 	
-	private TileImage[][] map;
+	private Tile[][] map;
 	private String name;
+	private EventListener listener;
 	
-	public TileImage[][] getMap() {
+	public Map(Loader loader, String name, EventListener listener) {
+		this.name = name;
+		this.listener = listener;
+	}
+	
+	// Getters & Setters
+	
+	public Tile[][] getMap() {
 		return this.map;
 	}
 	
-	public void setMap(TileImage[][] map) {
+	public void setMap(Tile[][] map) {
 		this.map = map;
 	}
 	
@@ -17,8 +27,6 @@ public class Map {
 		return this.name;
 	}
 	
-	public void setName(String name) {
-		this.name = name;
-	}	
+	
 	
 }
