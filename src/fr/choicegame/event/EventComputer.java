@@ -4,27 +4,19 @@ import fr.choicegame.Game;
 
 public class EventComputer implements GameEventListener {
 	
-	Game game;
+	private Game game;
 	
 	public EventComputer(Game game) {
-		this.game = game;
-	}
-	
-	// Getters & Setters
-
-	public Game getGame() {
-		return game;
-	}
-
-	public void setGame(Game game) {
 		this.game = game;
 	}
 	
 	// Functions
 
 	public void EventCalled(String event) {
-		switch(event) {
-		}
+		
+		String actions[] = event.split("\n");
+		
+		//TODO
 	}
 
 }
