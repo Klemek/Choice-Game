@@ -1,43 +1,25 @@
 package fr.choicegame;
 
-public class Tile {
+import fr.choicegame.event.Event;
 
-	private int id;
-	private String tileset;
-	private Script script;
+public class Tile {
 	
-	public Tile() {
-		
+	TileImage[] images = new TileImage[4];
+	Event event;
+	
+	// Getters & Setters
+	
+	public TileImage[] getImages() {
+		return images;
 	}
-	
-	public Tile(int id, String tileset, Script script) {
-		this.id = id;
-		this.tileset = tileset;
-		this.script = script;
+	public void setImages(TileImage[] images) {
+		this.images = images;
 	}
-	
-	public int getId() {
-		return this.id;
+	public Event getEvent() {
+		return event;
 	}
-	
-	public void setId(int id) {
-		this.id = id;
-	}
-	
-	public String getTileset() {
-		return this.tileset;
-	}
-	
-	public void setTileset(String tileset) {
-		this.tileset = tileset;
-	}
-	
-	public Script getScript() {
-		return this.script;
-	}
-	
-	public void setScript(Script script) {
-		this.script = script;
-	}
-	
+	public void setEvent(Event event) {
+		this.event = event;
+	}	
+
 }

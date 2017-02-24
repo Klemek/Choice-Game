@@ -2,14 +2,14 @@ package fr.choicegame;
 
 public class Map {
 	
-	private Tile[][] map;
+	private TileImage[][] map;
 	private String name;
 	
-	public Tile[][] getMap() {
+	public TileImage[][] getMap() {
 		return this.map;
 	}
 	
-	public void setMap(Tile[][] map) {
+	public void setMap(TileImage[][] map) {
 		this.map = map;
 	}
 	
