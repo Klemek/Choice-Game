@@ -4,7 +4,7 @@ import fr.choicegame.event.Event;
 
 public class NPC extends Character {
 	
-	Event event;
+	private Event event;
 
 	public Event getEvent() {
 		return event;

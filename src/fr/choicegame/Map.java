@@ -4,7 +4,7 @@ import java.util.EventListener;
 
 public class Map {
 	
-	private Tile[][] map;
+	private Tile[][] tileMap;
 	private String name;
 	private EventListener listener;
 	
@@ -15,12 +15,12 @@ public class Map {
 	
 	// Getters & Setters
 	
-	public Tile[][] getMap() {
-		return this.map;
+	public Tile[][] getTileMap() {
+		return this.tileMap;
 	}
 	
-	public void setMap(Tile[][] map) {
-		this.map = map;
+	public void setTileMap(Tile[][] tileMap) {
+		this.tileMap = tileMap;
 	}
 	
 	public String getName() {

@@ -4,7 +4,7 @@ public abstract class Character {
 	
 	private int posX;
 	private int posY;
-	Direction facing;
+	private Direction facing;
 	private String tileset;
 	private int animation;
 	
