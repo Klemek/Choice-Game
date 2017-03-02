@@ -45,4 +45,8 @@ public class Game {
 	public Map getMap(){
 		return map;
 	}
+	
+	public EventComputer getEventComputer(){
+		return evComputer;
+	}
 }

@@ -29,12 +29,14 @@ public class EventComputer implements GameEventListener {
 		HashMap<String, Integer> vars = new HashMap<>();
 		boolean jump = false;
 		for(String action:actions){
-			action = action.trim();
-			if(action.length()>0 && !action.startsWith("#")){
+			action = action.split("#")[0].trim(); //TODO espace # in text args
+			if(action.length()>0){
 				String spl1[] = action.split(" ",2);
 				String cmd = spl1[0];
 				if(!jump){
-					String args[] = getArgs(spl1[1], false);
+					String args[] = new String[0];
+					if(spl1.length>1)
+						args = getArgs(spl1[1], true);
 					switch(cmd){
 					case "TRIGGER": //TRIGGER (TRIGNAME) [ON/OFF] #Create/edit trigger
 						switch(args.length){
@@ -92,6 +94,9 @@ public class EventComputer implements GameEventListener {
 							break;
 						}
 						break;
+					case "ELSE":
+						jump = true;
+						break;
 					case "ICZ": //ICZ (VARNAME) [VALUE] # Increase var from or value 
 						switch(args.length){
 						case 1: //ICZ (VARNAME)
@@ -125,8 +130,10 @@ public class EventComputer implements GameEventListener {
 						}
 						break;
 					}
-				}else if(cmd == "ELSE" || cmd == "END"){
+				}else if(cmd.equals("ELSE") || cmd.equals("END")){
 					jump = false;
+				}else{
+					System.out.println("[DEBUG]jumped:"+action);
 				}
 			}
 		}
@@ -140,15 +147,16 @@ public class EventComputer implements GameEventListener {
 		
 		int jumplvl = 0;
 		for(int i = 0; i < actions.length; i++){
-			String action = actions[i].trim();
-			if(action.length()>0 && !action.startsWith("#")){
+			String action = actions[i].split("#")[0].trim();
+			if(action.length()>0){
 				String spl1[] = action.split(" ",2);
 				String cmd = spl1[0];
-				
-				String args[] = getArgs(spl1[1], true);
+				String args[] = new String[0];
+				if(spl1.length>1)
+					args = getArgs(spl1[1], true);
 				switch(cmd){
 				case "TRIGGER":  //TRIGGER (TRIGNAME) [ON/OFF] #Create/edit trigger
-					testArgs(i,action,errors,args, new String[][]{{TRIGGER}});
+					testArgs(i,action,errors,args, new String[][]{{TRIGGER},{TRIGGER,"ON/OFF"}});
 					break;
 				case "IFT":  //IFT [NOT] (TRIGNAME) ... [ELSE ...] END #Test trigger
 					jumplvl++;
@@ -199,8 +207,8 @@ public class EventComputer implements GameEventListener {
 					}
 					testArgs(i,action,errors,args, new String[][]{argstype});
 					break;
-				case "SHAKE": //SHAKE (ON/OFF)/(TIME) #Toggle shake screen for a time or until off
-					testArgs(i,action,errors,args, new String[][]{{"ON/OFF"},{VALUE}});
+				case "SHAKE": //SHAKE (ON/OFF) [TIME] #Toggle shake screen for a time or until off
+					testArgs(i,action,errors,args, new String[][]{{"ON/OFF"},{"ON/OFF",VALUE}});
 					break;
 				case "INVADD": //INVADD (ITEMID) [NUM] [MSG] #Add 1 or NUM item(s) to the player and display it (optional)(pause)
 					testArgs(i,action,errors,args, new String[][]{{ID},{ID,VALUE},{ID,VALUE,TEXT}});
@@ -234,7 +242,7 @@ public class EventComputer implements GameEventListener {
 			errors.add(jumplvl+" level(s) of IF or IFT not closed [End of event]");
 		return errors;
 	}
-
+	
 	private static String[] getArgs(String sargs, boolean keepquotes){
 		//"\"Je suis une phrase\" ARG1 \"Je suis une autre phrase\" \"phrase 3\" TEST TEST"
 		ArrayList<String> args = new ArrayList<>();
