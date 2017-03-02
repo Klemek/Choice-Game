@@ -129,6 +129,73 @@ public class EventComputer implements GameEventListener {
 							break;
 						}
 						break;
+					case "INVVAR": //INVVAR (ITEMID) (VARNAME) #Get the quantity of an item in the player inventory and put it in a var
+						//TODO EVENT INVVAR
+						break;
+					case "SAY": //SAY (TEXT) [IMAGEID] #Show text (pause game)
+						//TODO EVENT SAY
+						switch(args.length){
+						case 1: //SAY (TEXT)
+							break;
+						case 2://SAY (TEXT) (IMAGID)
+							break;
+						}
+						break;
+					case "DIALOG": //DIALOG (TEXT) (VARNAME) (OPTION1) (OPTION2) ... #Show a choice and return result on a viariable
+						//TODO EVENT DIALOG
+						break;
+					case "SHAKE": //SHAKE (ON/OFF) [TIME] #Toggle shake screen for a time or until off
+						//TODO EVENT SHAKE
+						switch(args.length){
+						case 1: //SHAKE (ON/OFF)
+							break;
+						case 2://SHAKE (ON/OFF) (TIME)
+							break;
+						}
+						break;
+					case "INVADD": //INVADD (ITEMID) [NUM] [MSG] #Add 1 or NUM item(s) to the player and display it (optional)(pause)
+						//TODO EVENT INVADD
+						switch(args.length){
+						case 1: //INVADD (ITEMID)
+							break;
+						case 2://INVADD (ITEMID) (NUM)
+							break;
+						case 3://INVADD (ITEMID) (NUM) (MSG)
+							break;
+						}
+						break;
+					case "INVDEL": //INVDEL (ITEMID) [NUM] [MSG] #Remove 1 or NUM item(s) to the player and display it (optional)(pause)
+						//TODO EVENT INVDEL
+						switch(args.length){
+						case 1: //INVDEL (ITEMID)
+							break;
+						case 2://INVDEL (ITEMID) (NUM)
+							break;
+						case 3://INVDEL (ITEMID) (NUM) (MSG)
+							break;
+						}
+						break;
+					case "MAP": //MAP (X) (Y) (LAYER) (TILESET) (ID) #Edit one map's tile
+						//TODO EVENT MAP
+						break;
+					case "MAPR": //MAP (DX) (DY) (LAYER) (TILESET) (ID) #Edit one map's tile relatively to event's source
+						//TODO EVENT MAPR
+						break;
+					case "NPCTILESET": //NPCTILESET (NPCID) (TILESET) #Change NPC tileset
+						//TODO EVENT NPCTILESET
+						break;
+					case "NPCIA": //NPCIA (NPCID) (IA) #Change NPc IA
+						//TODO EVENT NPCIA
+						break;
+					case "CHGMAP": //CHGMAP (MAPNAME) [PLAYERX] [PLAYERY]
+						//TODO EVENT CHGMAP
+						switch(args.length){
+						case 1: //CHGMAP (MAPNAME)
+							break;
+						case 3://CHGMAP (MAPNAME) (PLAYERX) (PLAYERY)
+							break;
+						}
+						break;
 					}
 				}else if(cmd.equals("ELSE") || cmd.equals("END")){
 					jump = false;
