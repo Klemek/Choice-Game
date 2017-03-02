@@ -29,6 +29,7 @@ public class EventComputer implements GameEventListener {
 		HashMap<String, Integer> vars = new HashMap<>();
 		boolean jump = false;
 		for(String action:actions){
+			action = action.trim();
 			if(action.length()>0 && !action.startsWith("#")){
 				String spl1[] = action.split(" ",2);
 				String cmd = spl1[0];
@@ -132,14 +133,14 @@ public class EventComputer implements GameEventListener {
 		//TODO
 	}
 	
-public static void testEvent(String event) {
+	public static ArrayList<String> testEvent(String event) {
 		
 		String actions[] = event.split("\n");
+		ArrayList<String> errors = new ArrayList<>();
 		
-		HashMap<String, Integer> vars;
 		int jumplvl = 0;
 		for(int i = 0; i < actions.length; i++){
-			String action = actions[i];
+			String action = actions[i].trim();
 			if(action.length()>0 && !action.startsWith("#")){
 				String spl1[] = action.split(" ",2);
 				String cmd = spl1[0];
@@ -147,100 +148,91 @@ public static void testEvent(String event) {
 				String args[] = getArgs(spl1[1], true);
 				switch(cmd){
 				case "TRIGGER":  //TRIGGER (TRIGNAME) [ON/OFF] #Create/edit trigger
-					switch(args.length){
-					case 1:  //TRIGGER (TRIGNAME)
-						testArgs(i, action, args, new String[]{TRIGGER});
-						break;
-					case 2:  //TRIGGER (TRIGNAME) [ON/OFF]
-						testArgs(i, action, args, new String[]{TRIGGER, "ON/OFF"});
-						break;
-					default:
-						System.err.println("Wrong number of arguments : ["+i+"]"+action);
-						break;
-					}
+					testArgs(i,action,errors,args, new String[][]{{TRIGGER}});
 					break;
 				case "IFT":  //IFT [NOT] (TRIGNAME) ... [ELSE ...] END #Test trigger
 					jumplvl++;
-					switch(args.length){
-					case 1: //IFT (TRIGNAME)
-						testArgs(i, action, args, new String[]{TRIGGER});
-						break;
-					case 2: //IFT NOT (TRIGNAME)
-						testArgs(i, action, args, new String[]{"NOT", TRIGGER});
-						break;
-					default:
-						System.err.println("Wrong number of arguments : ["+i+"]"+action);
-						break;
-					}
+					testArgs(i,action,errors,args, new String[][]{{TRIGGER},{"NOT", TRIGGER}});
+					break;
 				case "ELSE":
 					if(jumplvl<0)
 						System.err.println("No previous IF or IFT : ["+i+"]"+action);
-					if(args.length>0)
-						System.err.println("Wrong number of arguments : ["+i+"]"+action);
+					testArgs(i,action,errors,args, new String[][]{{}});
 					break;
 				case "END":
 					if(jumplvl>0)
 						jumplvl--;
 					else
 						System.err.println("No previous IF or IFT : ["+i+"]"+action);
-					if(args.length>0)
-						System.err.println("Wrong number of arguments : ["+i+"]"+action);
+					testArgs(i,action,errors,args, new String[][]{{}});
 					break;
 				case "VAR": //VAR (VARNAME) (VALUE) #Create/edit local variable
-					if(args.length!=2)
-						System.err.println("Wrong number of arguments : ["+i+"]"+action);
-					else
-						testArgs(i, action, args, new String[]{VARIABLE, VALUE});
+					testArgs(i,action,errors,args, new String[][]{{VARIABLE, VALUE}});
 					break;
 				case "VARG": //VARG (VARNAME) (VALUE) #Create/edit global variable
-					if(args.length!=2)
-						System.err.println("Wrong number of arguments : ["+i+"]"+action);
-					else
-						testArgs(i, action, args, new String[]{VARIABLE, VALUE});
+					testArgs(i,action,errors,args, new String[][]{{VARIABLE, VALUE}});
 					break;
 				case "IF": //IF (VARNAME) (==/!=/>/</>=/<=) (VALUE) ... [ELSE ...] END #Test variable
 					jumplvl++;
-					if(args.length!=2)
-						System.err.println("Wrong number of arguments : ["+i+"]"+action);
-					else
-						testArgs(i, action, args, new String[]{VARIABLE,"==/!=/>/</>=/<=", VALUE});
+					testArgs(i,action,errors,args, new String[][]{{VARIABLE,"==/!=/>/</>=/<=", VALUE}});
 					break;
 				case "ICZ": //ICZ (VARNAME) [VALUE] # Increase var from or value 
-					switch(args.length){
-					case 1: //ICZ (VARNAME)
-						testArgs(i, action, args, new String[]{VARIABLE});
-						break;
-					case 2: //ICZ (VARNAME) [VALUE]
-						testArgs(i, action, args, new String[]{VARIABLE, VALUE});
-						break;
-					default:
-						System.err.println("Wrong number of arguments : ["+i+"]"+action);
-						break;
-					}
+					testArgs(i,action,errors,args, new String[][]{{VARIABLE},{VARIABLE, VALUE}});
 					break;
 				case "DCZ": //DCZ (VARNAME) [VALUE] # Decrease var from or value 
-					switch(args.length){
-					case 1: //DCZ (VARNAME)
-						testArgs(i, action, args, new String[]{VARIABLE});
-						break;
-					case 2: //DCZ (VARNAME) [VALUE]
-						testArgs(i, action, args, new String[]{VARIABLE, VALUE});
-						break;
-					default:
-						System.err.println("Wrong number of arguments : ["+i+"]"+action);
-						break;
+					testArgs(i,action,errors,args, new String[][]{{VARIABLE},{VARIABLE, VALUE}});
+					break;
+				case "INVVAR": //INVVAR (ITEMID) (VARNAME) #Get the quantity of an item in the player inventory and put it in a var
+					testArgs(i,action,errors,args, new String[][]{{ID,VARIABLE}});
+					break;
+				case "SAY": //SAY (TEXT) [IMAGEID] #Show text (pause game)
+					testArgs(i,action,errors,args, new String[][]{{TEXT},{TEXT,ID}});
+					break;
+				case "DIALOG": //DIALOG (TEXT) (VARNAME) (OPTION1) (OPTION2) ... #Show a choice and return result on a viariable
+					String[] argstype = {TEXT,VARIABLE,TEXT,TEXT};
+					if(args.length>4){
+						argstype = new String[args.length];
+						argstype[0] = TEXT;
+						argstype[1] = VARIABLE;
+						for(int j = 2; j < args.length; j++)
+							argstype[j] = TEXT;
 					}
+					testArgs(i,action,errors,args, new String[][]{argstype});
+					break;
+				case "SHAKE": //SHAKE (ON/OFF)/(TIME) #Toggle shake screen for a time or until off
+					testArgs(i,action,errors,args, new String[][]{{"ON/OFF"},{VALUE}});
+					break;
+				case "INVADD": //INVADD (ITEMID) [NUM] [MSG] #Add 1 or NUM item(s) to the player and display it (optional)(pause)
+					testArgs(i,action,errors,args, new String[][]{{ID},{ID,VALUE},{ID,VALUE,TEXT}});
+					break;
+				case "INVDEL": //INVDEL (ITEMID) [NUM] [MSG] #Remove 1 or NUM item(s) to the player and display it (optional)(pause)
+					testArgs(i,action,errors,args, new String[][]{{ID},{ID,VALUE},{ID,VALUE,TEXT}});
+					break;
+				case "MAP": //MAP (X) (Y) (LAYER) (TILESET) (ID) #Edit one map's tile
+					testArgs(i,action,errors,args, new String[][]{{VALUE,VALUE,VALUE,TEXT,ID}});
+					break;
+				case "MAPR": //MAP (DX) (DY) (LAYER) (TILESET) (ID) #Edit one map's tile relatively to event's source
+					testArgs(i,action,errors,args, new String[][]{{VALUE,VALUE,VALUE,TEXT,ID}});
+					break;
+				case "NPCTILESET": //NPCTILESET (NPCID) (TILESET) #Change NPC tileset
+					testArgs(i,action,errors,args, new String[][]{{ID,TEXT}});
+					break;
+				case "NPCIA": //NPCIA (NPCID) (IA) #Change NPc IA
+					testArgs(i,action,errors,args, new String[][]{{ID,TEXT}});
+					break;
+				case "CHGMAP": //CHGMAP (MAPNAME) [PLAYERX] [PLAYERY]
+					testArgs(i,action,errors,args, new String[][]{{TEXT},{TEXT,VALUE,VALUE}});
 					break;
 				default:
-					System.err.println("Unknown event action : ["+i+"]"+action);
+					errors.add("Unknown event action : ["+i+"]"+action);
 					break;
 				}
 			}
 		}
 		
 		if(jumplvl>0)
-			System.err.println(jumplvl+" level(s) of IF or IFT not closed [End of event]");
-		//TODO
+			errors.add(jumplvl+" level(s) of IF or IFT not closed [End of event]");
+		return errors;
 	}
 
 	private static String[] getArgs(String sargs, boolean keepquotes){
@@ -276,48 +268,59 @@ public static void testEvent(String event) {
 		return args.toArray(new String[0]);
 	}
 
-	private static void testArgs(int i,String action, String args[], String values[]){
-		for(int j = 0; j < args.length; j++){
-			switch(values[j]){
-			case TRIGGER:
-			case VARIABLE:
-				if(args[j].startsWith("\""))
-					System.err.println("Argument "+(j+1)+" must be a "+values[j]+" : ["+i+"]"+action);
-				break;
-			case TEXT:
-				if(!args[j].startsWith("\""))
-					System.err.println("Argument "+(j+1)+" must be a TEXT : ["+i+"]"+action);
-				break;
-			case VALUE:
-				if(!isInteger(args[j]))
-					System.err.println("Argument "+(j+1)+" must be a VALUE : ["+i+"]"+action);
-				break;
-			case ID:
-				if(!isInteger(args[j]))
-					System.err.println("Argument "+(j+1)+" must be an ID : ["+i+"]"+action);
-				break;
-			default:
-				if(args[j].startsWith("\""))
-					System.err.println("Argument "+(j+1)+" must be ["+values[j]+"] : ["+i+"]"+action);
-				else{
-					String vals[] = values[j].split("/");
-					boolean good = false;
-					for(String val:vals){
-						if(args[j].equals(val)){
-							good = true;
-							break;
+	private static void testArgs(int i,String action, ArrayList<String> errors, String args[], String values[][]){
+		int j = -1;
+		for(int j1 = 0; j1 < values.length; j1++){
+			if(args.length == values[j1].length){
+				j = j1;
+			}
+		}
+		if(j == -1){
+			errors.add("Wrong number of arguments : ["+i+"]"+action);
+		}else{
+			for(int j2 = 0; j2 < args.length; j2++){
+				switch(values[j][j2]){
+				case TRIGGER:
+				case VARIABLE:
+					if(args[j2].startsWith("\""))
+						errors.add("Argument "+(j2+1)+" must be a "+values[j][j2]+" : ["+i+"]"+action);
+					break;
+				case TEXT:
+					if(!args[j2].startsWith("\""))
+						errors.add("Argument "+(j2+1)+" must be a TEXT : ["+i+"]"+action);
+					break;
+				case VALUE:
+					if(!isInteger(args[j2]))
+						errors.add("Argument "+(j2+1)+" must be a VALUE : ["+i+"]"+action);
+					break;
+				case ID:
+					if(!isInteger(args[j2]))
+						errors.add("Argument "+(j2+1)+" must be an ID : ["+i+"]"+action);
+					break;
+				default:
+					if(args[j2].startsWith("\""))
+						errors.add("Argument "+(j2+1)+" must be ["+values[j][j2]+"] : ["+i+"]"+action);
+					else{
+						String vals[] = values[j][j2].split("/");
+						boolean good = false;
+						for(String val:vals){
+							if(args[j2].equals(val)){
+								good = true;
+								break;
+							}
 						}
+						if(!good)
+							errors.add("Argument "+(j2+1)+" must be ["+values[j][j2]+"] : ["+i+"]"+action);
 					}
-					if(!good)
-						System.err.println("Argument "+(j+1)+" must be ["+values[j]+"] : ["+i+"]"+action);
+					break;
 				}
-				break;
 			}
 		}
 	}
 	
 	private static boolean isInteger(String s) {
-	    Scanner sc = new Scanner(s.trim());
+	    @SuppressWarnings("resource")
+		Scanner sc = new Scanner(s.trim());
 	    if(!sc.hasNextInt()) return false;
 	    sc.nextInt();
 	    return !sc.hasNext();
