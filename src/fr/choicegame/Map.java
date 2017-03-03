@@ -23,10 +23,9 @@ public class Map {
 		this.tileMap = tileMap;
 	}
 	
+	
+	
 	public String getName() {
 		return this.name;
-	}
-	
-	
-	
+	}	
 }

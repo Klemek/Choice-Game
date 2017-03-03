@@ -4,8 +4,9 @@ import fr.choicegame.event.Event;
 
 public class Tile {
 	
-	TileImage[] images = new TileImage[4];
-	Event event;
+	private TileImage[] images = new TileImage[4];
+	private Event event;
+	private TileType type;
 	
 	// Getters & Setters
 	
