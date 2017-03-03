@@ -13,14 +13,21 @@ public class Tile {
 	public TileImage[] getImages() {
 		return images;
 	}
+	
 	public void setImages(TileImage[] images) {
 		this.images = images;
 	}
+	
 	public Event getEvent() {
 		return event;
 	}
+	
 	public void setEvent(Event event) {
 		this.event = event;
+	}
+	
+	public TileType getType() {
+		return type;
 	}	
 
 }
