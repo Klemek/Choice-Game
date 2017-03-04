@@ -15,7 +15,7 @@ public class GamePanel extends JPanel {
 
 	private Game game;
 
-	public GamePanel(Game game) {
+	public GamePanel(Loader loader, Game game) {
 
 		this.game = game;
 

@@ -175,11 +175,23 @@ public class EventComputer implements GameEventListener {
 							break;
 						}
 						break;
-					case "MAP": //MAP (X) (Y) (LAYER) (TILESET) (ID) #Edit one map's tile
+					case "MAP": //MAP (X) (Y) (LAYER) [TILESET] [ID] #Edit one map's tile
 						//TODO EVENT MAP
+						switch(args.length){
+						case 3: //INVDEL (ITEMID)
+							break;
+						case 5://INVDEL (ITEMID) (NUM)
+							break;
+						}
 						break;
-					case "MAPR": //MAP (DX) (DY) (LAYER) (TILESET) (ID) #Edit one map's tile relatively to event's source
+					case "MAPR": //MAPR (DX) (DY) (LAYER) [TILESET] [ID] #Edit one map's tile relatively to event's source
 						//TODO EVENT MAPR
+						switch(args.length){
+						case 3: //INVDEL (ITEMID)
+							break;
+						case 5://INVDEL (ITEMID) (NUM)
+							break;
+						}
 						break;
 					case "NPCTILESET": //NPCTILESET (NPCID) (TILESET) #Change NPC tileset
 						//TODO EVENT NPCTILESET
@@ -283,11 +295,11 @@ public class EventComputer implements GameEventListener {
 				case "INVDEL": //INVDEL (ITEMID) [NUM] [MSG] #Remove 1 or NUM item(s) to the player and display it (optional)(pause)
 					testArgs(i,action,errors,args, new String[][]{{ID},{ID,VALUE},{ID,VALUE,TEXT}});
 					break;
-				case "MAP": //MAP (X) (Y) (LAYER) (TILESET) (ID) #Edit one map's tile
-					testArgs(i,action,errors,args, new String[][]{{VALUE,VALUE,VALUE,TEXT,ID}});
+				case "MAP": //MAP (X) (Y) (LAYER) [TILESET] [ID] #Edit one map's tile
+					testArgs(i,action,errors,args, new String[][]{{VALUE,VALUE,VALUE},{VALUE,VALUE,VALUE,TEXT,ID}});
 					break;
-				case "MAPR": //MAP (DX) (DY) (LAYER) (TILESET) (ID) #Edit one map's tile relatively to event's source
-					testArgs(i,action,errors,args, new String[][]{{VALUE,VALUE,VALUE,TEXT,ID}});
+				case "MAPR": //MAP (DX) (DY) (LAYER) [TILESET] [ID]  #Edit one map's tile relatively to event's source
+					testArgs(i,action,errors,args, new String[][]{{VALUE,VALUE,VALUE},{VALUE,VALUE,VALUE,TEXT,ID}});
 					break;
 				case "NPCTILESET": //NPCTILESET (NPCID) (TILESET) #Change NPC tileset
 					testArgs(i,action,errors,args, new String[][]{{ID,TEXT}});

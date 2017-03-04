@@ -16,9 +16,9 @@ public class Window extends JFrame {
 		this.setResizable(false);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-		// this.game = new Game();
+		this.game = new Game(loader);
 
-		this.gpanel = new GamePanel(null);
+		this.gpanel = new GamePanel(loader, game);
 
 		this.setContentPane(this.gpanel);
 

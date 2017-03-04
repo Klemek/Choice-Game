@@ -19,13 +19,13 @@ public class Game {
 		this.triggers = new HashMap<>();
 		this.globvars = new HashMap<>();
 		
-		this.maps = new HashMap();
+		this.maps = new HashMap<>();
 		
 		evComputer = new EventComputer(this);
 		
 		this.currentMap = "start"; //Maybe a Constants.java with START_MAP = start ?
 		
-		this.maps.put(this.currentMap, new Map(loader, this.currentMap, evComputer));
+		this.maps.put(this.currentMap, loader.loadMap(this.currentMap));
 		
 		//TODO create main character and give it to map
 		

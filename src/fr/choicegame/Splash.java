@@ -29,10 +29,6 @@ public class Splash extends JFrame{
 	public Loader run(){
 		Loader loader = new Loader();
 		
-		try {
-			Thread.sleep(500);
-		} catch (InterruptedException e) {}
-		
 		if(loader.load()){
 			this.setVisible(false);
 			return loader;

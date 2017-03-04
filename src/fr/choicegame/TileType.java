@@ -1,7 +1,8 @@
 package fr.choicegame;
 
 public enum TileType {
-	SOLID,
+	VOID,
 	FLAT,
-	AIR;
+	SOLID,
+	
 }
