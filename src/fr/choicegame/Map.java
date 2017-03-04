@@ -1,14 +1,14 @@
 package fr.choicegame;
 
-import java.util.EventListener;
+import fr.choicegame.event.GameEventListener;
 
 public class Map {
 	
 	private Tile[][] tileMap;
 	private String name;
-	private EventListener listener;
+	private GameEventListener listener;
 	
-	public Map(Loader loader, String name, EventListener listener) {
+	public Map(Loader loader, String name, GameEventListener listener) {
 		this.name = name;
 		this.listener = listener;
 	}

@@ -10,14 +10,25 @@ public class Game {
 	private HashMap<String, Integer> globvars;
 	
 	private EventComputer evComputer;
-	private Map map;
+	private HashMap<String, Map> maps;
+	
+	private String currentMap;
 	
 	public Game(Loader loader){
 		
 		this.triggers = new HashMap<>();
 		this.globvars = new HashMap<>();
 		
+		this.maps = new HashMap();
+		
 		evComputer = new EventComputer(this);
+		
+		this.currentMap = "start"; //Maybe a Constants.java with START_MAP = start ?
+		
+		this.maps.put(this.currentMap, new Map(loader, this.currentMap, evComputer));
+		
+		//TODO create main character and give it to map
+		
 	}
 	
 	public boolean getTrigger(String trigname){
@@ -42,8 +53,8 @@ public class Game {
 		this.globvars.put(varname, value);
 	}
 	
-	public Map getMap(){
-		return map;
+	public Map getCurrentMap(){
+		return this.maps.get(this.currentMap);
 	}
 	
 	public EventComputer getEventComputer(){
