@@ -16,7 +16,7 @@ public class Loader {
 
 	private static final ArrayList<String> IMAGE_EXT = new ArrayList<>(
 			Arrays.asList(new String[] { "png", "jpg", "gif" }));
-	private static final ArrayList<String> TEXT_EXT = new ArrayList<>(Arrays.asList(new String[] { "txt", "xml" }));
+	private static final ArrayList<String> TEXT_EXT = new ArrayList<>(Arrays.asList(new String[] { "txt", "xml", "tmx" }));
 
 	private HashMap<String, BufferedImage> imagesResources = new HashMap<String, BufferedImage>();
 	private HashMap<String, String> textResources = new HashMap<String, String>();
@@ -30,28 +30,34 @@ public class Loader {
 	public boolean load() {
 
 		File folder = new File("src/fr/choicegame/res");
-		File[] listOfFiles = folder.listFiles();
 
+		this.loadFolder(folder,"");
+
+		return true;
+	}
+	
+	private void loadFolder(File folder, String suffix){
+		File[] listOfFiles = folder.listFiles();
 		for (int i = 0; i < listOfFiles.length; i++) {
 			if (listOfFiles[i].isFile()) {
 				String ext = getExtension(listOfFiles[i].getName());
 				if (IMAGE_EXT.contains(ext)) {
 					BufferedImage image =  loadImageAsset(listOfFiles[i].getPath());
 					if(image != null){
-						imagesResources.put(listOfFiles[i].getName(), image);
-						System.out.println("Image File '" + listOfFiles[i].getName() + "' loaded");
+						imagesResources.put(suffix+listOfFiles[i].getName(), image);
+						System.out.println("Image File '" + suffix+listOfFiles[i].getName() + "' loaded");
 					}
 				} else if (TEXT_EXT.contains(ext)) {
 					String textFile =  loadTextAsset(listOfFiles[i].getPath());
 					if(textFile != null){
-						textResources.put(listOfFiles[i].getName(), textFile);
-						System.out.println("Text File " + listOfFiles[i].getName() + " loaded");
+						textResources.put(suffix+listOfFiles[i].getName(), textFile);
+						System.out.println("Text File '" + suffix+listOfFiles[i].getName() + "' loaded");
 					}
 				}
+			}else{
+				this.loadFolder(listOfFiles[i],suffix+listOfFiles[i].getName()+"/");
 			}
 		}
-
-		return true;
 	}
 
 	public static BufferedImage loadImageAsset(String path) {
@@ -104,6 +110,10 @@ public class Loader {
 		return this.imagesResources;
 	}
 
+	public Map loadMap(String mapName){
+		return null;
+	}
+	
 	/**
 	 * get the asset corresponding to name
 	 * 
