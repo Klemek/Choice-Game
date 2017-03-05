@@ -6,6 +6,10 @@ import fr.choicegame.Item;
 public class Player extends Character {
 	
 	private HashMap<Item, Integer> inventory;
+	
+	public Player() {
+		
+	}
 
 	// Getters & Setters
 	
