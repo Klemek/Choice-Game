@@ -193,11 +193,14 @@ public class EventComputer implements GameEventListener {
 							break;
 						}
 						break;
+					case "PLAYERTILESET": //PLAYERTILESET (TILESET) #Change Player tileset
+						//TODO EVENT PLAYERTILESET
+						break;
 					case "NPCTILESET": //NPCTILESET (NPCID) (TILESET) #Change NPC tileset
 						//TODO EVENT NPCTILESET
 						break;
-					case "NPCIA": //NPCIA (NPCID) (IA) #Change NPc IA
-						//TODO EVENT NPCIA
+					case "NPCANIMATION": //NPCTILESET (SOUTH/WEST/NORTH/EAST) (STOP/MARCH) #Change NPC animation
+						//TODO EVENT NPCANIMATION
 						break;
 					case "CHGMAP": //CHGMAP (MAPNAME) [PLAYERX] [PLAYERY]
 						//TODO EVENT CHGMAP
@@ -263,10 +266,10 @@ public class EventComputer implements GameEventListener {
 					jumplvl++;
 					testArgs(i,action,errors,args, new String[][]{{VARIABLE,"==/!=/>/</>=/<=", VALUE}});
 					break;
-				case "ICZ": //ICZ (VARNAME) [VALUE] # Increase var from or value 
+				case "ICZ": //ICZ (VARNAME) [VALUE] # Increase var from 1 or value 
 					testArgs(i,action,errors,args, new String[][]{{VARIABLE},{VARIABLE, VALUE}});
 					break;
-				case "DCZ": //DCZ (VARNAME) [VALUE] # Decrease var from or value 
+				case "DCZ": //DCZ (VARNAME) [VALUE] # Decrease var from 1 or value 
 					testArgs(i,action,errors,args, new String[][]{{VARIABLE},{VARIABLE, VALUE}});
 					break;
 				case "INVVAR": //INVVAR (ITEMID) (VARNAME) #Get the quantity of an item in the player inventory and put it in a var
@@ -292,7 +295,7 @@ public class EventComputer implements GameEventListener {
 				case "INVADD": //INVADD (ITEMID) [NUM] [MSG] #Add 1 or NUM item(s) to the player and display it (optional)(pause)
 					testArgs(i,action,errors,args, new String[][]{{ID},{ID,VALUE},{ID,VALUE,TEXT}});
 					break;
-				case "INVDEL": //INVDEL (ITEMID) [NUM] [MSG] #Remove 1 or NUM item(s) to the player and display it (optional)(pause)
+				case "INVDEL": //INVDEL (ITEMID) [NUM] [MSG] #Remove all or NUM item(s) to the player and display it (optional)(pause)
 					testArgs(i,action,errors,args, new String[][]{{ID},{ID,VALUE},{ID,VALUE,TEXT}});
 					break;
 				case "MAP": //MAP (X) (Y) (LAYER) [TILESET] [ID] #Edit one map's tile
@@ -301,10 +304,13 @@ public class EventComputer implements GameEventListener {
 				case "MAPR": //MAP (DX) (DY) (LAYER) [TILESET] [ID]  #Edit one map's tile relatively to event's source
 					testArgs(i,action,errors,args, new String[][]{{VALUE,VALUE,VALUE},{VALUE,VALUE,VALUE,TEXT,ID}});
 					break;
-				case "NPCTILESET": //NPCTILESET (NPCID) (TILESET) #Change NPC tileset
-					testArgs(i,action,errors,args, new String[][]{{ID,TEXT}});
+				case "PLAYERTILESET": //PLAYERTILESET (TILESET) #Change Player tileset
+					testArgs(i,action,errors,args, new String[][]{{TEXT}});
 					break;
-				case "NPCIA": //NPCIA (NPCID) (IA) #Change NPc IA
+				case "NPCANIMATION": //NPCTILESET (SOUTH/WEST/NORTH/EAST) [STOP/MARCH] #Change NPC animation
+					testArgs(i,action,errors,args, new String[][]{{"SOUTH/WEST/NORTH/EAST"},{"SOUTH/WEST/NORTH/EAST","STOP/MARCH"}});
+					break;
+				case "NPCTILESET": //NPCTILESET (NPCID) (TILESET) #Change NPC tileset
 					testArgs(i,action,errors,args, new String[][]{{ID,TEXT}});
 					break;
 				case "CHGMAP": //CHGMAP (MAPNAME) [PLAYERX] [PLAYERY]
