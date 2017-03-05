@@ -32,6 +32,10 @@ public class Map {
 		tileMap[x][y] = tile;
 	}
 	
+	public Tile getTile(int x, int y){
+		return tileMap[x][y];
+	}
+	
 	public int getWidth() {
 		return tileMap[0].length;
 	}

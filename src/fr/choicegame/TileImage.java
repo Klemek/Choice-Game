@@ -5,10 +5,6 @@ public class TileImage {
 	private int id;
 	private String tileset;
 	
-	public TileImage() {
-		
-	}
-	
 	public TileImage(int id, String tileset) {
 		this.id = id;
 		this.tileset = tileset;

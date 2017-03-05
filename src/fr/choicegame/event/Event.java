@@ -10,16 +10,25 @@ public class Event {
 		this.listener = listener;
 	}
 	
+	public Event(String actions) {
+		this(actions, null);
+	}
+	
 	// Getters & Setters
 
 	public void setListener(GameEventListener listener) {
 		this.listener = listener;
 	}
 	
+	public String getActions(){
+		return actions;
+	}
+	
 	// Functions
 	
 	public void action(int x, int y) {
-		this.listener.eventCalled(actions, x, y);
+		if(listener != null)
+			this.listener.eventCalled(actions, x, y);
 	}
 	
 }

@@ -219,7 +219,6 @@ public class EventComputer implements GameEventListener {
 				}
 			}
 		}
-		//TODO
 	}
 	
 	public static ArrayList<String> testEvent(String event) {

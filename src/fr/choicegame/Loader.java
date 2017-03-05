@@ -3,14 +3,27 @@ package fr.choicegame;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
 import javax.imageio.ImageIO;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+
+import fr.choicegame.event.Event;
 
 public class Loader {
 
@@ -70,11 +83,10 @@ public class Loader {
 	}
 
 	public static String loadTextAsset(String pathToSource) {
-		File f = new File(pathToSource);
 		BufferedReader br = null;
 		String content = null;
 		try {
-			br = new BufferedReader(new FileReader(f));
+			br = new BufferedReader(new InputStreamReader(new FileInputStream(pathToSource), "utf-8"));
 			content = "";
 
 			String line = br.readLine();
@@ -111,8 +123,192 @@ public class Loader {
 	}
 
 	public Map loadMap(String mapName){
+		Map map = null;
+		if(textResources != null && textResources.containsKey("maps/"+mapName+".tmx")){
+			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+			factory.setValidating(false);
+			factory.setIgnoringElementContentWhitespace(true);
+			try {
+				DocumentBuilder builder = factory.newDocumentBuilder();
+				InputSource is = new InputSource(new StringReader(textResources.get("maps/"+mapName+".tmx")));
+				Document svg = builder.parse(is);
+				Element root = svg.getDocumentElement();
+				if(root.getNodeName().equals("map")){
+					int width = Integer.parseInt(getAttribute(root,"width","0"));
+					int height = Integer.parseInt(getAttribute(root,"height","0"));
+					HashMap<String,Integer[][]> layers = new HashMap<>();
+					HashMap<Integer,String> tilesets = new HashMap<>();
+					HashMap<String,Integer> tilesetsAll = new HashMap<>();
+					HashMap<Integer,Event> events = new HashMap<>();
+					HashMap<Integer,String> npcs = new HashMap<>();
+					HashMap<Integer,TileType> types = new HashMap<>();
+					for (int i1 = 0; i1 < root.getChildNodes().getLength(); i1++) {
+						Node child1 = root.getChildNodes().item(i1);
+						switch(child1.getNodeName()){
+						case "layer":
+							String layername = getAttribute(child1,"name","unknown");
+							Node data = getChildNode(child1,"data");
+							if(data != null){
+								String[] slayer = data.getTextContent().replace("\n","").trim().split(",");
+								Integer[][] layer = new Integer[width][height];
+								for(int x = 0; x < width; x++){
+									for(int y = 0; y < height; y++){
+										layer[x][y] = Integer.parseInt(slayer[x*width+y]);
+									}
+								}
+								layers.put(layername, layer);
+							}
+							break;
+						case "tileset":
+							int firstid = Integer.parseInt(getAttribute(child1,"firstgid","0"));
+							int tilecount = Integer.parseInt(getAttribute(child1,"tilecount","0"));
+							String tilesetName = getAttribute(child1,"name","unknown");
+							switch(tilesetName){
+							case "info":
+								for (int i2 = 0; i2 <child1.getChildNodes().getLength(); i2++) {
+									Node child2 = child1.getChildNodes().item(i2);
+									if(child2.getNodeName().equals("tile")){
+										int tileId = Integer.parseInt(getAttribute(child2,"id","0"));
+										HashMap<String,String> props = getTileProperties(child2);
+										if(props.containsKey("event")){
+											
+											events.put(firstid+tileId,new Event(props.get("event")));
+										}else if(props.containsKey("npc")){
+											npcs.put(firstid+tileId, props.get("npc"));
+										}
+									}
+								}
+								break;
+							case "type":
+								for (int i2 = 0; i2 <child1.getChildNodes().getLength(); i2++) {
+									Node child2 = child1.getChildNodes().item(i2);
+									if(child2.getNodeName().equals("tile")){
+										int tileId = Integer.parseInt(getAttribute(child2,"id","0"));
+										HashMap<String,String> props = getTileProperties(child2);
+										if(props.containsKey("type")){
+											switch(props.get("type")){
+											case "1":
+												types.put(firstid+tileId,TileType.FLAT);
+												break;
+											case "2":
+												types.put(firstid+tileId,TileType.SOLID);
+												break;
+											}
+										}
+									}
+								}
+								break;
+							default:
+								tilesetsAll.put(tilesetName,firstid);
+								for(int j = firstid; j < firstid+tilecount; j++){
+									tilesets.put(j, tilesetName);
+								}
+								break;
+							}
+							break;
+						}
+					}
+					
+					if(layers.containsKey("bg1") && layers.containsKey("bg2") &&
+							layers.containsKey("fg1") && layers.containsKey("fg2") &&
+							layers.containsKey("info") && layers.containsKey("type")){
+						map = new Map(width, height);
+						for(int x = 0; x < width; x++){
+							for(int y = 0; y < height; y++){
+								TileImage[] images = new TileImage[4];
+								TileType ttype = TileType.VOID;
+								Event event = null;
+								int bg1 = layers.get("bg1")[y][x];
+								int bg2 = layers.get("bg2")[y][x];
+								int fg1 = layers.get("fg1")[y][x];
+								int fg2 = layers.get("fg2")[y][x];
+								int info = layers.get("info")[y][x];
+								int type = layers.get("type")[y][x];
+								
+								if(bg1 != 0 && tilesets.containsKey(bg1)){
+									String tileset = tilesets.get(bg1);
+									images[0] = new TileImage(bg1-tilesetsAll.get(tileset),tileset);
+								}
+								if(bg2 != 0 && tilesets.containsKey(bg2)){
+									String tileset = tilesets.get(bg2);
+									images[1] = new TileImage(bg2-tilesetsAll.get(tileset),tileset);
+								}
+								if(fg1 != 0 && tilesets.containsKey(fg1)){
+									String tileset = tilesets.get(fg1);
+									images[2] = new TileImage(fg1-tilesetsAll.get(tileset),tileset);
+								}
+								if(fg2 != 0 && tilesets.containsKey(fg2)){
+									String tileset = tilesets.get(fg2);
+									images[3] = new TileImage(fg2-tilesetsAll.get(tileset),tileset);
+								}
+								if(info != 0){
+									if(npcs.containsKey(info)){
+										//TODO create NPC
+									}
+									event = events.get(info);
+								}
+								if(type != 0 && types.containsKey(type))
+									ttype = types.get(type);
+								map.setTile(x, y, new Tile(ttype, images, event));
+							}
+						}
+					}else{
+						System.out.println("[LOADER]Invalid map:"+mapName);
+					}
+					
+				}
+			} catch (ParserConfigurationException | SAXException | IOException e) {
+				e.printStackTrace();
+			}
+		
+		
+		}
+		return map;
+	}
+	
+	public static String getAttribute(Node n, String name, String defaultValue) {
+		if(!hasAttribute(n, name))
+			return defaultValue;
+		else
+			return n.getAttributes().getNamedItem(name).getTextContent();
+	}
+	
+	public static boolean hasAttribute(Node n, String name) {
+		return n.hasAttributes() && n.getAttributes().getNamedItem(name)!=null;
+	}
+	
+	public static Node getChildNode(Node n, String name) {
+		for (int i = 0; i <n.getChildNodes().getLength(); i++) {
+			Node child = n.getChildNodes().item(i);
+			if(child.getNodeName().equals(name))
+				return child;
+		}
 		return null;
 	}
+	
+	public static HashMap<String,String> getTileProperties(Node tileNode) {
+		HashMap<String,String> props = new HashMap<>();
+		if(tileNode.getNodeName().equals("tile")){
+			Node properties = getChildNode(tileNode,"properties");
+				if(properties != null){
+				for (int i = 0; i <properties.getChildNodes().getLength(); i++) {
+					Node child = properties.getChildNodes().item(i);
+					if(child.getNodeName().equals("property")){
+						String name = getAttribute(child,"name","");
+						String value = getAttribute(child,"value",null);
+						if(value == null)
+							value = child.getTextContent();
+						if(value != null && !value.equals(""))
+							props.put(name, value);
+					}
+				}
+			}
+		}
+		return props;
+	}
+		
+	
+	
 	
 	/**
 	 * get the asset corresponding to name
