@@ -1,7 +1,5 @@
 package fr.choicegame;
 
-import fr.choicegame.event.Event;
-
 public class TileImage {
 
 	private int id;
@@ -11,7 +9,7 @@ public class TileImage {
 		
 	}
 	
-	public TileImage(int id, String tileset, Event script) {
+	public TileImage(int id, String tileset) {
 		this.id = id;
 		this.tileset = tileset;
 	}

@@ -7,7 +7,14 @@ public class Tile {
 	private TileImage[] images = new TileImage[4];
 	private Event event;
 	private TileType type;
+	final static Tile EMPTY = new Tile(TileType.VOID, new TileImage[4], null);
 	
+	public Tile(TileType type, TileImage[] images, Event event) {
+		this.type = type;
+		this.images = images;
+		this.event = event;
+	}
+
 	// Getters & Setters
 	
 	public TileImage[] getImages() {

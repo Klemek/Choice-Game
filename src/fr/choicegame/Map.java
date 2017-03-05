@@ -1,31 +1,54 @@
 package fr.choicegame;
 
+import java.util.HashMap;
+import fr.choicegame.character.NPC;
 import fr.choicegame.event.GameEventListener;
 
 public class Map {
 	
 	private Tile[][] tileMap;
-	private String name;
-	private GameEventListener listener;
+	private HashMap<String, NPC> npcs;
 	
-	public Map(Loader loader, String name, GameEventListener listener) {
-		this.name = name;
-		this.listener = listener;
+	public Map(int sizex, int sizey) {
+		tileMap = new Tile[sizex][sizey];
+		for(int x = 0; x < sizex; x++) {
+			for(int y = 0; y < sizey; y++) {
+				tileMap[x][y] = Tile.EMPTY;
+			}
+		}
 	}
 	
 	// Getters & Setters
 	
-	public Tile[][] getTileMap() {
-		return this.tileMap;
+	public void setGameEventListener(GameEventListener listener) {
+		for(int x = 0; x < getWidth(); x++) {
+			for(int y = 0; y < getHeight(); x++) {
+				if(tileMap[x][y].getEvent() != null) {
+					tileMap[x][y].getEvent().setListener(listener);
+				}
+			}
+		}
 	}
 	
-	public void setTileMap(Tile[][] tileMap) {
-		this.tileMap = tileMap;
+	public void setTile(int x, int y, Tile tile) {
+		tileMap[x][y] = tile;
+	}
+	
+	public int getWidth() {
+		return tileMap[0].length;
+	}
+	
+	public int getHeight() {
+		return tileMap.length;
+	}
+
+	public HashMap<String, NPC> getNpcs() {
+		return npcs;
+	}
+
+	public void setNpcs(HashMap<String, NPC> npcs) {
+		this.npcs = npcs;
 	}
 	
 	
-	
-	public String getName() {
-		return this.name;
-	}	
 }
