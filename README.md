@@ -1,6 +1,6 @@
 # Choice-Game
 
-Un jeu dans lequel vos choix décident de votre scénario !
+Un jeu dans lequel vos choix dÃ©cident de votre scÃ©nario !
 
 
 ## Documentation
@@ -39,8 +39,8 @@ EVENT (PARAM) {OPTIONAL PARAM}
 * NPCTILESET (NPCID) (TILESET) #Change NPC tileset
 * CHGMAP (MAPNAME) {PLAYERX} {PLAYERY} #Change map and (optional) move player in it
 
-####Exemples
-#####Exemple 1 (Bed):
+####Examples
+#####Example 1 (Bed):
 ```
 DIALOG "What do you want to do ?" CHOICE1 "Sleep until morning"  "Sleep until night"  "Cancel"
 IF CHOICE1==0
@@ -50,13 +50,14 @@ END
 IF CHOICE1==1
    SAY "You sleep until night"
    TRIGGER DAY OFF
-END```
-#####Exemple 2 (Chest):
+END
+```
+#####Example 2 (Chest):
 ```
 IF NOT CHEST152 #One time event
    INVVAR 152 KEY152
    IF KEY152>=1
-      INVDEL 152 1 "You use " #"{Cl� de coffre}x1"
+      INVDEL 152 1 "You use " #"{Clé de coffre}x1"
       MAPR 0 0 1 CHEST1 1
       SAY "You find some food"
       INVADD 12 1 "You find : " 
