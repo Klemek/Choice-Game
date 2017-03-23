@@ -14,6 +14,14 @@ public class Game {
 	
 	private String currentMap;
 	
+	public enum UserEvent{
+		ACTION,
+		LEFT,
+		RIGHT,
+		DOWN,
+		UP;
+	}
+	
 	public Game(Loader loader){
 		
 		this.triggers = new HashMap<>();
@@ -29,6 +37,21 @@ public class Game {
 		
 		//TODO create main character and give it to map
 		
+	}
+	
+	public void onUserEvent(UserEvent e, boolean release){
+		switch(e){
+		case ACTION:
+			break;
+		case DOWN:
+			break;
+		case LEFT:
+			break;
+		case RIGHT:
+			break;
+		case UP:
+			break;
+		}
 	}
 	
 	public boolean getTrigger(String trigname){

@@ -17,7 +17,8 @@ public class GamePanel extends JPanel {
 
 	private Game game;
 	private HashMap<String, BufferedImage> assets;
-	
+	private int animationTick;
+
 	public GamePanel(Loader loader, Game game) {
 
 		this.game = game;
@@ -25,9 +26,17 @@ public class GamePanel extends JPanel {
 		this.assets = loader.getGameAssets();
 		
 		Timer refresh = new Timer(20, new ActionListener() {
+			
+			private long t0;
+			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				GamePanel.this.repaint();
+				long t1 = System.currentTimeMillis();
+				if(t1-t0>1000){
+					t0 = t1;
+					animationTick++;
+				}
 			}
 		});
 		refresh.start();
