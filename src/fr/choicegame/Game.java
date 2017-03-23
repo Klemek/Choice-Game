@@ -2,6 +2,8 @@ package fr.choicegame;
 
 import java.util.HashMap;
 
+import fr.choicegame.character.Direction;
+import fr.choicegame.character.Player;
 import fr.choicegame.event.EventComputer;
 
 public class Game {
@@ -13,6 +15,8 @@ public class Game {
 	private HashMap<String, Map> maps;
 	
 	private String currentMap;
+	
+	private Player player;
 	
 	public enum UserEvent{
 		ACTION,
@@ -82,5 +86,40 @@ public class Game {
 	
 	public EventComputer getEventComputer(){
 		return evComputer;
+	}
+
+	public void action(EventComputer listener) {
+		int posX = (int) Math.round(player.getPosX()), posY = (int) Math.round(player.getPosY());
+		switch(player.getFacing()) {
+			case NORTH :
+				maps.get(currentMap).getTile(posX, posY-1).getEvent().action(posX, posY-1);
+			break;
+			case EAST :
+				maps.get(currentMap).getTile(posX+1, posY).getEvent().action(posX+1, posY);
+			break;
+			case SOUTH :
+				maps.get(currentMap).getTile(posX, posY+1).getEvent().action(posX, posY+1);
+			break;
+			case WEST :
+				maps.get(currentMap).getTile(posX-1, posY).getEvent().action(posX-1, posY);
+			break;
+		}
+	}
+	
+	public void move(Direction dir, Map map) {
+		switch(dir) {
+			case NORTH :
+				player.setPosY(player.getPosY() - 1);
+			break;
+			case SOUTH :
+				player.setPosY(player.getPosY() + 1);
+			break;
+			case EAST :
+				player.setPosX(player.getPosX() + 1);
+			break;
+			case WEST :
+				player.setPosX(player.getPosX() - 1);
+			break;
+		}
 	}
 }

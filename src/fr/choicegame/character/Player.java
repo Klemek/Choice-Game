@@ -2,6 +2,8 @@ package fr.choicegame.character;
 
 import java.util.HashMap;
 import fr.choicegame.Item;
+import fr.choicegame.Map;
+import fr.choicegame.TileType;
 
 public class Player extends Character {
 	
@@ -23,20 +25,4 @@ public class Player extends Character {
 
 	// Functions
 	
-	public void move(Direction dir) {
-		switch(dir) {
-			case NORTH :
-				setPosY(getPosY() - 1);
-			break;
-			case SOUTH :
-				setPosY(getPosY() + 1);
-			break;
-			case EAST :
-				setPosX(getPosX() + 1);
-			break;
-			case WEST :
-				setPosX(getPosX() - 1);
-			break;
-		}
-	}
 }

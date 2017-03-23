@@ -17,5 +17,7 @@ public class NPC extends Character {
 	public void setEvent(Event event) {
 		this.event = event;
 	}
+	
+	
 
 }

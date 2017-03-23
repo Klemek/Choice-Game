@@ -4,27 +4,27 @@ import fr.choicegame.TileImage;
 
 public abstract class Character {
 	
-	private int posX;
-	private int posY;
+	private double posX;
+	private double posY;
 	private Direction facing;
 	private String tileset;
-	private int animation;
+	private boolean walking;
 	
 	// Getters & Setters
 	
-	public int getPosX() {
+	public double getPosX() {
 		return posX;
 	}
 	
-	public void setPosX(int posX) {
+	public void setPosX(double posX) {
 		this.posX = posX;
 	}
 	
-	public int getPosY() {
+	public double getPosY() {
 		return posY;
 	}
 	
-	public void setPosY(int posY) {
+	public void setPosY(double posY) {
 		this.posY = posY;
 	}
 	
@@ -44,15 +44,15 @@ public abstract class Character {
 		this.tileset = tileset;
 	}
 	
-	public int getAnimation() {
-		return animation;
+	public boolean isWalking() {
+		return walking;
 	}
 	
-	public void setAnimation(int animation) {
-		this.animation = animation;
+	public void setWalking(boolean walking) {
+		this.walking = walking;
 	}
 
-	public TileImage getImage() {
+	public TileImage getImage(int i) {
 		int face = 0;
 		
 		switch(facing) {
@@ -69,8 +69,10 @@ public abstract class Character {
 				face = 9;
 			break;
 		}
-		
-		return new TileImage(animation + face, tileset);
+		if(!walking)
+			return new TileImage(face*4, tileset);
+		else
+			return new TileImage(face*4+1+i%2, tileset);
 	}
 	
 }
