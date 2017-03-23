@@ -120,6 +120,22 @@ public class Game {
 			case WEST :
 				player.setPosX(player.getPosX() - 1);
 			break;
+			case NORTH_EAST:
+				player.setPosY(player.getPosY() - 1/Math.sqrt(2));
+				player.setPosX(player.getPosX() + 1/Math.sqrt(2));
+			break;
+			case NORTH_WEST:
+				player.setPosY(player.getPosY() - 1/Math.sqrt(2));
+				player.setPosX(player.getPosX() - 1/Math.sqrt(2));
+			break;
+			case SOUTH_EAST:
+				player.setPosY(player.getPosY() + 1/Math.sqrt(2));
+				player.setPosX(player.getPosX() + 1/Math.sqrt(2));
+			break;
+			case SOUTH_WEST:
+				player.setPosY(player.getPosY() + 1/Math.sqrt(2));
+				player.setPosX(player.getPosX() - 1/Math.sqrt(2));
+			break;
 		}
 	}
 }
