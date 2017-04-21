@@ -28,7 +28,7 @@ public class TileItem {
 	    
 	    for(int i = 0; i < 4; i++){
 	    	if(texs[i] != null){
-	    		float z = -10f;
+	    		float z = 0f;
 	    		if(i<2)
 	    			z += 0.01f*i;
 	    		else

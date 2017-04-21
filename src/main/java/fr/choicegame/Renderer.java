@@ -10,6 +10,7 @@ import org.joml.Matrix4f;
 import fr.choicegame.lwjglengine.TileItem;
 import fr.choicegame.lwjglengine.Utils;
 import fr.choicegame.lwjglengine.Window;
+import fr.choicegame.lwjglengine.graph.Camera;
 import fr.choicegame.lwjglengine.graph.ShaderProgram;
 import fr.choicegame.lwjglengine.graph.Texture;
 import fr.choicegame.lwjglengine.graph.Transformation;
@@ -47,7 +48,7 @@ public class Renderer {
 		shaderProgram.link();
 		
 		shaderProgram.createUniform("projectionMatrix");
-	    shaderProgram.createUniform("worldMatrix");
+	    shaderProgram.createUniform("modelViewMatrix");
 	    shaderProgram.createUniform("texture_sampler");
 
 	    window.setClearColor(0.0f, 0.0f, 0.0f, 0.0f);
@@ -58,7 +59,7 @@ public class Renderer {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
 
-	public void render(Window window, List<TileItem> tileItems) {
+	public void render(Window window, List<TileItem> tileItems, Camera camera) {
 		clear();
 
 		if (window.isResized()) {
@@ -74,15 +75,13 @@ public class Renderer {
 	    Matrix4f projectionMatrix = transformation.getProjectionMatrix(FOV, window.getWidth(), window.getHeight(), Z_NEAR, Z_FAR);
 	    shaderProgram.setUniform("projectionMatrix", projectionMatrix);
 
+	    Matrix4f viewMatrix = transformation.getViewMatrix(camera);
+	    
 	    // Render each gameItem
 	    for(TileItem tileItem : tileItems) {
 	        // Set world matrix for this item
-	        Matrix4f worldMatrix =
-	            transformation.getWorldMatrix(
-	                tileItem.getPosition(),
-	                tileItem.getRotation(),
-	                tileItem.getScale());
-	        shaderProgram.setUniform("worldMatrix", worldMatrix);
+	    	Matrix4f modelViewMatrix = transformation.getModelViewMatrix(tileItem, viewMatrix);
+	        shaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
 	        tileItem.render();
 	    }
 

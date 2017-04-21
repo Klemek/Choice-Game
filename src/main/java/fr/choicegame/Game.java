@@ -12,6 +12,7 @@ import fr.choicegame.event.EventComputer;
 import fr.choicegame.lwjglengine.IGameLogic;
 import fr.choicegame.lwjglengine.TileItem;
 import fr.choicegame.lwjglengine.Window;
+import fr.choicegame.lwjglengine.graph.Camera;
 import fr.choicegame.lwjglengine.graph.Texture;
 
 public class Game implements IGameLogic{
@@ -28,8 +29,11 @@ public class Game implements IGameLogic{
 	
 	private List<TileItem> tileItems;
 	private final Renderer renderer;
+	private final Camera camera;
 	
 	private final JFrame splash;
+	
+	
 	
 	public enum UserEvent{
 		ACTION,
@@ -52,6 +56,7 @@ public class Game implements IGameLogic{
 		
 		tileItems = new ArrayList<>();
 		renderer = new Renderer(loader);
+		camera = new Camera();
 		
 		if(loader != null){
 			
@@ -176,15 +181,12 @@ public class Game implements IGameLogic{
 
 	@Override
 	public void input(Window window) {
-		// TODO Auto-generated method stub
-		
+		// TODO inputs
 	}
 
 	@Override
 	public void update(float interval) {
-		// update every tile
-		
-		
+		//TODO game loop
 	}
 	
 	public void updateMap() {
@@ -206,16 +208,17 @@ public class Game implements IGameLogic{
 					}
 				}
 				TileItem item = new TileItem(texs, ids);
-				item.setPosition((x-m.getWidth()/2f), (m.getHeight()/2f-y));
+				item.setPosition(x, (m.getHeight()-y));
 				item.setScale(1.01f); //merge borders;
 				tileItems.add(item);
 			}
 		}
+		camera.setPosition(m.getWidth()/2f, m.getHeight()/2f, 10f); //TODO position
 	}
 
 	@Override
 	public void render(Window window) {
-		renderer.render(window, tileItems);
+		renderer.render(window, tileItems, camera);
 	}
 
 	@Override
