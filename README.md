@@ -1,6 +1,6 @@
 # Choice-Game
 
-Un jeu dans lequel vos choix dÃ©cident de votre scÃ©nario !
+Un jeu dans lequel vos choix décident de votre scénario !
 
 
 ## Documentation

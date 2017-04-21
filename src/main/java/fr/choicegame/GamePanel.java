@@ -73,8 +73,8 @@ public class GamePanel extends JPanel {
 	}
 	
 	private void paintTile(Graphics2D g2, TileImage ti, int x, int y, int size){
-		if(ti != null && assets.containsKey("tilesets/"+ti.getTileset()+".png")){
-			BufferedImage img = assets.get("tilesets/"+ti.getTileset()+".png");
+		if(ti != null && assets.containsKey("/tilesets/"+ti.getTileset()+".png")){
+			BufferedImage img = assets.get("/tilesets/"+ti.getTileset()+".png");
 			int nc = img.getWidth()/32;
 			int ix = ti.getId()%nc;
 			int iy = ti.getId()/nc;
