@@ -8,6 +8,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.StringReader;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -33,6 +34,8 @@ public class Loader {
 
 	private HashMap<String, BufferedImage> imagesResources = new HashMap<String, BufferedImage>();
 	private HashMap<String, String> textResources = new HashMap<String, String>();
+	
+	private String[] folders = {"maps","tilesets"};
 
 	/**
 	 * load all pictures resources contained in the res folder files contained
@@ -41,11 +44,14 @@ public class Loader {
 	 * @return a boolean indicating whether or not the import was successful.
 	 */
 	public boolean load() {
-
-		File folder = new File("src/fr/choicegame/res");
-
-		this.loadFolder(folder,"");
-
+		for(String folderPath:folders){
+			try {
+				File folder = new File(Loader.class.getClass().getResource("/"+folderPath).toURI());
+				this.loadFolder(folder,folderPath+"/");
+			} catch (URISyntaxException e) {
+				e.printStackTrace();
+			}
+		}
 		return true;
 	}
 	
@@ -95,7 +101,7 @@ public class Loader {
 				line = br.readLine();
 			}
 		} catch (FileNotFoundException exception) {
-			System.out.println("Le fichier n'a pas été trouvé");
+			System.out.println("Le fichier n'a pas ï¿½tï¿½ trouvï¿½");
 			return null;
 		} catch (IOException exception) {
 			System.out.println("Erreur lors de la lecture de '"+pathToSource+"': " + exception.getMessage());

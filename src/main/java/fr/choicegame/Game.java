@@ -35,11 +35,18 @@ public class Game {
 		
 		evComputer = new EventComputer(this);
 		
-		this.currentMap = "start"; //Maybe a Constants.java with START_MAP = start ?
 		
-		this.maps.put(this.currentMap, loader.loadMap(this.currentMap));
 		
-		//TODO create main character and give it to map
+		if(loader != null){
+			
+			this.currentMap = "start"; //Maybe a Constants.java with START_MAP = start ?
+		
+			this.maps.put(this.currentMap, loader.loadMap(this.currentMap));
+		
+			//TODO create main character and give it to map
+		
+		}
+		
 		
 	}
 	

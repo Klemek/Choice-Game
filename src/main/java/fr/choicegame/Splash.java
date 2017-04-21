@@ -17,7 +17,7 @@ public class Splash extends JFrame{
 	}
 	
 	public Splash(){
-		ImageIcon splashImg = new ImageIcon(this.getClass().getResource("res/splash.jpg"));
+		ImageIcon splashImg = new ImageIcon(this.getClass().getResource("/splash.jpg"));
 		this.setSize(splashImg.getIconWidth(), splashImg.getIconHeight());
 		this.setUndecorated(true);
 		this.setLocationRelativeTo(null);
