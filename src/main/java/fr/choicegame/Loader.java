@@ -73,6 +73,7 @@ public class Loader {
 	}
 
 	private void loadFolder(String folderPath) throws IOException {
+		//http://stackoverflow.com/questions/11012819/how-can-i-get-a-resource-folder-from-inside-my-jar-file
 		if (!ide) { // Run with JAR file
 			final JarFile jar = new JarFile(jarFile);
 			//give all entries in jar
