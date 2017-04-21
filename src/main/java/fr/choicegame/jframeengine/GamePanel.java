@@ -1,4 +1,4 @@
-package fr.choicegame;
+package fr.choicegame.jframeengine;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -10,6 +10,11 @@ import java.util.HashMap;
 
 import javax.swing.JPanel;
 import javax.swing.Timer;
+
+import fr.choicegame.Game;
+import fr.choicegame.Loader;
+import fr.choicegame.Map;
+import fr.choicegame.TileImage;
 
 public class GamePanel extends JPanel {
 
@@ -23,7 +28,7 @@ public class GamePanel extends JPanel {
 
 		this.game = game;
 
-		this.assets = loader.getGameAssets();
+		this.assets = loader.loadGameAssets();
 		
 		Timer refresh = new Timer(20, new ActionListener() {
 			

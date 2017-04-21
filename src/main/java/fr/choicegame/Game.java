@@ -1,12 +1,20 @@
 package fr.choicegame;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+
+import javax.swing.JFrame;
 
 import fr.choicegame.character.Direction;
 import fr.choicegame.character.Player;
 import fr.choicegame.event.EventComputer;
+import fr.choicegame.lwjglengine.IGameLogic;
+import fr.choicegame.lwjglengine.TileItem;
+import fr.choicegame.lwjglengine.Window;
+import fr.choicegame.lwjglengine.graph.Texture;
 
-public class Game {
+public class Game implements IGameLogic{
 
 	private HashMap<String, Boolean> triggers;
 	private HashMap<String, Integer> globvars;
@@ -18,6 +26,11 @@ public class Game {
 	
 	private Player player;
 	
+	private List<TileItem> tileItems;
+	private final Renderer renderer;
+	
+	private final JFrame splash;
+	
 	public enum UserEvent{
 		ACTION,
 		LEFT,
@@ -26,7 +39,9 @@ public class Game {
 		UP;
 	}
 	
-	public Game(Loader loader){
+	public Game(Loader loader, JFrame splash){
+		
+		this.splash = splash;
 		
 		this.triggers = new HashMap<>();
 		this.globvars = new HashMap<>();
@@ -35,7 +50,8 @@ public class Game {
 		
 		evComputer = new EventComputer(this);
 		
-		
+		tileItems = new ArrayList<>();
+		renderer = new Renderer(loader);
 		
 		if(loader != null){
 			
@@ -110,6 +126,8 @@ public class Game {
 			case WEST :
 				maps.get(currentMap).getTile(posX-1, posY).getEvent().action(posX-1, posY);
 			break;
+		default:
+			break;
 		}
 	}
 	
@@ -144,5 +162,66 @@ public class Game {
 				player.setPosX(player.getPosX() - 1/Math.sqrt(2));
 			break;
 		}
+	}
+
+	@Override
+	public void init(Window window) throws Exception {
+		System.out.println("Initializing renderer and Loading textures ...");
+		renderer.init(window);
+		System.out.println("Creating map...");
+		this.updateMap();
+		System.out.println("Finished loading");
+		splash.setVisible(false); //end of loading
+	}
+
+	@Override
+	public void input(Window window) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void update(float interval) {
+		// update every tile
+		
+		
+	}
+	
+	public void updateMap() {
+		// free tile memory
+		for(TileItem item:tileItems)
+			item.cleanup();
+		
+		//allocate tiles
+		Map m = getCurrentMap();
+		for(int x = 0; x < m.getWidth(); x++){
+			for(int y = 0; y < m.getHeight(); y++){
+				TileImage[] timgs = m.getTile(x, y).getImages();
+				Texture[] texs = new Texture[timgs.length];
+				int[] ids = new int[timgs.length];
+				for(int i = 0; i < timgs.length; i++){
+					if(timgs[i] != null){
+						ids[i] = timgs[i].getId();
+						texs[i] = renderer.getTexture("/tilesets/"+timgs[i].getTileset()+".png");
+					}
+				}
+				TileItem item = new TileItem(texs, ids);
+				item.setPosition((x-m.getWidth()/2f), (m.getHeight()/2f-y));
+				item.setScale(1.01f); //merge borders;
+				tileItems.add(item);
+			}
+		}
+	}
+
+	@Override
+	public void render(Window window) {
+		renderer.render(window, tileItems);
+	}
+
+	@Override
+	public void cleanup() {
+		renderer.cleanup();
+		for(TileItem item:tileItems)
+			item.cleanup();
 	}
 }

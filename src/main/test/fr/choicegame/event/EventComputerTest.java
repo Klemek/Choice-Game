@@ -14,7 +14,7 @@ public class EventComputerTest {
 
 	@Test
 	public void testEventCalledExample1() {
-		Game game = new Game(null); // TODO loader
+		Game game = new Game(null, null); // TODO loader
 		Event ev = new Event(loadEvent("eventtest1.txt"), game.getEventComputer());
 		
 		ev.action(0, 0);

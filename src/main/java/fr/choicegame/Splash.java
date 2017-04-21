@@ -5,14 +5,29 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
+import fr.choicegame.jframeengine.Window;
+import fr.choicegame.lwjglengine.GameEngine;
+import fr.choicegame.lwjglengine.IGameLogic;
+
+
 public class Splash extends JFrame{
 
 	private static final long serialVersionUID = 1L;
 
 	public static void main(String[] args) {
-		Loader load = (new Splash()).run();
+		Splash splash = new Splash();
+		Loader load = splash.run();
 		if(load != null){
-			new Window(load);
+	        boolean vSync = true;
+	        try{
+	            IGameLogic gameLogic = new Game(load, splash);
+	            GameEngine gameEng = new GameEngine("Choice game",
+	                600, 480, vSync, gameLogic);
+	            gameEng.start();
+	        } catch (Exception excp) {
+	            excp.printStackTrace();
+	            System.exit(-1);
+	        }
 		}
 	}
 	
@@ -27,10 +42,11 @@ public class Splash extends JFrame{
 	}
 	
 	public Loader run(){
+
 		Loader loader = new Loader();
 		
 		if(loader.load()){
-			this.setVisible(false);
+			//this.setVisible(false);
 			return loader;
 		}else{
 			this.setVisible(false);

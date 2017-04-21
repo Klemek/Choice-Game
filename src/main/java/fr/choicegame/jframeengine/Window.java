@@ -1,10 +1,12 @@
-package fr.choicegame;
+package fr.choicegame.jframeengine;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 import javax.swing.JFrame;
 
+import fr.choicegame.Game;
+import fr.choicegame.Loader;
 import fr.choicegame.Game.UserEvent;
 
 public class Window extends JFrame implements KeyListener {
@@ -21,7 +23,7 @@ public class Window extends JFrame implements KeyListener {
 		this.setResizable(false);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-		this.game = new Game(loader);
+		this.game = new Game(loader, null);
 
 		this.gpanel = new GamePanel(loader, game);
 

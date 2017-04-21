@@ -28,6 +28,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import fr.choicegame.event.Event;
+import fr.choicegame.lwjglengine.graph.Texture;
 
 public class Loader {
 
@@ -36,8 +37,8 @@ public class Loader {
 	private static final ArrayList<String> TEXT_EXT = new ArrayList<>(
 			Arrays.asList(new String[] { "txt", "xml", "tmx" }));
 
-	private HashMap<String, BufferedImage> imagesResources = new HashMap<String, BufferedImage>();
-	private HashMap<String, String> textResources = new HashMap<String, String>();
+	private ArrayList<String> imageResources = new ArrayList<>();
+	private HashMap<String, String> textResources = new HashMap<>();
 
 	private String[] folders = { "/maps", "/tilesets" };
 
@@ -102,11 +103,8 @@ public class Loader {
 	private void loadFile(String path) {
 		String ext = getExtension(path);
 		if (IMAGE_EXT.contains(ext)) {
-			BufferedImage image = loadImageAsset(path);
-			if (image != null) {
-				imagesResources.put(path, image);
-				System.out.println("Image File '" + path + "' loaded");
-			}
+			imageResources.add(path);
+			System.out.println("Image File '" + path + "' detected");
 		} else if (TEXT_EXT.contains(ext)) {
 			String textFile = loadTextAsset(path);
 			if (textFile != null) {
@@ -116,13 +114,37 @@ public class Loader {
 		}
 	}
 
-	public static BufferedImage loadImageAsset(String path) {
-		try {
-			return ImageIO.read(Loader.class.getResource(path));
-		} catch (IOException e) {
-			System.out.println("Error on reading '" + path + "': " + e.getMessage());
-			return null;
+	public HashMap<String, Texture> loadTextures(){
+		//Make sure to call this function after LWJGL was initialized
+		HashMap<String, Texture> textures = new HashMap<>();
+		for(String path:imageResources){
+			try {
+				textures.put(path, new Texture(path));
+				System.out.println("Image File '" + path + "' loaded");
+			} catch (IOException e) {
+				e.printStackTrace();
+				System.out.println("Error on reading '" + path + "': " + e.getMessage());
+			}
 		}
+		return textures;
+	}
+	
+	public HashMap<String, BufferedImage> loadGameAssets() {
+		HashMap<String, BufferedImage> images = new HashMap<>();
+		for(String path:imageResources){
+			try {
+				images.put(path, loadImageAsset(path));
+				System.out.println("Image File '" + path + "' loaded");
+			} catch (IOException e) {
+				e.printStackTrace();
+				System.out.println("Error on reading '" + path + "': " + e.getMessage());
+			}
+		}
+		return images;
+	}
+	
+	public static BufferedImage loadImageAsset(String path) throws IOException {
+		return ImageIO.read(Loader.class.getResource(path));
 	}
 
 	public static String loadTextAsset(String pathToSource) {
@@ -163,9 +185,7 @@ public class Loader {
 		return this.textResources.get(name);
 	}
 
-	public HashMap<String, BufferedImage> getGameAssets() {
-		return this.imagesResources;
-	}
+	
 
 	public Map loadMap(String mapName) {
 		Map map = null;
@@ -357,13 +377,14 @@ public class Loader {
 	 *            the name of the resource
 	 * @return the image if existing, null if not.
 	 */
-	public BufferedImage getGameAsset(String name) {
+	/*public BufferedImage getGameAsset(String name) {
 		if (!name.startsWith("/"))
 			name = "/" + name;
 		return this.imagesResources.get(name);
-	}
+	}*/
 
 	public static String getExtension(String filePath) {
 		return filePath.substring(filePath.lastIndexOf(".") + 1);
 	}
+
 }
