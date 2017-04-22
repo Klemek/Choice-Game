@@ -6,8 +6,9 @@ public class NPC extends Character {
 	
 	private Event event;
 	
-	public NPC() {
-		
+	public NPC(float posX, float posY, String tileset, Event event) {
+		super(posX, posY, tileset);
+		this.event = event;
 	}
 
 	public Event getEvent() {

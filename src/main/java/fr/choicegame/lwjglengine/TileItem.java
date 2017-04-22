@@ -22,18 +22,32 @@ public class TileItem {
 									        0, 1, 3, 3, 1, 2,
 									    };
     
+    private static final float Z = 0f;
+    private static final float DELTA = 0.01f;
+    
+    public TileItem(Texture tex, int id) {
+	    meshes = new ArrayList<>();
+	    meshes.add(new Mesh(getPositions(Z),tex.getTextCoords(id, 32), INDICES, tex));
+	    
+        position = new Vector3f(0, 0, 0);
+        scale = 1;
+        rotation = new Vector3f(0, 0, 0);
+    }
+    
     public TileItem(Texture[] texs, int[] ids) {
     	
 	    meshes = new ArrayList<>();
 	    
 	    for(int i = 0; i < 4; i++){
 	    	if(texs[i] != null){
-	    		float z = 0f;
+	    		float z = Z;
 	    		if(i<2)
-	    			z += 0.01f*i;
+	    			z -= DELTA*(2-i);
 	    		else
-	    			z -= 0.01f*(i-2);
+	    			z += DELTA*(i-1);
 	    		meshes.add(new Mesh(getPositions(z),texs[i].getTextCoords(ids[i], 32), INDICES, texs[i]));
+	    	}else{
+	    		meshes.add(null);
 	    	}
 	    }
 	    
@@ -80,12 +94,19 @@ public class TileItem {
 
     public void render(){
     	for(Mesh mesh: meshes)
-    		mesh.render();
+    		if(mesh != null)
+    			mesh.render();
+    }
+    
+    public void render(int i){
+    	if(meshes.size()>i && meshes.get(i) != null)
+    		meshes.get(i).render();
     }
     
     public void cleanup(){
     	for(Mesh mesh: meshes)
-    		mesh.cleanUp();
+    		if(mesh != null)
+    			mesh.cleanUp();
     }
     
 }

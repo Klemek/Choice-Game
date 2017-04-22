@@ -22,6 +22,7 @@ public class GamePanel extends JPanel {
 
 	private Game game;
 	private HashMap<String, BufferedImage> assets;
+	@SuppressWarnings("unused")
 	private int animationTick;
 
 	public GamePanel(Loader loader, Game game) {

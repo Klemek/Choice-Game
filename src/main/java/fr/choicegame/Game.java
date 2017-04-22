@@ -4,14 +4,18 @@ import java.util.HashMap;
 
 import javax.swing.JFrame;
 
+import static org.lwjgl.glfw.GLFW.*;
+
 import fr.choicegame.character.Direction;
 import fr.choicegame.character.Player;
 import fr.choicegame.event.EventComputer;
 import fr.choicegame.lwjglengine.IGameLogic;
 import fr.choicegame.lwjglengine.Window;
 
-public class Game implements IGameLogic{
 
+
+public class Game implements IGameLogic{
+	
 	private HashMap<String, Boolean> triggers;
 	private HashMap<String, Integer> globvars;
 	
@@ -24,14 +28,6 @@ public class Game implements IGameLogic{
 
 	private final Renderer renderer;
 	private final JFrame splash;
-	
-	public enum UserEvent{
-		ACTION,
-		LEFT,
-		RIGHT,
-		DOWN,
-		UP;
-	}
 	
 	public Game(Loader loader, JFrame splash){
 		
@@ -54,23 +50,7 @@ public class Game implements IGameLogic{
 		
 			//TODO create main character and give it to map
 		
-		}
-		
-		
-	}
-	
-	public void onUserEvent(UserEvent e, boolean release){
-		switch(e){
-		case ACTION:
-			break;
-		case DOWN:
-			break;
-		case LEFT:
-			break;
-		case RIGHT:
-			break;
-		case UP:
-			break;
+			player = new Player(0f,0f,"character1");
 		}
 	}
 	
@@ -123,39 +103,6 @@ public class Game implements IGameLogic{
 			break;
 		}
 	}
-	
-	public void move(Direction dir, Map map) {
-		switch(dir) {
-			case NORTH :
-				player.setPosY(player.getPosY() - 1);
-			break;
-			case SOUTH :
-				player.setPosY(player.getPosY() + 1);
-			break;
-			case EAST :
-				player.setPosX(player.getPosX() + 1);
-			break;
-			case WEST :
-				player.setPosX(player.getPosX() - 1);
-			break;
-			case NORTH_EAST:
-				player.setPosY(player.getPosY() - 1/Math.sqrt(2));
-				player.setPosX(player.getPosX() + 1/Math.sqrt(2));
-			break;
-			case NORTH_WEST:
-				player.setPosY(player.getPosY() - 1/Math.sqrt(2));
-				player.setPosX(player.getPosX() - 1/Math.sqrt(2));
-			break;
-			case SOUTH_EAST:
-				player.setPosY(player.getPosY() + 1/Math.sqrt(2));
-				player.setPosX(player.getPosX() + 1/Math.sqrt(2));
-			break;
-			case SOUTH_WEST:
-				player.setPosY(player.getPosY() + 1/Math.sqrt(2));
-				player.setPosX(player.getPosX() - 1/Math.sqrt(2));
-			break;
-		}
-	}
 
 	@Override
 	public void init(Window window) throws Exception {
@@ -163,18 +110,57 @@ public class Game implements IGameLogic{
 		renderer.init(window);
 		System.out.println("Creating map...");
 		renderer.updateMap(getCurrentMap());
+		renderer.updateCharacters(0, player, getCurrentMap());
 		System.out.println("Finished loading");
 		splash.setVisible(false); //end of loading
 	}
 
 	@Override
 	public void input(Window window) {
-		// TODO inputs
+		//azerty is auto converted to qwerty with lwjgl
+		boolean up = window.isKeyPressed(GLFW_KEY_UP) || window.isKeyPressed(GLFW_KEY_W);
+		boolean down = window.isKeyPressed(GLFW_KEY_DOWN) || window.isKeyPressed(GLFW_KEY_S);
+		boolean left = window.isKeyPressed(GLFW_KEY_LEFT) || window.isKeyPressed(GLFW_KEY_A);
+		boolean right = window.isKeyPressed(GLFW_KEY_RIGHT) || window.isKeyPressed(GLFW_KEY_D);
+		
+		player.setWalking((up ^ down) || (left ^ right));
+		
+		if(player.isWalking()){
+			if(up && !down){
+				if(left && !right){
+					player.setMoving(Direction.NORTH_WEST);
+				}else if(right && !left){
+					player.setMoving(Direction.NORTH_EAST);
+				}else{
+					player.setMoving(Direction.NORTH);
+				}
+				player.setFacing(Direction.NORTH);
+			}else if(down && !up){
+				if(left && !right){
+					player.setMoving(Direction.SOUTH_WEST);
+				}else if(right && !left){
+					player.setMoving(Direction.SOUTH_EAST);
+				}else{
+					player.setMoving(Direction.SOUTH);
+				}
+				player.setFacing(Direction.SOUTH);
+			}else{
+				if(left && !right){
+					player.setMoving(Direction.WEST);
+					player.setFacing(Direction.WEST);
+				}else if(right && !left){
+					player.setMoving(Direction.EAST);
+					player.setFacing(Direction.EAST);
+				}
+			}
+		}
 	}
 
 	@Override
 	public void update(float interval) {
 		//TODO game loop
+		player.update(getCurrentMap());
+		renderer.updateCharacters(interval, player, getCurrentMap());
 	}
 
 

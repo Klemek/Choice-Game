@@ -18,8 +18,8 @@ public class Texture {
 		//Load the texture from file
 		PNGDecoder decoder = new PNGDecoder(Texture.class.getResourceAsStream(fileName));
 		
-		width = decoder.getHeight();
-		height = decoder.getWidth();
+		width = decoder.getWidth();
+		height = decoder.getHeight();
 		
 		ByteBuffer buf = ByteBuffer.allocateDirect(4 * decoder.getWidth() * decoder.getHeight());
 		decoder.decode(buf, decoder.getWidth() * 4, Format.RGBA);
@@ -52,7 +52,7 @@ public class Texture {
 		float wcut = (float)texSize/(float)width;
 		float hcut = (float)texSize/(float)height;
 		
-		int wsize = width/texSize;
+		int wsize = Math.round(width/texSize);
 		
 		int x = id%wsize;
 		int y = id/wsize;

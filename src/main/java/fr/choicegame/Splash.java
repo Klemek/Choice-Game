@@ -5,7 +5,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
-import fr.choicegame.jframeengine.Window;
 import fr.choicegame.lwjglengine.GameEngine;
 import fr.choicegame.lwjglengine.IGameLogic;
 

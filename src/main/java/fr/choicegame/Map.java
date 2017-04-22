@@ -16,6 +16,7 @@ public class Map {
 				tileMap[x][y] = Tile.EMPTY;
 			}
 		}
+		npcs = new HashMap<>();
 	}
 		
 	public void setGameEventListener(GameEventListener listener) {

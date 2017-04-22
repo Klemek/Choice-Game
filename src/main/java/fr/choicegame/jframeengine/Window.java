@@ -7,7 +7,6 @@ import javax.swing.JFrame;
 
 import fr.choicegame.Game;
 import fr.choicegame.Loader;
-import fr.choicegame.Game.UserEvent;
 
 public class Window extends JFrame implements KeyListener {
 
@@ -40,7 +39,7 @@ public class Window extends JFrame implements KeyListener {
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		switch(e.getKeyCode()){
+		/*switch(e.getKeyCode()){
 		case KeyEvent.VK_E:
 			game.onUserEvent(UserEvent.ACTION, false);
 			break;
@@ -56,12 +55,12 @@ public class Window extends JFrame implements KeyListener {
 		case KeyEvent.VK_DOWN:
 			game.onUserEvent(UserEvent.DOWN, false);
 			break;
-		}
+		}*/
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-		switch(e.getKeyCode()){
+		/*switch(e.getKeyCode()){
 		case KeyEvent.VK_E:
 			game.onUserEvent(UserEvent.ACTION, true);
 			break;
@@ -77,7 +76,7 @@ public class Window extends JFrame implements KeyListener {
 		case KeyEvent.VK_DOWN:
 			game.onUserEvent(UserEvent.DOWN, true);
 			break;
-		}
+		}*/
 	}
 
 }

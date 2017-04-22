@@ -2,15 +2,14 @@ package fr.choicegame.character;
 
 import java.util.HashMap;
 import fr.choicegame.Item;
-import fr.choicegame.Map;
-import fr.choicegame.TileType;
 
 public class Player extends Character {
 	
 	private HashMap<Item, Integer> inventory;
 	
-	public Player() {
-		
+	public Player(float posX, float posY, String tileset) {
+		super(posX, posY, tileset);
+		inventory = new HashMap<>();
 	}
 
 	// Getters & Setters
