@@ -1,8 +1,6 @@
 package fr.choicegame;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import javax.swing.JFrame;
 
@@ -10,10 +8,7 @@ import fr.choicegame.character.Direction;
 import fr.choicegame.character.Player;
 import fr.choicegame.event.EventComputer;
 import fr.choicegame.lwjglengine.IGameLogic;
-import fr.choicegame.lwjglengine.TileItem;
 import fr.choicegame.lwjglengine.Window;
-import fr.choicegame.lwjglengine.graph.Camera;
-import fr.choicegame.lwjglengine.graph.Texture;
 
 public class Game implements IGameLogic{
 
@@ -26,14 +21,9 @@ public class Game implements IGameLogic{
 	private String currentMap;
 	
 	private Player player;
-	
-	private List<TileItem> tileItems;
+
 	private final Renderer renderer;
-	private final Camera camera;
-	
 	private final JFrame splash;
-	
-	
 	
 	public enum UserEvent{
 		ACTION,
@@ -54,9 +44,7 @@ public class Game implements IGameLogic{
 		
 		evComputer = new EventComputer(this);
 		
-		tileItems = new ArrayList<>();
 		renderer = new Renderer(loader);
-		camera = new Camera();
 		
 		if(loader != null){
 			
@@ -174,7 +162,7 @@ public class Game implements IGameLogic{
 		System.out.println("Initializing renderer and Loading textures ...");
 		renderer.init(window);
 		System.out.println("Creating map...");
-		this.updateMap();
+		renderer.updateMap(getCurrentMap());
 		System.out.println("Finished loading");
 		splash.setVisible(false); //end of loading
 	}
@@ -188,43 +176,15 @@ public class Game implements IGameLogic{
 	public void update(float interval) {
 		//TODO game loop
 	}
-	
-	public void updateMap() {
-		// free tile memory
-		for(TileItem item:tileItems)
-			item.cleanup();
-		
-		//allocate tiles
-		Map m = getCurrentMap();
-		for(int x = 0; x < m.getWidth(); x++){
-			for(int y = 0; y < m.getHeight(); y++){
-				TileImage[] timgs = m.getTile(x, y).getImages();
-				Texture[] texs = new Texture[timgs.length];
-				int[] ids = new int[timgs.length];
-				for(int i = 0; i < timgs.length; i++){
-					if(timgs[i] != null){
-						ids[i] = timgs[i].getId();
-						texs[i] = renderer.getTexture("/tilesets/"+timgs[i].getTileset()+".png");
-					}
-				}
-				TileItem item = new TileItem(texs, ids);
-				item.setPosition(x, (m.getHeight()-y));
-				item.setScale(1.01f); //merge borders;
-				tileItems.add(item);
-			}
-		}
-		camera.setPosition(m.getWidth()/2f, m.getHeight()/2f, 10f); //TODO position
-	}
+
 
 	@Override
 	public void render(Window window) {
-		renderer.render(window, tileItems, camera);
+		renderer.render(window);
 	}
 
 	@Override
 	public void cleanup() {
 		renderer.cleanup();
-		for(TileItem item:tileItems)
-			item.cleanup();
 	}
 }
