@@ -1,4 +1,5 @@
 /bin/
 /build/
 /.gradle/
+/.settings/
 /hs_err_pid*.log
