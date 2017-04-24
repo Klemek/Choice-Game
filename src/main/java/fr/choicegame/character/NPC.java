@@ -1,5 +1,6 @@
 package fr.choicegame.character;
 
+import fr.choicegame.Map;
 import fr.choicegame.event.Event;
 
 public class NPC extends Character {
@@ -17,6 +18,11 @@ public class NPC extends Character {
 
 	public void setEvent(Event event) {
 		this.event = event;
+	}
+
+	@Override
+	protected void updateChar(Map m) {
+		// TODO IA
 	}
 	
 	

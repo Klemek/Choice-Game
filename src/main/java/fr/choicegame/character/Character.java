@@ -8,7 +8,7 @@ import fr.choicegame.TileType;
 
 public abstract class Character {
 
-	private static final float CHAR_SPD = 0.1f;
+	protected static final float CHAR_SPD = 0.1f;
 
 	private float posX;
 	private float posY;
@@ -17,6 +17,12 @@ public abstract class Character {
 	private String tileset;
 	private boolean walking;
 
+	protected float[] hitboxstart = {0.25f,0.7f};
+	//around feet
+	//TODO dynamically read value
+
+	protected float[] hitboxsize = {0.5f,0.3f};
+	
 	public Character(float posX, float posY, String tileset) {
 		this.posX = posX;
 		this.posY = posY;
@@ -96,8 +102,10 @@ public abstract class Character {
 			return new TileImage(face * 3 + 1 + i % 2, tileset);
 	}
 
+	protected abstract void updateChar(Map m);
+	
 	public void update(Map m) {
-
+		updateChar(m);
 		if (walking) {
 
 			float newx = getPosX(), newy = getPosY();
@@ -141,11 +149,16 @@ public abstract class Character {
 
 	private boolean collision(Map m, float newx, float newy) {
 		//TODO continue
-		if(newx>=0f && newy>=0f && newx+1f<m.getWidth() && newy+1f<m.getHeight()){
-			for(float dx = 0; dx <= 1f; dx+=1f){
-				for(float dy = 0; dy <= 1f; dy+=1f){
-					if(m.getTile(Math.round(newx+dx),Math.round(newy+dy)).getType() != TileType.FLAT){
-						if(new Rectangle.Float(newx, newy,1f,1f).intersects(new Rectangle.Float(Math.round(newx+dx),Math.round(newy+dy),1f,1f))){
+		int inewx = (int) Math.floor(newx);
+		int inewy = (int) Math.floor(newy);
+		if(inewx>=0 && inewy>=0 && inewx+1<m.getWidth() && inewy+1<m.getHeight()){
+			for(int dx = 0; dx <= 1; dx+=1){
+				for(int dy = 0; dy <= 1; dy+=1){
+					if(m.getTile(inewx+dx,inewy+dy).getType() != TileType.FLAT){
+						if(new Rectangle.Float(newx+hitboxstart[0],newy+hitboxstart[1],
+								hitboxsize[0],hitboxsize[1])
+								.intersects(new Rectangle.Float(inewx+dx,inewy+dy,1f,1f))){
+							//TODO tile size < 1 like rocks,etc
 							return true;
 						}
 					}

@@ -25,6 +25,11 @@ public class Tile {
 		this.images = images;
 	}
 	
+	public void action(int x, int y){
+		if(event != null)
+			event.action(x, y);
+	}
+	
 	public Event getEvent() {
 		return event;
 	}

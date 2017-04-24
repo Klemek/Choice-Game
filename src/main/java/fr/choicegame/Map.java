@@ -37,6 +37,10 @@ public class Map {
 		return tileMap[x][y];
 	}
 	
+	public void action(int x, int y){
+		tileMap[x][y].action(x, y);
+	}
+	
 	public int getWidth() {
 		return tileMap[0].length;
 	}

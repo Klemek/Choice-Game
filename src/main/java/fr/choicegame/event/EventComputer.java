@@ -134,6 +134,7 @@ public class EventComputer implements GameEventListener {
 						break;
 					case "SAY": //SAY (TEXT) [IMAGEID] #Show text (pause game)
 						//TODO EVENT SAY
+						System.out.println(args[0]);
 						switch(args.length){
 						case 1: //SAY (TEXT)
 							break;
