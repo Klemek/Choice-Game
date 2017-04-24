@@ -1,7 +1,7 @@
 package fr.choicegame.character;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+
 import fr.choicegame.Item;
 import fr.choicegame.Map;
 
@@ -30,30 +30,30 @@ public class Player extends Character {
 	@Override
 	protected void updateChar(Map m) {
 		//action events when walked in
-		float posx = (int)(getPosX()+hitboxstart[0]);
-		float posy = (int)(getPosY()+hitboxstart[1]);
-		float posx2 = (int)(getPosX()+hitboxstart[0]+hitboxsize[0]);
-		float posy2 = (int)(getPosY()+hitboxstart[1]+hitboxsize[1]);
+		float posx = getPosX()+hitboxstart[0];
+		float posy = getPosY()+hitboxstart[1];
+		float posx2 = getPosX()+hitboxstart[0]+hitboxsize[0];
+		float posy2 = getPosY()+hitboxstart[1]+hitboxsize[1];
 		if(lastPos[0] >= 0){
 			float dx = getPosX()-lastPos[0];
 			float dy = getPosY()-lastPos[1];
 			
-			if(dx>=0){
+			if(dx>0){
 				if(posx2-(int)posx2<=Character.CHAR_SPD){
 					m.action((int)posx2,(int)posy);
 				}
-			}else if(dx<=0){
-				if((int)(posx2)-posx<=Character.CHAR_SPD){
+			}else if(dx<0){
+				if((int)(posx+1)-posx<=Character.CHAR_SPD){
 					m.action((int)posx,(int)posy);
 				}
 			}
 			
-			if(dy>=0){
+			if(dy>0){
 				if(posy2-(int)posy2<=Character.CHAR_SPD){
 					m.action((int)posx,(int)posy2);
 				}
-			}else if(dy<=0){
-				if((int)(posy2)-posy<=Character.CHAR_SPD){
+			}else if(dy<0){
+				if((int)(posy+1)-posy<=Character.CHAR_SPD){
 					m.action((int)posx,(int)posy);
 				}
 			}

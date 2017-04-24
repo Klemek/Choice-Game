@@ -47,7 +47,9 @@ public class Game implements IGameLogic{
 			this.currentMap = "start"; //Maybe a Constants.java with START_MAP = start ?
 		
 			this.maps.put(this.currentMap, loader.loadMap(this.currentMap));
-		
+
+			this.setCurrentMap(currentMap);
+			
 			//TODO create main character and give it to map
 		
 			player = new Player(0f,0f,"character1");
@@ -78,6 +80,13 @@ public class Game implements IGameLogic{
 	
 	public Map getCurrentMap(){
 		return this.maps.get(this.currentMap);
+	}
+	
+	public void setCurrentMap(String name){
+		if(maps.containsKey(name)){
+			this.currentMap = name;
+			getCurrentMap().setGameEventListener(evComputer);
+		}
 	}
 	
 	public EventComputer getEventComputer(){

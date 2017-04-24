@@ -29,6 +29,7 @@ public class EventComputer implements GameEventListener {
 		HashMap<String, Integer> vars = new HashMap<>();
 		boolean jump = false;
 		for(String action:actions){
+			System.out.println(">"+action);//TODO debug
 			action = action.split("#")[0].trim(); //TODO espace # in text args
 			if(action.length()>0){
 				String spl1[] = action.split(" ",2);
