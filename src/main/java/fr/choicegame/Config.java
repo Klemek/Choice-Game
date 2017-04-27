@@ -27,6 +27,9 @@ public class Config {
 	
 	//Player
 	
+	public static final String CHARACTER_SPEED = "character_speed";
+	private static final float CHARACTER_SPEED_DEFAULT = 0.1f;
+	
 	public static final String HITBOX_START_X = "hitbox_start_x";
 	private static final float HITBOX_START_X_DEFAULT = 0.25f;
 	
@@ -51,6 +54,7 @@ public class Config {
 		values.put(PLAYER_TILESET, PLAYER_TILESET_DEFAULT);
 		values.put(TILE_SIZE, ""+TILE_SIZE_DEFAULT);
 		values.put(START_MAP, START_MAP_DEFAULT);
+		values.put(CHARACTER_SPEED, ""+CHARACTER_SPEED_DEFAULT);
 		values.put(HITBOX_START_X, ""+HITBOX_START_X_DEFAULT);
 		values.put(HITBOX_START_Y, ""+HITBOX_START_Y_DEFAULT);
 		values.put(HITBOX_SIZE_X, ""+HITBOX_SIZE_X_DEFAULT);

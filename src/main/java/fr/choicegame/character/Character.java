@@ -9,8 +9,6 @@ import fr.choicegame.TileType;
 
 public abstract class Character {
 
-	protected static final float CHAR_SPD = 0.1f;
-
 	private float posX;
 	private float posY;
 	private Direction facing;
@@ -101,6 +99,9 @@ public abstract class Character {
 	
 	public void update(Map m) {
 		if(m != null){
+			
+			float char_spd = Config.getFloatValue(Config.CHARACTER_SPEED);
+			
 			updateChar(m);
 			if (walking) {
 	
@@ -108,32 +109,32 @@ public abstract class Character {
 	
 				switch (moving) {
 				case NORTH:
-					newy = getPosY() - CHAR_SPD;
+					newy = getPosY() - char_spd;
 					break;
 				case SOUTH:
-					newy = getPosY() + CHAR_SPD;
+					newy = getPosY() + char_spd;
 					break;
 				case EAST:
-					newx = getPosX() + CHAR_SPD;
+					newx = getPosX() + char_spd;
 					break;
 				case WEST:
-					newx = getPosX() - CHAR_SPD;
+					newx = getPosX() - char_spd;
 					break;
 				case NORTH_EAST:
-					newy = (float) (getPosY() - CHAR_SPD / Math.sqrt(2));
-					newx = (float) (getPosX() + CHAR_SPD / Math.sqrt(2));
+					newy = (float) (getPosY() - char_spd / Math.sqrt(2));
+					newx = (float) (getPosX() + char_spd / Math.sqrt(2));
 					break;
 				case NORTH_WEST:
-					newy = (float) (getPosY() - CHAR_SPD / Math.sqrt(2));
-					newx = (float) (getPosX() - CHAR_SPD / Math.sqrt(2));
+					newy = (float) (getPosY() - char_spd / Math.sqrt(2));
+					newx = (float) (getPosX() - char_spd / Math.sqrt(2));
 					break;
 				case SOUTH_EAST:
-					newy = (float) (getPosY() + CHAR_SPD / Math.sqrt(2));
-					newx = (float) (getPosX() + CHAR_SPD / Math.sqrt(2));
+					newy = (float) (getPosY() + char_spd / Math.sqrt(2));
+					newx = (float) (getPosX() + char_spd / Math.sqrt(2));
 					break;
 				case SOUTH_WEST:
-					newy = (float) (getPosY() + CHAR_SPD / Math.sqrt(2));
-					newx = (float) (getPosX() - CHAR_SPD / Math.sqrt(2));
+					newy = (float) (getPosY() + char_spd / Math.sqrt(2));
+					newx = (float) (getPosX() - char_spd / Math.sqrt(2));
 					break;
 				}
 	

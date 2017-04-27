@@ -37,6 +37,8 @@ public class Player extends Character {
 		float hitboxsizex = Config.getFloatValue(Config.HITBOX_SIZE_X);
 		float hitboxsizey = Config.getFloatValue(Config.HITBOX_SIZE_Y);
 		
+		float char_spd = Config.getFloatValue(Config.CHARACTER_SPEED);
+		
 		float posx = getPosX()+hitboxstartx;
 		float posy = getPosY()+hitboxstarty;
 		float posx2 = getPosX()+hitboxstartx+hitboxsizex;
@@ -46,21 +48,21 @@ public class Player extends Character {
 			float dy = getPosY()-lastPos[1];
 			
 			if(dx>0){
-				if(posx2-(int)posx2<=Character.CHAR_SPD){
+				if(posx2-(int)posx2<=char_spd){
 					m.action((int)posx2,(int)posy);
 				}
 			}else if(dx<0){
-				if((int)(posx+1)-posx<=Character.CHAR_SPD){
+				if((int)(posx+1)-posx<=char_spd){
 					m.action((int)posx,(int)posy);
 				}
 			}
 			
 			if(dy>0){
-				if(posy2-(int)posy2<=Character.CHAR_SPD){
+				if(posy2-(int)posy2<=char_spd){
 					m.action((int)posx,(int)posy2);
 				}
 			}else if(dy<0){
-				if((int)(posy+1)-posy<=Character.CHAR_SPD){
+				if((int)(posy+1)-posy<=char_spd){
 					m.action((int)posx,(int)posy);
 				}
 			}
