@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.Scanner;
 
 import fr.choicegame.Game;
+import fr.choicegame.Tile;
+import fr.choicegame.TileImage;
 
 public class EventComputer implements GameEventListener {
 	
@@ -179,19 +181,43 @@ public class EventComputer implements GameEventListener {
 						break;
 					case "MAP": //MAP (X) (Y) (LAYER) [TILESET] [ID] #Edit one map's tile
 						//TODO EVENT MAP
+						int x0 = Integer.parseInt(args[0]);
+						int y0 = Integer.parseInt(args[1]);
+						int layer = Integer.parseInt(args[2]);
+						Tile t = game.getCurrentMap().getTile(x0,y0);
+						TileImage[] ti = t.getImages();
 						switch(args.length){
-						case 3: //INVDEL (ITEMID)
+						case 3: //MAP (X) (Y) (LAYER)
+							ti[layer] = null;
+							t.setImages(ti);
 							break;
-						case 5://INVDEL (ITEMID) (NUM)
+						case 5: //MAP (X) (Y) (LAYER) [TILESET] [ID]
+							String tileset = args[3];
+							int id = Integer.parseInt(args[4]);
+							ti[layer] = new TileImage(id,tileset);
+							t.setImages(ti);
 							break;
 						}
 						break;
 					case "MAPR": //MAPR (DX) (DY) (LAYER) [TILESET] [ID] #Edit one map's tile relatively to event's source
 						//TODO EVENT MAPR
+						int dx = Integer.parseInt(args[0]);
+						int dy = Integer.parseInt(args[1]);
+						int layer1 = Integer.parseInt(args[2]);
+						Tile t1 = game.getCurrentMap().getTile(x+dx,y+dy);
+						TileImage[] ti1 = t1.getImages();
 						switch(args.length){
-						case 3: //INVDEL (ITEMID)
+						case 3: //MAPR (DX) (DY) (LAYER)
+							ti1[layer1] = null;
+							t1.setImages(ti1);
+							game.updateMap();
 							break;
-						case 5://INVDEL (ITEMID) (NUM)
+						case 5: //MAPR (DX) (DY) (LAYER) [TILESET] [ID]
+							String tileset = args[3];
+							int id = Integer.parseInt(args[4]);
+							ti1[layer1] = new TileImage(id,tileset);
+							t1.setImages(ti1);
+							game.updateMap();
 							break;
 						}
 						break;

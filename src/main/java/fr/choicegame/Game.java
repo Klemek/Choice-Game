@@ -93,6 +93,10 @@ public class Game implements IGameLogic{
 		return evComputer;
 	}
 
+	public void updateMap() {
+		renderer.updateMap(getCurrentMap());
+	}
+	
 	public void action(EventComputer listener) {
 		int posX = (int) Math.round(player.getPosX()), posY = (int) Math.round(player.getPosY());
 		switch(player.getFacing()) {
