@@ -35,7 +35,7 @@ public class Loader {
 	private static final ArrayList<String> IMAGE_EXT = new ArrayList<>(
 			Arrays.asList(new String[] { "png", "jpg", "gif" }));
 	private static final ArrayList<String> TEXT_EXT = new ArrayList<>(
-			Arrays.asList(new String[] { "txt", "xml", "tmx" }));
+			Arrays.asList(new String[] { "txt", "xml", "tmx", "cfg" }));
 
 	private ArrayList<String> imageResources = new ArrayList<>();
 	private HashMap<String, String> textResources = new HashMap<>();
@@ -70,6 +70,9 @@ public class Loader {
 				return false;
 			}
 		}
+		
+		this.loadFile(Config.CONFIG_FILE);
+		
 		return true;
 	}
 

@@ -9,7 +9,9 @@ public class Config {
 	private HashMap<String, String> values;
 	private HashMap<String, String> defaultValues;
 	
-	public static final String CONFIG_FILE = "config.cfg";
+	public static final String CONFIG_FILE = "/config.cfg";
+	
+	//Resources
 	
 	public static final String TILE_SIZE = "tile_size";
 	private static final int TILE_SIZE_DEFAULT = 32;
@@ -23,6 +25,20 @@ public class Config {
 	public static final String START_MAP = "start_map";
 	private static final String START_MAP_DEFAULT = null;
 	
+	//Player
+	
+	public static final String HITBOX_START_X = "hitbox_start_x";
+	private static final float HITBOX_START_X_DEFAULT = 0.25f;
+	
+	public static final String HITBOX_START_Y = "hitbox_start_y";
+	private static final float HITBOX_START_Y_DEFAULT = 0.7f;
+	
+	public static final String HITBOX_SIZE_X = "hitbox_size_x";
+	private static final float HITBOX_SIZE_X_DEFAULT = 0.5f;
+	
+	public static final String HITBOX_SIZE_Y = "hitbox_size_y";
+	private static final float HITBOX_SIZE_Y_DEFAULT = 0.3f;
+	
 	private Config(){
 		values = new HashMap<>();
 		defaultValues = new HashMap<>();
@@ -35,6 +51,10 @@ public class Config {
 		values.put(PLAYER_TILESET, PLAYER_TILESET_DEFAULT);
 		values.put(TILE_SIZE, ""+TILE_SIZE_DEFAULT);
 		values.put(START_MAP, START_MAP_DEFAULT);
+		values.put(HITBOX_START_X, ""+HITBOX_START_X_DEFAULT);
+		values.put(HITBOX_START_Y, ""+HITBOX_START_Y_DEFAULT);
+		values.put(HITBOX_SIZE_X, ""+HITBOX_SIZE_X_DEFAULT);
+		values.put(HITBOX_SIZE_Y, ""+HITBOX_SIZE_Y_DEFAULT);
 	}
 	
 	public static void loadValues(String configText){
@@ -49,6 +69,8 @@ public class Config {
 					getInstance().values.put(key, value[1].trim());
 				}
 			}
+		}else{
+			System.out.println("No config file found");
 		}
 	}
 	
@@ -71,12 +93,12 @@ public class Config {
 		}
 	}
 	
-	public static double getDoubleValue(String key){
+	public static float getFloatValue(String key){
 		String value = getValue(key);
 		try{
-			return Double.parseDouble(value);
+			return Float.parseFloat(value);
 		}catch(NumberFormatException e){
-			return Double.parseDouble(getInstance().defaultValues.get(key));
+			return Float.parseFloat(getInstance().defaultValues.get(key));
 		}
 	}
 	

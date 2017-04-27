@@ -2,6 +2,7 @@ package fr.choicegame.character;
 
 import java.util.HashMap;
 
+import fr.choicegame.Config;
 import fr.choicegame.Item;
 import fr.choicegame.Map;
 
@@ -30,10 +31,16 @@ public class Player extends Character {
 	@Override
 	protected void updateChar(Map m) {
 		//action events when walked in
-		float posx = getPosX()+hitboxstart[0];
-		float posy = getPosY()+hitboxstart[1];
-		float posx2 = getPosX()+hitboxstart[0]+hitboxsize[0];
-		float posy2 = getPosY()+hitboxstart[1]+hitboxsize[1];
+		
+		float hitboxstartx = Config.getFloatValue(Config.HITBOX_START_X);
+		float hitboxstarty = Config.getFloatValue(Config.HITBOX_START_Y);
+		float hitboxsizex = Config.getFloatValue(Config.HITBOX_SIZE_X);
+		float hitboxsizey = Config.getFloatValue(Config.HITBOX_SIZE_Y);
+		
+		float posx = getPosX()+hitboxstartx;
+		float posy = getPosY()+hitboxstarty;
+		float posx2 = getPosX()+hitboxstartx+hitboxsizex;
+		float posy2 = getPosY()+hitboxstarty+hitboxsizey;
 		if(lastPos[0] >= 0){
 			float dx = getPosX()-lastPos[0];
 			float dy = getPosY()-lastPos[1];

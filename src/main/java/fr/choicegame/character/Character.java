@@ -2,6 +2,7 @@ package fr.choicegame.character;
 
 import java.awt.Rectangle;
 
+import fr.choicegame.Config;
 import fr.choicegame.Map;
 import fr.choicegame.TileImage;
 import fr.choicegame.TileType;
@@ -16,12 +17,6 @@ public abstract class Character {
 	private Direction moving;
 	private String tileset;
 	private boolean walking;
-
-	protected float[] hitboxstart = {0.25f,0.7f};
-	//around feet
-	//TODO dynamically read value
-
-	protected float[] hitboxsize = {0.5f,0.3f};
 	
 	public Character(float posX, float posY, String tileset) {
 		this.posX = posX;
@@ -151,14 +146,20 @@ public abstract class Character {
 
 	private boolean collision(Map m, float newx, float newy) {
 		//TODO continue
+		
+		float hitboxstartx = Config.getFloatValue(Config.HITBOX_START_X);
+		float hitboxstarty = Config.getFloatValue(Config.HITBOX_START_Y);
+		float hitboxsizex = Config.getFloatValue(Config.HITBOX_SIZE_X);
+		float hitboxsizey = Config.getFloatValue(Config.HITBOX_SIZE_Y);
+		
 		int inewx = (int) Math.floor(newx);
 		int inewy = (int) Math.floor(newy);
 		if(inewx>=0 && inewy>=0 && inewx+1<m.getWidth() && inewy+1<m.getHeight()){
 			for(int dx = 0; dx <= 1; dx+=1){
 				for(int dy = 0; dy <= 1; dy+=1){
 					if(m.getTile(inewx+dx,inewy+dy).getType() != TileType.FLAT){
-						if(new Rectangle.Float(newx+hitboxstart[0],newy+hitboxstart[1],
-								hitboxsize[0],hitboxsize[1])
+						if(new Rectangle.Float(newx+hitboxstartx,newy+hitboxstarty,
+								hitboxsizex,hitboxsizey)
 								.intersects(new Rectangle.Float(inewx+dx,inewy+dy,1f,1f))){
 							//TODO tile size < 1 like rocks,etc
 							return true;
