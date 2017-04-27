@@ -105,44 +105,46 @@ public abstract class Character {
 	protected abstract void updateChar(Map m);
 	
 	public void update(Map m) {
-		updateChar(m);
-		if (walking) {
-
-			float newx = getPosX(), newy = getPosY();
-
-			switch (moving) {
-			case NORTH:
-				newy = getPosY() - CHAR_SPD;
-				break;
-			case SOUTH:
-				newy = getPosY() + CHAR_SPD;
-				break;
-			case EAST:
-				newx = getPosX() + CHAR_SPD;
-				break;
-			case WEST:
-				newx = getPosX() - CHAR_SPD;
-				break;
-			case NORTH_EAST:
-				newy = (float) (getPosY() - CHAR_SPD / Math.sqrt(2));
-				newx = (float) (getPosX() + CHAR_SPD / Math.sqrt(2));
-				break;
-			case NORTH_WEST:
-				newy = (float) (getPosY() - CHAR_SPD / Math.sqrt(2));
-				newx = (float) (getPosX() - CHAR_SPD / Math.sqrt(2));
-				break;
-			case SOUTH_EAST:
-				newy = (float) (getPosY() + CHAR_SPD / Math.sqrt(2));
-				newx = (float) (getPosX() + CHAR_SPD / Math.sqrt(2));
-				break;
-			case SOUTH_WEST:
-				newy = (float) (getPosY() + CHAR_SPD / Math.sqrt(2));
-				newx = (float) (getPosX() - CHAR_SPD / Math.sqrt(2));
-				break;
-			}
-
-			if (!collision(m, newx, newy)) {
-				setPosition(newx, newy);
+		if(m != null){
+			updateChar(m);
+			if (walking) {
+	
+				float newx = getPosX(), newy = getPosY();
+	
+				switch (moving) {
+				case NORTH:
+					newy = getPosY() - CHAR_SPD;
+					break;
+				case SOUTH:
+					newy = getPosY() + CHAR_SPD;
+					break;
+				case EAST:
+					newx = getPosX() + CHAR_SPD;
+					break;
+				case WEST:
+					newx = getPosX() - CHAR_SPD;
+					break;
+				case NORTH_EAST:
+					newy = (float) (getPosY() - CHAR_SPD / Math.sqrt(2));
+					newx = (float) (getPosX() + CHAR_SPD / Math.sqrt(2));
+					break;
+				case NORTH_WEST:
+					newy = (float) (getPosY() - CHAR_SPD / Math.sqrt(2));
+					newx = (float) (getPosX() - CHAR_SPD / Math.sqrt(2));
+					break;
+				case SOUTH_EAST:
+					newy = (float) (getPosY() + CHAR_SPD / Math.sqrt(2));
+					newx = (float) (getPosX() + CHAR_SPD / Math.sqrt(2));
+					break;
+				case SOUTH_WEST:
+					newy = (float) (getPosY() + CHAR_SPD / Math.sqrt(2));
+					newx = (float) (getPosX() - CHAR_SPD / Math.sqrt(2));
+					break;
+				}
+	
+				if (!collision(m, newx, newy)) {
+					setPosition(newx, newy);
+				}
 			}
 		}
 	}

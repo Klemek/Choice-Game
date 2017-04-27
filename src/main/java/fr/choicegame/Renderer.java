@@ -98,30 +98,33 @@ public class Renderer {
 	}
 	
 	public void updateMap(Map m) {
+		
 		// free tile memory
 		for(TileItem item:mapTileItems)
 			item.cleanup();
 		mapTileItems.clear();
 		
-		//allocate tiles
-		for(int x = 0; x < m.getWidth(); x++){
-			for(int y = 0; y < m.getHeight(); y++){
-				TileImage[] timgs = m.getTile(x, y).getImages();
-				Texture[] texs = new Texture[4];
-				int[] ids = new int[4];
-				for(int i = 0; i < 4; i++){
-					if(timgs[i] != null){
-						ids[i] = timgs[i].getId();
-						texs[i] = getTexture("/tilesets/"+timgs[i].getTileset()+".png");
+		if(m != null){
+			//allocate tiles
+			for(int x = 0; x < m.getWidth(); x++){
+				for(int y = 0; y < m.getHeight(); y++){
+					TileImage[] timgs = m.getTile(x, y).getImages();
+					Texture[] texs = new Texture[4];
+					int[] ids = new int[4];
+					for(int i = 0; i < 4; i++){
+						if(timgs[i] != null){
+							ids[i] = timgs[i].getId();
+							texs[i] = getTexture("/tilesets/"+timgs[i].getTileset()+".png");
+						}
 					}
+					TileItem item = new TileItem(texs, ids);
+					item.setPosition(x, (m.getHeight()-y));
+					item.setScale(1.0f); //merge borders;
+					mapTileItems.add(item);
 				}
-				TileItem item = new TileItem(texs, ids);
-				item.setPosition(x, (m.getHeight()-y));
-				item.setScale(1.0f); //merge borders;
-				mapTileItems.add(item);
 			}
+			camera.setPosition(m.getWidth()/2f, m.getHeight()/2f, zoom); //TODO position
 		}
-		camera.setPosition(m.getWidth()/2f, m.getHeight()/2f, zoom); //TODO position
 	}
 
 	public void clear() {

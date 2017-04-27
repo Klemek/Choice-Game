@@ -38,21 +38,28 @@ public class Game implements IGameLogic{
 		
 		this.maps = new HashMap<>();
 		
+		Config.loadValues(loader.getGameFile(Config.CONFIG_FILE));
+		
 		evComputer = new EventComputer(this);
 		
 		renderer = new Renderer(loader);
 		
 		if(loader != null){
 			
-			this.currentMap = "start"; //Maybe a Constants.java with START_MAP = start ?
-		
-			this.maps.put(this.currentMap, loader.loadMap(this.currentMap));
-
-			this.setCurrentMap(currentMap);
+			String startMap = Config.getValue(Config.START_MAP);
 			
-			//TODO create main character and give it to map
-		
-			player = new Player(0f,0f,"character1");
+			if(startMap != null){
+			
+				//TODO load all maps
+				this.maps.put(this.currentMap, loader.loadMap(startMap));
+	
+				this.setCurrentMap(startMap);
+			
+				String player_tileset = Config.getValue(Config.PLAYER_TILESET);
+				
+				if(player_tileset != null)
+					player = new Player(0f,0f,player_tileset);
+			}
 		}
 	}
 	
@@ -98,6 +105,7 @@ public class Game implements IGameLogic{
 	}
 	
 	public void action(EventComputer listener) {
+		if(player != null){
 		int posX = (int) Math.round(player.getPosX()), posY = (int) Math.round(player.getPosY());
 		switch(player.getFacing()) {
 			case NORTH :
@@ -115,6 +123,7 @@ public class Game implements IGameLogic{
 		default:
 			break;
 		}
+		}
 	}
 
 	@Override
@@ -123,7 +132,9 @@ public class Game implements IGameLogic{
 		renderer.init(window);
 		System.out.println("Creating map...");
 		renderer.updateMap(getCurrentMap());
-		renderer.updateCharacters(0, player, getCurrentMap());
+		if(player != null){
+			renderer.updateCharacters(0, player, getCurrentMap());
+		}
 		System.out.println("Finished loading");
 		splash.setVisible(false); //end of loading
 	}
@@ -171,9 +182,10 @@ public class Game implements IGameLogic{
 
 	@Override
 	public void update(float interval) {
-		//TODO game loop
-		player.update(getCurrentMap());
-		renderer.updateCharacters(interval, player, getCurrentMap());
+		if(player != null){
+			player.update(getCurrentMap());
+			renderer.updateCharacters(interval, player, getCurrentMap());
+		}
 	}
 
 

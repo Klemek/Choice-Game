@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.joml.Vector3f;
 
+import fr.choicegame.Config;
 import fr.choicegame.lwjglengine.graph.Mesh;
 import fr.choicegame.lwjglengine.graph.Texture;
 
@@ -27,7 +28,7 @@ public class TileItem {
     
     public TileItem(Texture tex, int id) {
 	    meshes = new ArrayList<>();
-	    meshes.add(new Mesh(getPositions(Z),tex.getTextCoords(id, 32), INDICES, tex));
+	    meshes.add(new Mesh(getPositions(Z),tex.getTextCoords(id, Config.getIntValue(Config.TILE_SIZE)), INDICES, tex));
 	    
         position = new Vector3f(0, 0, 0);
         scale = 1;
@@ -45,7 +46,7 @@ public class TileItem {
 	    			z -= DELTA*(2-i);
 	    		else
 	    			z += DELTA*(i-1);
-	    		meshes.add(new Mesh(getPositions(z),texs[i].getTextCoords(ids[i], 32), INDICES, texs[i]));
+	    		meshes.add(new Mesh(getPositions(z),texs[i].getTextCoords(ids[i], Config.getIntValue(Config.TILE_SIZE)), INDICES, texs[i]));
 	    	}else{
 	    		meshes.add(null);
 	    	}
