@@ -13,6 +13,12 @@ public class Config {
 	
 	//Resources
 	
+	public static final String TILESETS_FOLDER = "tilesets_folder";
+	private static final String TILESETS_FOLDER_DEFAULT = "tilesets";
+	
+	public static final String MAPS_FOLDER = "maps_folder";
+	private static final String MAPS_FOLDER_DEFAULT = "maps";
+	
 	public static final String TILE_SIZE = "tile_size";
 	private static final int TILE_SIZE_DEFAULT = 32;
 	
@@ -45,20 +51,23 @@ public class Config {
 	private Config(){
 		values = new HashMap<>();
 		defaultValues = new HashMap<>();
-		loadDefault();
+		loadDefaultValues();
 	}
 	
-	private void loadDefault(){
+	private void loadDefaultValues(){
+		defaultValues.putAll(defaultValues);
+		defaultValues.put(TILESETS_FOLDER, TILESETS_FOLDER_DEFAULT);
+		defaultValues.put(MAPS_FOLDER, MAPS_FOLDER_DEFAULT);
+		defaultValues.put(ITEMS_TILESET, ITEMS_TILESET_DEFAULT);
+		defaultValues.put(PLAYER_TILESET, PLAYER_TILESET_DEFAULT);
+		defaultValues.put(TILE_SIZE, ""+TILE_SIZE_DEFAULT);
+		defaultValues.put(START_MAP, START_MAP_DEFAULT);
+		defaultValues.put(CHARACTER_SPEED, ""+CHARACTER_SPEED_DEFAULT);
+		defaultValues.put(HITBOX_START_X, ""+HITBOX_START_X_DEFAULT);
+		defaultValues.put(HITBOX_START_Y, ""+HITBOX_START_Y_DEFAULT);
+		defaultValues.put(HITBOX_SIZE_X, ""+HITBOX_SIZE_X_DEFAULT);
+		defaultValues.put(HITBOX_SIZE_Y, ""+HITBOX_SIZE_Y_DEFAULT);
 		values.putAll(defaultValues);
-		values.put(ITEMS_TILESET, ITEMS_TILESET_DEFAULT);
-		values.put(PLAYER_TILESET, PLAYER_TILESET_DEFAULT);
-		values.put(TILE_SIZE, ""+TILE_SIZE_DEFAULT);
-		values.put(START_MAP, START_MAP_DEFAULT);
-		values.put(CHARACTER_SPEED, ""+CHARACTER_SPEED_DEFAULT);
-		values.put(HITBOX_START_X, ""+HITBOX_START_X_DEFAULT);
-		values.put(HITBOX_START_Y, ""+HITBOX_START_Y_DEFAULT);
-		values.put(HITBOX_SIZE_X, ""+HITBOX_SIZE_X_DEFAULT);
-		values.put(HITBOX_SIZE_Y, ""+HITBOX_SIZE_Y_DEFAULT);
 	}
 	
 	public static void loadValues(String configText){

@@ -27,9 +27,10 @@ public class TileItem {
     private static final float DELTA = 0.01f;
     
     public TileItem(Texture tex, int id) {
-	    meshes = new ArrayList<>();
-	    meshes.add(new Mesh(getPositions(Z),tex.getTextCoords(id, Config.getIntValue(Config.TILE_SIZE)), INDICES, tex));
-	    
+    	meshes = new ArrayList<>();
+    	if(tex!= null){
+		    meshes.add(new Mesh(getPositions(Z),tex.getTextCoords(id, Config.getIntValue(Config.TILE_SIZE)), INDICES, tex));
+    	} 
         position = new Vector3f(0, 0, 0);
         scale = 1;
         rotation = new Vector3f(0, 0, 0);

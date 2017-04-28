@@ -40,8 +40,6 @@ public class Loader {
 	private ArrayList<String> imageResources = new ArrayList<>();
 	private HashMap<String, String> textResources = new HashMap<>();
 
-	private String[] folders = { "/maps", "/tilesets" };
-
 	private boolean ide;
 	private File jarFile;
 
@@ -61,7 +59,12 @@ public class Loader {
 		} else {
 			System.out.println("Running with JAR file");
 		}
+		
+		this.loadFile(Config.CONFIG_FILE);
+		Config.loadValues(getGameFile(Config.CONFIG_FILE));
 
+		String[] folders = { "/"+Config.getValue(Config.MAPS_FOLDER), "/"+Config.getValue(Config.TILESETS_FOLDER)};
+		
 		for (String folderPath : folders) {
 			try {
 				this.loadFolder(folderPath);
@@ -71,7 +74,7 @@ public class Loader {
 			}
 		}
 		
-		this.loadFile(Config.CONFIG_FILE);
+		
 		
 		return true;
 	}
@@ -192,13 +195,13 @@ public class Loader {
 
 	public Map loadMap(String mapName) {
 		Map map = null;
-		if (textResources != null && textResources.containsKey("/maps/" + mapName + ".tmx")) {
+		if (textResources != null && textResources.containsKey("/"+Config.getValue(Config.MAPS_FOLDER)+"/" + mapName + ".tmx")) {
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			factory.setValidating(false);
 			factory.setIgnoringElementContentWhitespace(true);
 			try {
 				DocumentBuilder builder = factory.newDocumentBuilder();
-				InputSource is = new InputSource(new StringReader(textResources.get("/maps/" + mapName + ".tmx")));
+				InputSource is = new InputSource(new StringReader(textResources.get("/"+Config.getValue(Config.MAPS_FOLDER)+"/" + mapName + ".tmx")));
 				Document svg = builder.parse(is);
 				Element root = svg.getDocumentElement();
 				if (root.getNodeName().equals("map")) {

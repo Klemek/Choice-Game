@@ -36,8 +36,6 @@ public class Game implements IGameLogic {
 
 		this.maps = new HashMap<>();
 
-		Config.loadValues(loader.getGameFile(Config.CONFIG_FILE));
-
 		evComputer = new EventComputer(this);
 
 		renderer = new Renderer(loader);

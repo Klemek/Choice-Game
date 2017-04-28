@@ -76,9 +76,10 @@ public class Renderer {
 		//refresh all positions and camera
 		if(playerTileItem != null)
 			playerTileItem.cleanup();
-		if(p != null){
+		
+		if(p != null && m != null){
 			TileImage ti = p.getImage(tick);
-			playerTileItem = new TileItem(getTexture("/tilesets/"+ti.getTileset()+".png"),ti.getId());
+			playerTileItem = new TileItem(getTexture("/"+Config.getValue(Config.TILESETS_FOLDER)+"/"+ti.getTileset()+".png"),ti.getId());
 			playerTileItem.setPosition(p.getPosX(), m.getHeight()-p.getPosY());
 			camera.setPosition(p.getPosX(), m.getHeight()-p.getPosY(), zoom);
 		}
@@ -87,12 +88,16 @@ public class Renderer {
 			item.cleanup();
 		npcTileItems.clear();
 		
-		for(String key:m.getNpcs().keySet()){
-			NPC npc = m.getNpcs().get(key);
-			TileImage ti = npc.getImage(tick);
-			TileItem item = new TileItem(getTexture("/tilesets/"+ti.getTileset()+".png"),ti.getId());
-			item.setPosition(npc.getPosX(), m.getHeight()-npc.getPosY());
-			npcTileItems.add(item);
+		if(m != null){
+		
+			for(String key:m.getNpcs().keySet()){
+				NPC npc = m.getNpcs().get(key);
+				TileImage ti = npc.getImage(tick);
+				TileItem item = new TileItem(getTexture("/"+Config.getValue(Config.TILESETS_FOLDER)+"/"+ti.getTileset()+".png"),ti.getId());
+				item.setPosition(npc.getPosX(), m.getHeight()-npc.getPosY());
+				npcTileItems.add(item);
+			}
+		
 		}
 		
 	}
@@ -114,7 +119,7 @@ public class Renderer {
 					for(int i = 0; i < 4; i++){
 						if(timgs[i] != null){
 							ids[i] = timgs[i].getId();
-							texs[i] = getTexture("/tilesets/"+timgs[i].getTileset()+".png");
+							texs[i] = getTexture("/"+Config.getValue(Config.TILESETS_FOLDER)+"/"+timgs[i].getTileset()+".png");
 						}
 					}
 					TileItem item = new TileItem(texs, ids);
