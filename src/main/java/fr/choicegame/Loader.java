@@ -44,8 +44,8 @@ public class Loader {
 	private File jarFile;
 
 	/**
-	 * load all pictures resources contained in the given folders, files contained
-	 * in another folder WON'T be loaded
+	 * load all pictures resources contained in the given folders, files
+	 * contained in another folder WON'T be loaded
 	 * 
 	 * @return a boolean indicating whether or not the import was successful.
 	 */
@@ -59,12 +59,12 @@ public class Loader {
 		} else {
 			System.out.println("Running with JAR file");
 		}
-		
+
 		this.loadFile(Config.CONFIG_FILE);
 		Config.loadValues(getGameFile(Config.CONFIG_FILE));
 
-		String[] folders = { "/"+Config.getValue(Config.MAPS_FOLDER), "/"+Config.getValue(Config.TILESETS_FOLDER)};
-		
+		String[] folders = { "/" + Config.getValue(Config.MAPS_FOLDER), "/" + Config.getValue(Config.TILESETS_FOLDER) };
+
 		for (String folderPath : folders) {
 			try {
 				this.loadFolder(folderPath);
@@ -73,21 +73,19 @@ public class Loader {
 				return false;
 			}
 		}
-		
-		
-		
+
 		return true;
 	}
 
 	private void loadFolder(String folderPath) throws IOException {
-		//http://stackoverflow.com/questions/11012819/how-can-i-get-a-resource-folder-from-inside-my-jar-file
+		// http://stackoverflow.com/questions/11012819/how-can-i-get-a-resource-folder-from-inside-my-jar-file
 		if (!ide) { // Run with JAR file
 			final JarFile jar = new JarFile(jarFile);
-			//give all entries in jar
+			// give all entries in jar
 			final Enumeration<JarEntry> entries = jar.entries();
 			while (entries.hasMoreElements()) {
 				String name = entries.nextElement().getName();
-				//filter according to the path
+				// filter according to the path
 				if (name.startsWith(folderPath.substring(1) + "/")) {
 					loadFile("/" + name);
 				}
@@ -101,7 +99,8 @@ public class Loader {
 					for (File app : apps.listFiles()) {
 						loadFile(folderPath + "/" + app.getName());
 					}
-				} catch (URISyntaxException ignored) {}
+				} catch (URISyntaxException ignored) {
+				}
 			}
 		}
 	}
@@ -120,10 +119,10 @@ public class Loader {
 		}
 	}
 
-	public HashMap<String, Texture> loadTextures(){
-		//Make sure to call this function after LWJGL was initialized
+	public HashMap<String, Texture> loadTextures() {
+		// Make sure to call this function after LWJGL was initialized
 		HashMap<String, Texture> textures = new HashMap<>();
-		for(String path:imageResources){
+		for (String path : imageResources) {
 			try {
 				textures.put(path, new Texture(path));
 				System.out.println("Image File '" + path + "' loaded");
@@ -134,10 +133,10 @@ public class Loader {
 		}
 		return textures;
 	}
-	
+
 	public HashMap<String, BufferedImage> loadGameAssets() {
 		HashMap<String, BufferedImage> images = new HashMap<>();
-		for(String path:imageResources){
+		for (String path : imageResources) {
 			try {
 				images.put(path, loadImageAsset(path));
 				System.out.println("Image File '" + path + "' loaded");
@@ -148,7 +147,7 @@ public class Loader {
 		}
 		return images;
 	}
-	
+
 	public static BufferedImage loadImageAsset(String path) throws IOException {
 		return ImageIO.read(Loader.class.getResource(path));
 	}
@@ -191,17 +190,17 @@ public class Loader {
 		return this.textResources.get(name);
 	}
 
-	
-
 	public Map loadMap(String mapName) {
 		Map map = null;
-		if (textResources != null && textResources.containsKey("/"+Config.getValue(Config.MAPS_FOLDER)+"/" + mapName + ".tmx")) {
+		if (textResources != null
+				&& textResources.containsKey("/" + Config.getValue(Config.MAPS_FOLDER) + "/" + mapName + ".tmx")) {
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			factory.setValidating(false);
 			factory.setIgnoringElementContentWhitespace(true);
 			try {
 				DocumentBuilder builder = factory.newDocumentBuilder();
-				InputSource is = new InputSource(new StringReader(textResources.get("/"+Config.getValue(Config.MAPS_FOLDER)+"/" + mapName + ".tmx")));
+				InputSource is = new InputSource(new StringReader(
+						textResources.get("/" + Config.getValue(Config.MAPS_FOLDER) + "/" + mapName + ".tmx")));
 				Document svg = builder.parse(is);
 				Element root = svg.getDocumentElement();
 				if (root.getNodeName().equals("map")) {
@@ -213,6 +212,7 @@ public class Loader {
 					HashMap<Integer, Event> events = new HashMap<>();
 					HashMap<Integer, String> npcs = new HashMap<>();
 					HashMap<Integer, TileType> types = new HashMap<>();
+
 					for (int i1 = 0; i1 < root.getChildNodes().getLength(); i1++) {
 						Node child1 = root.getChildNodes().item(i1);
 						switch (child1.getNodeName()) {
@@ -234,30 +234,28 @@ public class Loader {
 							int firstid = Integer.parseInt(getAttribute(child1, "firstgid", "0"));
 							int tilecount = Integer.parseInt(getAttribute(child1, "tilecount", "0"));
 							String tilesetName = getAttribute(child1, "name", "unknown");
-							switch (tilesetName) {
-							case "info":
+							if (tilesetName.equals(Config.getValue(Config.INFO_TILESET))) {
 								for (int i2 = 0; i2 < child1.getChildNodes().getLength(); i2++) {
 									Node child2 = child1.getChildNodes().item(i2);
 									if (child2.getNodeName().equals("tile")) {
 										int tileId = Integer.parseInt(getAttribute(child2, "id", "0"));
 										HashMap<String, String> props = getTileProperties(child2);
-										if (props.containsKey("event")) {
+										if (props.containsKey(Config.getValue(Config.EVENT_PROPERTY))) {
 
-											events.put(firstid + tileId, new Event(props.get("event")));
-										} else if (props.containsKey("npc")) {
-											npcs.put(firstid + tileId, props.get("npc"));
+											events.put(firstid + tileId, new Event(props.get(Config.getValue(Config.EVENT_PROPERTY))));
+										} else if (props.containsKey(Config.getValue(Config.NPC_PROPERTY))) {
+											npcs.put(firstid + tileId, props.get(Config.getValue(Config.NPC_PROPERTY)));
 										}
 									}
 								}
-								break;
-							case "type":
+							} else if (tilesetName.equals(Config.getValue(Config.TYPE_TILESET))) {
 								for (int i2 = 0; i2 < child1.getChildNodes().getLength(); i2++) {
 									Node child2 = child1.getChildNodes().item(i2);
 									if (child2.getNodeName().equals("tile")) {
 										int tileId = Integer.parseInt(getAttribute(child2, "id", "0"));
 										HashMap<String, String> props = getTileProperties(child2);
-										if (props.containsKey("type")) {
-											switch (props.get("type")) {
+										if (props.containsKey(Config.getValue(Config.TYPE_PROPERTY))) {
+											switch (props.get(Config.getValue(Config.TYPE_PROPERTY))) {
 											case "1":
 												types.put(firstid + tileId, TileType.FLAT);
 												break;
@@ -268,32 +266,38 @@ public class Loader {
 										}
 									}
 								}
-								break;
-							default:
+							} else {
 								tilesetsAll.put(tilesetName, firstid);
 								for (int j = firstid; j < firstid + tilecount; j++) {
 									tilesets.put(j, tilesetName);
 								}
-								break;
 							}
 							break;
 						}
 					}
 
-					if (layers.containsKey("bg1") && layers.containsKey("bg2") && layers.containsKey("fg1")
-							&& layers.containsKey("fg2") && layers.containsKey("info") && layers.containsKey("type")) {
+					String bg1_key = Config.getValue(Config.BACKGROUND_1_LAYER);
+					String bg2_key = Config.getValue(Config.BACKGROUND_2_LAYER);
+					String fg1_key = Config.getValue(Config.FOREGROUND_1_LAYER);
+					String fg2_key = Config.getValue(Config.FOREGROUND_2_LAYER);
+					String info_key = Config.getValue(Config.INFO_LAYER);
+					String type_key = Config.getValue(Config.TYPE_LAYER);
+
+					if (layers.containsKey(bg1_key) && layers.containsKey(bg2_key) && layers.containsKey(fg1_key)
+							&& layers.containsKey(fg2_key) && layers.containsKey(info_key)
+							&& layers.containsKey(type_key)) {
 						map = new Map(width, height);
 						for (int x = 0; x < width; x++) {
 							for (int y = 0; y < height; y++) {
 								TileImage[] images = new TileImage[4];
 								TileType ttype = TileType.VOID;
 								Event event = null;
-								int bg1 = layers.get("bg1")[y][x];
-								int bg2 = layers.get("bg2")[y][x];
-								int fg1 = layers.get("fg1")[y][x];
-								int fg2 = layers.get("fg2")[y][x];
-								int info = layers.get("info")[y][x];
-								int type = layers.get("type")[y][x];
+								int bg1 = layers.get(bg1_key)[y][x];
+								int bg2 = layers.get(bg2_key)[y][x];
+								int fg1 = layers.get(fg1_key)[y][x];
+								int fg2 = layers.get(fg2_key)[y][x];
+								int info = layers.get(info_key)[y][x];
+								int type = layers.get(type_key)[y][x];
 
 								if (bg1 != 0 && tilesets.containsKey(bg1)) {
 									String tileset = tilesets.get(bg1);
@@ -383,11 +387,11 @@ public class Loader {
 	 *            the name of the resource
 	 * @return the image if existing, null if not.
 	 */
-	/*public BufferedImage getGameAsset(String name) {
-		if (!name.startsWith("/"))
-			name = "/" + name;
-		return this.imagesResources.get(name);
-	}*/
+	/*
+	 * public BufferedImage getGameAsset(String name) { if
+	 * (!name.startsWith("/")) name = "/" + name; return
+	 * this.imagesResources.get(name); }
+	 */
 
 	public static String getExtension(String filePath) {
 		return filePath.substring(filePath.lastIndexOf(".") + 1);

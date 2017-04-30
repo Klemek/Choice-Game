@@ -31,7 +31,7 @@ public class Config {
 	public static final String START_MAP = "start_map";
 	private static final String START_MAP_DEFAULT = null;
 	
-	//Player
+	//Character
 	
 	public static final String CHARACTER_SPEED = "character_speed";
 	private static final float CHARACTER_SPEED_DEFAULT = 0.1f;
@@ -47,6 +47,41 @@ public class Config {
 	
 	public static final String HITBOX_SIZE_Y = "hitbox_size_y";
 	private static final float HITBOX_SIZE_Y_DEFAULT = 0.3f;
+	
+	//Maps
+	
+	public static final String BACKGROUND_1_LAYER = "background_1_layer";
+	private static final String BACKGROUND_1_LAYER_DEFAULT = "bg1";
+	
+	public static final String BACKGROUND_2_LAYER = "background_2_layer";
+	private static final String BACKGROUND_2_LAYER_DEFAULT = "bg2";
+	
+	public static final String FOREGROUND_1_LAYER = "foreground_1_layer";
+	private static final String FOREGROUND_1_LAYER_DEFAULT = "fg1";
+	
+	public static final String FOREGROUND_2_LAYER = "foreground_2_layer";
+	private static final String FOREGROUND_2_LAYER_DEFAULT = "fg2";
+	
+	public static final String INFO_LAYER = "info_layer";
+	private static final String INFO_LAYER_DEFAULT = "info";
+	
+	public static final String TYPE_LAYER = "type_layer";
+	private static final String TYPE_LAYER_DEFAULT = "type";
+	
+	public static final String TYPE_TILESET = "type_tileset";
+	private static final String TYPE_TILESET_DEFAULT = "type";
+	
+	public static final String TYPE_PROPERTY = "type_property";
+	private static final String TYPE_PROPERTY_DEFAULT = "type";
+	
+	public static final String INFO_TILESET = "info_tileset";
+	private static final String INFO_TILESET_DEFAULT = "info";
+	
+	public static final String EVENT_PROPERTY = "event_property";
+	private static final String EVENT_PROPERTY_DEFAULT = "event";
+	
+	public static final String NPC_PROPERTY = "npc_property";
+	private static final String NPC_PROPERTY_DEFAULT = "npc";
 	
 	private Config(){
 		values = new HashMap<>();
@@ -67,6 +102,17 @@ public class Config {
 		defaultValues.put(HITBOX_START_Y, ""+HITBOX_START_Y_DEFAULT);
 		defaultValues.put(HITBOX_SIZE_X, ""+HITBOX_SIZE_X_DEFAULT);
 		defaultValues.put(HITBOX_SIZE_Y, ""+HITBOX_SIZE_Y_DEFAULT);
+		defaultValues.put(BACKGROUND_1_LAYER, BACKGROUND_1_LAYER_DEFAULT);
+		defaultValues.put(BACKGROUND_2_LAYER, BACKGROUND_2_LAYER_DEFAULT);
+		defaultValues.put(FOREGROUND_1_LAYER, FOREGROUND_1_LAYER_DEFAULT);
+		defaultValues.put(FOREGROUND_2_LAYER, FOREGROUND_2_LAYER_DEFAULT);
+		defaultValues.put(INFO_LAYER, INFO_LAYER_DEFAULT);
+		defaultValues.put(TYPE_LAYER, TYPE_LAYER_DEFAULT);
+		defaultValues.put(TYPE_TILESET, TYPE_TILESET_DEFAULT);
+		defaultValues.put(TYPE_PROPERTY, TYPE_PROPERTY_DEFAULT);
+		defaultValues.put(INFO_TILESET, INFO_TILESET_DEFAULT);
+		defaultValues.put(EVENT_PROPERTY, EVENT_PROPERTY_DEFAULT);
+		defaultValues.put(NPC_PROPERTY, NPC_PROPERTY_DEFAULT);
 		values.putAll(defaultValues);
 	}
 	
