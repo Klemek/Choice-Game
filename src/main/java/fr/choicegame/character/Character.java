@@ -15,7 +15,7 @@ public abstract class Character {
 	private Direction moving;
 	private String tileset;
 	private boolean walking;
-	
+
 	public Character(float posX, float posY, String tileset) {
 		this.posX = posX;
 		this.posY = posY;
@@ -89,24 +89,24 @@ public abstract class Character {
 		default:
 			break;
 		}
-		if (!walking)
-			return new TileImage(face * 3, tileset);
+		if (!walking || (face % 2 == 1 && i % 2 == 1))
+			return new TileImage(face * 3 + 1, tileset);
 		else
-			return new TileImage(face * 3 + 1 + i % 2, tileset);
+			return new TileImage(face * 3 + (face % 2 == 1 ? i % 4 : 2 * (i % 2)), tileset);
 	}
 
 	protected abstract void updateChar(Map m);
-	
+
 	public void update(Map m) {
-		if(m != null){
-			
+		if (m != null) {
+
 			float char_spd = Config.getFloatValue(Config.CHARACTER_SPEED);
-			
+
 			updateChar(m);
 			if (walking) {
-	
+
 				float newx = getPosX(), newy = getPosY();
-	
+
 				switch (moving) {
 				case NORTH:
 					newy = getPosY() - char_spd;
@@ -137,7 +137,7 @@ public abstract class Character {
 					newx = (float) (getPosX() - char_spd / Math.sqrt(2));
 					break;
 				}
-	
+
 				if (!collision(m, newx, newy)) {
 					setPosition(newx, newy);
 				}
@@ -146,23 +146,22 @@ public abstract class Character {
 	}
 
 	private boolean collision(Map m, float newx, float newy) {
-		//TODO continue
-		
+		// TODO continue
+
 		float hitboxstartx = Config.getFloatValue(Config.HITBOX_START_X);
 		float hitboxstarty = Config.getFloatValue(Config.HITBOX_START_Y);
 		float hitboxsizex = Config.getFloatValue(Config.HITBOX_SIZE_X);
 		float hitboxsizey = Config.getFloatValue(Config.HITBOX_SIZE_Y);
-		
+
 		int inewx = (int) Math.floor(newx);
 		int inewy = (int) Math.floor(newy);
-		if(inewx>=0 && inewy>=0 && inewx+1<m.getWidth() && inewy+1<m.getHeight()){
-			for(int dx = 0; dx <= 1; dx+=1){
-				for(int dy = 0; dy <= 1; dy+=1){
-					if(m.getTile(inewx+dx,inewy+dy).getType() != TileType.FLAT){
-						if(new Rectangle.Float(newx+hitboxstartx,newy+hitboxstarty,
-								hitboxsizex,hitboxsizey)
-								.intersects(new Rectangle.Float(inewx+dx,inewy+dy,1f,1f))){
-							//TODO tile size < 1 like rocks,etc
+		if (inewx >= 0 && inewy >= 0 && inewx + 1 < m.getWidth() && inewy + 1 < m.getHeight()) {
+			for (int dx = 0; dx <= 1; dx += 1) {
+				for (int dy = 0; dy <= 1; dy += 1) {
+					if (m.getTile(inewx + dx, inewy + dy).getType() != TileType.FLAT) {
+						if (new Rectangle.Float(newx + hitboxstartx, newy + hitboxstarty, hitboxsizex, hitboxsizey)
+								.intersects(new Rectangle.Float(inewx + dx, inewy + dy, 1f, 1f))) {
+							// TODO tile size < 1 like rocks,etc
 							return true;
 						}
 					}

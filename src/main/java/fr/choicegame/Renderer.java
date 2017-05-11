@@ -43,7 +43,7 @@ public class Renderer {
 	private final Camera camera;
 	private float zoom = 10f;
 	private float updateTimer = 0f;
-	private static final float UPDATETIME = 0.5f;
+	private static final float UPDATETIME = 0.2f;
 
 	public Renderer(Loader l){
 		loader = l;
