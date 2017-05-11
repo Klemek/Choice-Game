@@ -27,16 +27,16 @@ public class EventComputer implements GameEventListener {
 	public void eventCalled(String event, int x, int y) {
 		
 		String actions[] = event.split("\n");
-		
+		System.out.println("Event in ("+x+","+y+")");
 		HashMap<String, Integer> vars = new HashMap<>();
 		boolean jump = false;
 		for(String action:actions){
-			System.out.println(">"+action);//TODO debug
-			action = action.split("#")[0].trim(); //TODO espace # in text args
+			action = action.split("#")[0].trim(); //TODO escape # in text args
 			if(action.length()>0){
 				String spl1[] = action.split(" ",2);
 				String cmd = spl1[0];
 				if(!jump){
+					System.out.println(">"+action);//TODO debug
 					String args[] = new String[0];
 					if(spl1.length>1)
 						args = getArgs(spl1[1], true);
@@ -44,21 +44,21 @@ public class EventComputer implements GameEventListener {
 					case "TRIGGER": //TRIGGER (TRIGNAME) [ON/OFF] #Create/edit trigger
 						switch(args.length){
 						case 1: //TRIGGER (TRIGNAME)
-							this.game.setTrigger(args[0], true);
+							game.setTrigger(args[0], true);
 							break;
 						case 2: //TRIGGER (TRIGNAME) [ON/OFF]
-							this.game.setTrigger(args[0], args[1].equals("ON"));
+							game.setTrigger(args[0], args[1].equals("ON"));
 							break;
 						}
 						break;
 					case "IFT": //IFT [NOT] (TRIGNAME) ... [ELSE ...] END #Test trigger
 						switch(args.length){
 						case 1: //IFT TRIGNAME
-							if(!this.game.getTrigger(args[0]))
+							if(!game.getTrigger(args[0]))
 								jump = true;
 							break;
 						case 2: //IFT NOT TRIGNAME
-							if(this.game.getTrigger(args[0]))
+							if(game.getTrigger(args[1]))
 								jump = true;
 							break;
 						}
@@ -67,32 +67,32 @@ public class EventComputer implements GameEventListener {
 						vars.put(args[0], Integer.parseInt(args[1]));
 						break;
 					case "VARG": //VARG (VARNAME) (VALUE) #Create/edit global variable
-						this.game.setGlobalVariable(args[0], Integer.parseInt(args[1]));
+						game.setGlobalVariable(args[0], Integer.parseInt(args[1]));
 						break;
 					case "IF": //IF (VARNAME) (==/!=/>/</>=/<=) (VALUE) ... [ELSE ...] END #Test variable
 						switch(args[1]){
 						case "==": //IF (VARNAME) == (VALUE)
-							if(vars.getOrDefault(args[0], this.game.getGlobalVariable(args[0]))!=Integer.parseInt(args[2]))
+							if(vars.getOrDefault(args[0], game.getGlobalVariable(args[0]))!=Integer.parseInt(args[2]))
 								jump = true;
 							break;
 						case "!=": //IF (VARNAME) != (VALUE)
-							if(vars.getOrDefault(args[0], this.game.getGlobalVariable(args[0]))==Integer.parseInt(args[2]))
+							if(vars.getOrDefault(args[0], game.getGlobalVariable(args[0]))==Integer.parseInt(args[2]))
 								jump = true;
 							break;
 						case ">": //IF (VARNAME) > (VALUE)
-							if(vars.getOrDefault(args[0], this.game.getGlobalVariable(args[0]))<=Integer.parseInt(args[2]))
+							if(vars.getOrDefault(args[0], game.getGlobalVariable(args[0]))<=Integer.parseInt(args[2]))
 								jump = true;
 							break;
 						case "<": //IF (VARNAME) < (VALUE)
-							if(vars.getOrDefault(args[0], this.game.getGlobalVariable(args[0]))>=Integer.parseInt(args[2]))
+							if(vars.getOrDefault(args[0], game.getGlobalVariable(args[0]))>=Integer.parseInt(args[2]))
 								jump = true;
 							break;
 						case ">=": //IF (VARNAME) >= (VALUE)
-							if(vars.getOrDefault(args[0], this.game.getGlobalVariable(args[0]))<Integer.parseInt(args[2]))
+							if(vars.getOrDefault(args[0], game.getGlobalVariable(args[0]))<Integer.parseInt(args[2]))
 								jump = true;
 							break;
 						case "<=": //IF (VARNAME) <= (VALUE)
-							if(vars.getOrDefault(args[0], this.game.getGlobalVariable(args[0]))>Integer.parseInt(args[2]))
+							if(vars.getOrDefault(args[0], game.getGlobalVariable(args[0]))>Integer.parseInt(args[2]))
 								jump = true;
 							break;
 						}
@@ -106,13 +106,13 @@ public class EventComputer implements GameEventListener {
 							if(vars.containsKey(args[0]))
 								vars.put(args[0], vars.get(args[0])+1);
 							else
-								this.game.setGlobalVariable(args[0], this.game.getGlobalVariable(args[0])+1);
+								game.setGlobalVariable(args[0], game.getGlobalVariable(args[0])+1);
 							break;
 						case 2: //ICZ (VARNAME) [VALUE]
 							if(vars.containsKey(args[0]))
 								vars.put(args[0], vars.get(args[0])+Integer.parseInt(args[1]));
 							else
-								this.game.setGlobalVariable(args[0], this.game.getGlobalVariable(args[0])+Integer.parseInt(args[1]));
+								game.setGlobalVariable(args[0], game.getGlobalVariable(args[0])+Integer.parseInt(args[1]));
 							break;
 						}
 						break;
@@ -122,18 +122,21 @@ public class EventComputer implements GameEventListener {
 							if(vars.containsKey(args[0]))
 								vars.put(args[0], vars.get(args[0])-1);
 							else
-								this.game.setGlobalVariable(args[0], this.game.getGlobalVariable(args[0])-1);
+								game.setGlobalVariable(args[0], game.getGlobalVariable(args[0])-1);
 							break;
 						case 2: //DCZ (VARNAME) [VALUE]
 							if(vars.containsKey(args[0]))
 								vars.put(args[0], vars.get(args[0])-Integer.parseInt(args[1]));
 							else
-								this.game.setGlobalVariable(args[0], this.game.getGlobalVariable(args[0])-Integer.parseInt(args[1]));
+								game.setGlobalVariable(args[0], game.getGlobalVariable(args[0])-Integer.parseInt(args[1]));
 							break;
 						}
 						break;
 					case "INVVAR": //INVVAR (ITEMID) (VARNAME) #Get the quantity of an item in the player inventory and put it in a var
-						//TODO EVENT INVVAR
+						int itemid = Integer.parseInt(args[0]);
+						if(game.getPlayer().getInventory().containsKey(itemid)){
+							vars.put(args[1],game.getPlayer().getInventory().get(Integer.parseInt(args[0])));
+						}
 						break;
 					case "SAY": //SAY (TEXT) [IMAGEID] #Show text (pause game)
 						//TODO EVENT SAY
@@ -158,29 +161,44 @@ public class EventComputer implements GameEventListener {
 						}
 						break;
 					case "INVADD": //INVADD (ITEMID) [NUM] [MSG] #Add 1 or NUM item(s) to the player and display it (optional)(pause)
-						//TODO EVENT INVADD
+						int itemcount1 = 0;
+						int itemid1 = Integer.parseInt(args[0]);
+						if(game.getPlayer().getInventory().containsKey(itemid1)){
+							itemcount1 = game.getPlayer().getInventory().get(itemid1);
+						}
 						switch(args.length){
 						case 1: //INVADD (ITEMID)
+							game.getPlayer().getInventory().put(itemid1,itemcount1+1);
 							break;
 						case 2://INVADD (ITEMID) (NUM)
+							game.getPlayer().getInventory().put(itemid1,itemcount1+Integer.parseInt(args[1]));
 							break;
 						case 3://INVADD (ITEMID) (NUM) (MSG)
+							game.getPlayer().getInventory().put(itemid1,itemcount1+Integer.parseInt(args[1]));
+							 //TODO MSG
 							break;
 						}
 						break;
-					case "INVDEL": //INVDEL (ITEMID) [NUM] [MSG] #Remove 1 or NUM item(s) to the player and display it (optional)(pause)
-						//TODO EVENT INVDEL
+					case "INVDEL": //INVDEL (ITEMID) [NUM] [MSG] #Remove all or NUM item(s) to the player and display it (optional)(pause)
+						int itemcount2 = 0;
+						int itemid2 = Integer.parseInt(args[0]);
+						if(game.getPlayer().getInventory().containsKey(itemid2)){
+							itemcount2 = game.getPlayer().getInventory().get(itemid2);
+						}
 						switch(args.length){
 						case 1: //INVDEL (ITEMID)
+							game.getPlayer().getInventory().remove(itemid2);
 							break;
 						case 2://INVDEL (ITEMID) (NUM)
+							game.getPlayer().getInventory().put(itemid2,Math.max(0,itemcount2-Integer.parseInt(args[1])));
 							break;
 						case 3://INVDEL (ITEMID) (NUM) (MSG)
+							game.getPlayer().getInventory().put(itemid2,Math.max(0,itemcount2-Integer.parseInt(args[1])));
+							//TODO MSG
 							break;
 						}
 						break;
 					case "MAP": //MAP (X) (Y) (LAYER) [TILESET] [ID] #Edit one map's tile
-						//TODO EVENT MAP
 						int x0 = Integer.parseInt(args[0]);
 						int y0 = Integer.parseInt(args[1]);
 						int layer = Integer.parseInt(args[2]);
@@ -200,7 +218,6 @@ public class EventComputer implements GameEventListener {
 						}
 						break;
 					case "MAPR": //MAPR (DX) (DY) (LAYER) [TILESET] [ID] #Edit one map's tile relatively to event's source
-						//TODO EVENT MAPR
 						int dx = Integer.parseInt(args[0]);
 						int dy = Integer.parseInt(args[1]);
 						int layer1 = Integer.parseInt(args[2]);
@@ -222,28 +239,39 @@ public class EventComputer implements GameEventListener {
 						}
 						break;
 					case "PLAYERTILESET": //PLAYERTILESET (TILESET) #Change Player tileset
-						//TODO EVENT PLAYERTILESET
+						game.getPlayer().setTileset(args[0]);
 						break;
 					case "NPCTILESET": //NPCTILESET (NPCID) (TILESET) #Change NPC tileset
 						//TODO EVENT NPCTILESET
+						game.getCurrentMap().getNpcs().get(args[0]).setTileset(args[1]);
 						break;
-					case "NPCANIMATION": //NPCTILESET (SOUTH/WEST/NORTH/EAST) (STOP/MARCH) #Change NPC animation
+					case "NPCANIMATION": //NPCTILESET (NPCID) (SOUTH/WEST/NORTH/EAST) (STOP/MARCH) #Change NPC animation
 						//TODO EVENT NPCANIMATION
 						break;
 					case "CHGMAP": //CHGMAP (MAPNAME) [PLAYERX] [PLAYERY]
 						//TODO EVENT CHGMAP
 						switch(args.length){
 						case 1: //CHGMAP (MAPNAME)
+							game.setCurrentMap(args[0]);
 							break;
 						case 3://CHGMAP (MAPNAME) (PLAYERX) (PLAYERY)
+							game.setCurrentMap(args[0]);
+							game.getPlayer().setPosition(Integer.parseInt(args[1]),Integer.parseInt(args[2]));
 							break;
 						}
+						break;
+					case "MVPLAYER": //MVPLAYER (PLAYERX) (PLAYERY) #Move player in current map
+						game.getPlayer().setPosition(Integer.parseInt(args[0]),Integer.parseInt(args[1]));
+						break;
+					case "MVRPLAYER": //MVRPLAYER (PLAYERDX) (PLAYERDY) #Move player relativelyin current map
+						game.getPlayer().setPosition(Integer.parseInt(x+args[0]),Integer.parseInt(y+args[1]));
 						break;
 					}
 				}else if(cmd.equals("ELSE") || cmd.equals("END")){
 					jump = false;
+					System.out.println(">"+cmd);
 				}else{
-					System.out.println("[DEBUG]jumped:"+action);
+					System.out.println("#"+action);
 				}
 			}
 		}
@@ -343,6 +371,12 @@ public class EventComputer implements GameEventListener {
 				case "CHGMAP": //CHGMAP (MAPNAME) [PLAYERX] [PLAYERY]
 					testArgs(i,action,errors,args, new String[][]{{TEXT},{TEXT,VALUE,VALUE}});
 					break;
+				case "MVPLAYER": //MVPLAYER (PLAYERX) (PLAYERY) #Move player in current map
+					testArgs(i,action,errors,args, new String[][]{{VALUE,VALUE}});
+					break;
+				case "MVRPLAYER": //MVRPLAYER (PLAYERDX) (PLAYERDY) #Move player relatively in current map
+					testArgs(i,action,errors,args, new String[][]{{VALUE,VALUE}});
+					break;
 				default:
 					errors.add("Unknown event action : ["+i+"]"+action);
 					break;
@@ -366,7 +400,7 @@ public class EventComputer implements GameEventListener {
 				quote = !quote;
 				if(!quote){
 					if(keepquotes)
-						arg = "\\"+arg+"\"";
+						arg = "\""+arg+"\"";
 					args.add(arg);
 					arg = "";
 				}

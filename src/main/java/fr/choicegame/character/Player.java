@@ -3,12 +3,11 @@ package fr.choicegame.character;
 import java.util.HashMap;
 
 import fr.choicegame.Config;
-import fr.choicegame.Item;
 import fr.choicegame.Map;
 
 public class Player extends Character {
 	
-	private HashMap<Item, Integer> inventory;
+	private HashMap<Integer, Integer> inventory;
 	private float[] lastPos = {-1f,-1f};
 	
 	public Player(float posX, float posY, String tileset) {
@@ -18,12 +17,8 @@ public class Player extends Character {
 
 	// Getters & Setters
 	
-	public HashMap<Item, Integer> getInventory() {
+	public HashMap<Integer, Integer> getInventory() {
 		return inventory;
-	}
-
-	public void setInventory(HashMap<Item, Integer> inventory) {
-		this.inventory = inventory;
 	}
 
 	// Functions

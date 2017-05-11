@@ -28,6 +28,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import fr.choicegame.event.Event;
+import fr.choicegame.event.EventComputer;
 import fr.choicegame.lwjglengine.graph.Texture;
 
 public class Loader {
@@ -241,8 +242,17 @@ public class Loader {
 										int tileId = Integer.parseInt(getAttribute(child2, "id", "0"));
 										HashMap<String, String> props = getTileProperties(child2);
 										if (props.containsKey(Config.getValue(Config.EVENT_PROPERTY))) {
-
-											events.put(firstid + tileId, new Event(props.get(Config.getValue(Config.EVENT_PROPERTY))));
+											String ev = props.get(Config.getValue(Config.EVENT_PROPERTY));
+											
+											ArrayList<String> errors = EventComputer.testEvent(ev);
+											if(errors.size()>0){
+												System.out.println(errors.size()+" errors with event "+tileId+" : ");
+												for(String error:errors){
+													System.out.println(error);
+												}
+											}else{
+												events.put(firstid + tileId, new Event(ev));
+											}
 										} else if (props.containsKey(Config.getValue(Config.NPC_PROPERTY))) {
 											npcs.put(firstid + tileId, props.get(Config.getValue(Config.NPC_PROPERTY)));
 										}
@@ -319,7 +329,9 @@ public class Loader {
 									if (npcs.containsKey(info)) {
 										// TODO create NPC
 									}
-									event = events.get(info);
+									if(events.containsKey(info)){
+										event = events.get(info);
+									}
 								}
 								if (type != 0 && types.containsKey(type))
 									ttype = types.get(type);

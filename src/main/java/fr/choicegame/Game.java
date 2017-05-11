@@ -45,9 +45,9 @@ public class Game implements IGameLogic {
 			String startMap = Config.getValue(Config.START_MAP);
 
 			if (startMap != null) {
-
+				
 				// TODO load all maps
-				this.maps.put(this.currentMap, loader.loadMap(startMap));
+				this.maps.put(startMap, loader.loadMap(startMap));
 
 				this.setCurrentMap(startMap);
 
@@ -83,6 +83,10 @@ public class Game implements IGameLogic {
 
 	public Map getCurrentMap() {
 		return this.maps.get(this.currentMap);
+	}
+
+	public Player getPlayer() {
+		return player;
 	}
 
 	public void setCurrentMap(String name) {

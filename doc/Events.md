@@ -31,6 +31,8 @@ EVENT (PARAM) {OPTIONAL PARAM}
 * NPCTILESET (SOUTH/WEST/NORTH/EAST) {STOP/MARCH} #Change NPC animation
 * NPCTILESET (NPCID) (TILESET) #Change NPC tileset
 * CHGMAP (MAPNAME) {PLAYERX} {PLAYERY} #Change map and (optional) move player in it
+* MVPLAYER (PLAYERX) (PLAYERY) #Move player in current map
+* MVRPLAYER (PLAYERDX) (PLAYERDY) #Move player relatively in current map
 
 ##Exemples
 ###Example 1 (Bed):
