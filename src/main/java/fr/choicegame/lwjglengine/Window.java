@@ -30,6 +30,9 @@ public class Window {
 
 	public void init() {
 		
+		//OSX trick to use fonts
+		System.setProperty("java.awt.headless", "true");
+		
 		System.out.println("Loading LWJGL 3 ...");
 		
 		// Setup an error callback. The default implementation
