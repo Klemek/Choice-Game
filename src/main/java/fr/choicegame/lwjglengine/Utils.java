@@ -45,10 +45,17 @@ public class Utils {
     }
     
     public static float getTextWidth(Font font, String text){
+    	String[] text2 = text.split("\n");
     	BufferedImage img = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
 	    Graphics2D g2D = img.createGraphics();
 	    g2D.setFont(font);
 	    FontMetrics fontMetrics = g2D.getFontMetrics();
-	    return fontMetrics.stringWidth(text);
+	    int max = 0;
+	    for(String text3:text2){
+	    	int w = fontMetrics.stringWidth(text3);
+	    	if(w>max)
+	    		max=w;
+	    }
+	    return max;
     }
 }

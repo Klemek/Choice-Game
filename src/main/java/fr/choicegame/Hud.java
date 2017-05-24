@@ -55,9 +55,9 @@ public class Hud implements IHud {
     	String msg = dialogmsg[0];
     	for(int i = 1; i < dialogmsg.length; i++){
     		if(i == dialogchoice){
-    			msg+="\n>\t"+dialogmsg[i];
+    			msg+="\n   >"+dialogmsg[i];
     		}else{
-    			msg+="\n\t"+dialogmsg[i];
+    			msg+="\n    "+dialogmsg[i];
     		}
     	}
     	return msg;
