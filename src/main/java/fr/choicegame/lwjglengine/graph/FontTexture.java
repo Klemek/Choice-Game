@@ -39,6 +39,7 @@ public class FontTexture extends Texture{
 	    for (char c = 0; c < Character.MAX_VALUE; c++) {
 	        if (ce.canEncode(c)) {
 	            result.append(c);
+	            result.append(' '); //add space between
 	        }
 	    }
 	    return result.toString();
@@ -54,12 +55,24 @@ public class FontTexture extends Texture{
 	    String allChars = getAllAvailableChars(charSetName);
 	    this.width = 0;
 	    this.height = 0;
-	    for (char c : allChars.toCharArray()) {
+	    
+	    
+	    char[] allCharsArray = allChars.toCharArray();
+	    
+	    int spacewidth = fontMetrics.charWidth(' ');
+	    
+	    for (int i = 0; i < allCharsArray.length; i++) {
 	        // Get the size for each character and update global image size
-	        CharInfo charInfo = new CharInfo(width, fontMetrics.charWidth(c));
-	        charMap.put(c, charInfo);
-	        width += charInfo.getWidth();
-	        height = Math.max(height, fontMetrics.getHeight());
+	    	char c = allCharsArray[i];
+	    	if(i%2 == 0){
+	    		 CharInfo charInfo = new CharInfo(width, fontMetrics.charWidth(c));
+	    		 charMap.put(c, charInfo);
+	    		 width += charInfo.getWidth();
+	    		 height = Math.max(height, fontMetrics.getHeight());
+	    	}else{
+	    		width += spacewidth;
+	    	}
+	        
 	    }
 	    g2D.dispose();
 	    

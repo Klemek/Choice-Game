@@ -58,4 +58,16 @@ public class Utils {
 	    }
 	    return max;
     }
+
+	public static int countLines(String text) {
+		
+		int nlines = 1;
+		
+		for(char c:text.toCharArray()){
+			if(c == '\n')
+				nlines++;
+		}
+		
+		return nlines;
+	}
 }

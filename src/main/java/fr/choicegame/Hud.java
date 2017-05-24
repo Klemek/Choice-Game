@@ -37,7 +37,7 @@ public class Hud implements IHud {
     
     public void setMsg(String msg){
     	this.msgTextItem.setText(msg);
-    	this.msgTextItem.setPosition(windowWidth/2-msgTextItem.getWidth()/2,windowHeight/2-msgTextItem.getHeight()/2, 0f);
+    	updatePos();
     }
     
     public void setDialog(String[] dial, String dialvar){
@@ -47,8 +47,7 @@ public class Hud implements IHud {
     	this.dialog = true;
     	
     	this.msgTextItem.setText(getDialogMsg());
-    	this.msgTextItem.setPosition(windowWidth/2-msgTextItem.getWidth()/2,windowHeight/2-msgTextItem.getHeight()/2, 0f);
-    	
+    	updatePos();
     }
     
     private String getDialogMsg(){
@@ -81,8 +80,7 @@ public class Hud implements IHud {
     public void updateSize(Window window) {
     	windowWidth = window.getWidth();
     	windowHeight = window.getHeight();
-        this.infoTextItem.setPosition(2f, window.getHeight() - 20f, 0);
-    	this.msgTextItem.setPosition(windowWidth/2-msgTextItem.getWidth()/2,windowHeight/2-msgTextItem.getHeight()/2, 0f);
+        updatePos();
     }
 
     public void up(){
@@ -113,6 +111,11 @@ public class Hud implements IHud {
 		return dialogvar;
 	}
 
+	private void updatePos(){
+		this.infoTextItem.setPosition(2f, windowHeight - 20f, 0);
+    	this.msgTextItem.setPosition(windowWidth/2-msgTextItem.getWidth()/2,(float)windowHeight*9f/10f-msgTextItem.getHeight(), 0f);
+	}
+	
 	public void update(float interval) {
 		updateTimer += interval;
 		if(updateTimer>UPDATETIME){

@@ -103,7 +103,7 @@ public class TextItem extends GameItem {
 	}
 	
 	public float getHeight(){
-		return fontTexture.getHeight();
+		return fontTexture.getHeight()*Utils.countLines(text);
 	}
 	
 	public String getText() {
