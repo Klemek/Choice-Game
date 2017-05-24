@@ -1,6 +1,7 @@
 package fr.choicegame.lwjglengine;
 
 import java.io.InputStream;
+import java.util.List;
 import java.util.Scanner;
 
 public class Utils {
@@ -21,5 +22,21 @@ public class Utils {
             result = scanner.useDelimiter("\\A").next();
         }
         return result;
+    }
+    
+    public static float[] arrayToListFloat(List<Float> array){
+    	float[] list= new float[array.size()];
+    	for(int i = 0; i < array.size(); i++){
+    		list[i] = array.get(i);
+    	}
+    	return list;
+    }
+    
+    public static int[] arrayToListInt(List<Integer> array){
+    	int[] list= new int[array.size()];
+    	for(int i = 0; i < array.size(); i++){
+    		list[i] = array.get(i);
+    	}
+    	return list;
     }
 }

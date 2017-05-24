@@ -12,6 +12,8 @@ import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL30.*;
 import org.lwjgl.system.MemoryUtil;
 
+import fr.choicegame.lwjglengine.Utils;
+
 public class Mesh {
 
 	private final int vaoId;
@@ -22,9 +24,13 @@ public class Mesh {
 	
 	private final int vertexCount;
 	
-	private final Texture texture;
+	private final Material material;
 
-	public Mesh(float[] positions, float[] textCoords, int[] indices, Texture texture) {
+	public Mesh(List<Float> positions, List<Float> textCoords, List<Integer> indices, Material material) {
+		this(Utils.arrayToListFloat(positions),Utils.arrayToListFloat(textCoords),Utils.arrayToListInt(indices),material);
+	}
+	
+	public Mesh(float[] positions, float[] textCoords, int[] indices, Material material) {
 		FloatBuffer verticesBuffer = null;
 		IntBuffer indicesBuffer = null;
 		//FloatBuffer colourBuffer = null;
@@ -32,7 +38,7 @@ public class Mesh {
 		
 		vboIdList = new ArrayList<>();
 		
-		this.texture = texture;
+		this.material = material;
 		
 		try {
 			
@@ -50,7 +56,16 @@ public class Mesh {
 			glBufferData(GL_ARRAY_BUFFER, verticesBuffer, GL_STATIC_DRAW);
 			glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0);
 			glBindBuffer(GL_ARRAY_BUFFER, 0);
-
+			
+			//colour vbo
+			/*vboId = glGenBuffers();
+			vboIdList.add(vboId);
+			colourBuffer = MemoryUtil.memAllocFloat(colours.length);
+			colourBuffer.put(colours).flip();
+			glBindBuffer(GL_ARRAY_BUFFER, vboId);
+			glBufferData(GL_ARRAY_BUFFER, colourBuffer, GL_STATIC_DRAW);
+			glVertexAttribPointer(1, 3, GL_FLOAT, false, 0, 0);*/
+			
 			//texture vbo
 			vboId = glGenBuffers();
 			vboIdList.add(vboId);
@@ -72,11 +87,12 @@ public class Mesh {
 		} finally {
 			if (verticesBuffer != null) 
 				MemoryUtil.memFree(verticesBuffer);
+			/*if (colourBuffer != null)
+			MemoryUtil.memFree(colourBuffer);*/
 			if (textCoordsBuffer != null)
 				MemoryUtil.memFree(textCoordsBuffer);
 			if (indicesBuffer != null)
 				MemoryUtil.memFree(indicesBuffer);
-			
 		}
 	}
 
@@ -106,7 +122,7 @@ public class Mesh {
 		// Activate first texture unit
 		glActiveTexture(GL_TEXTURE0);
 		// Bind the texture
-		glBindTexture(GL_TEXTURE_2D, texture.getId());
+		glBindTexture(GL_TEXTURE_2D, material.getTexture().getId());
 		
 	    glBindVertexArray(getVaoId());
 	    glEnableVertexAttribArray(0);
@@ -118,5 +134,9 @@ public class Mesh {
 	    glDisableVertexAttribArray(0);
 	    glDisableVertexAttribArray(1);
 	    glBindVertexArray(0);
+	}
+
+	public Material getMaterial() {
+		return material;
 	}
 }

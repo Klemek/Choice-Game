@@ -1,5 +1,8 @@
 package fr.choicegame;
 
+import java.awt.Font;
+import java.awt.FontFormatException;
+import java.awt.GraphicsEnvironment;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
@@ -75,6 +78,19 @@ public class Loader {
 			}
 		}
 
+		//register font
+		if(Config.getValue(Config.FONT_FILE) != null){
+			GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+	    	try {
+				ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, this.getClass().getResourceAsStream("/fonts/"+Config.getValue(Config.FONT_FILE))));
+				System.out.println("Font file '"+Config.getValue(Config.FONT_FILE)+"' loaded");
+	    	} catch (FontFormatException e) {
+				System.out.println("Font file '"+Config.getValue(Config.FONT_FILE)+"' in wrong format");
+			} catch (IOException e) {
+				System.out.println("Font file '"+Config.getValue(Config.FONT_FILE)+"' not found");
+			}
+		}
+		
 		return true;
 	}
 

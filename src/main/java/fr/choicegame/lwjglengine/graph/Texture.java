@@ -1,6 +1,7 @@
 package fr.choicegame.lwjglengine.graph;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.ByteBuffer;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL30.*;
@@ -10,13 +11,19 @@ import de.matthiasmann.twl.utils.PNGDecoder.Format;
 
 public class Texture {
 
-	private final int textureId;
+	private int textureId;
+	
 	private int width, height;
 	
+	public Texture(){}
+	
 	public Texture(String fileName) throws IOException {
-		
 		//Load the texture from file
-		PNGDecoder decoder = new PNGDecoder(Texture.class.getResourceAsStream(fileName));
+		init(Texture.class.getResourceAsStream(fileName));
+	}
+	
+	protected void init(InputStream is) throws IOException{
+		PNGDecoder decoder = new PNGDecoder(is);
 		
 		width = decoder.getWidth();
 		height = decoder.getHeight();
@@ -46,7 +53,15 @@ public class Texture {
 	public int getId(){
 		return textureId;
 	}
-	
+
+	public int getWidth() {
+		return width;
+	}
+
+	public int getHeight() {
+		return height;
+	}
+
 	public float[] getTextCoords(int id, int texSize){
 		
 		float wcut = (float)texSize/(float)width;
@@ -63,6 +78,5 @@ public class Texture {
     	        (x+1)*wcut, (y+1)*hcut,
     	        (x+1)*wcut, y*hcut,
     	    };
-	}
-
+}
 }

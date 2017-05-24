@@ -31,6 +31,12 @@ public class Config {
 	public static final String START_MAP = "start_map";
 	private static final String START_MAP_DEFAULT = null;
 	
+	public static final String FONT_FILE = "font_file";
+	private static final String FONT_FILE_DEFAULT = null;
+	
+	public static final String FONT_NAME = "font_name";
+	private static final String FONT_NAME_DEFAULT = "Consolas";
+	
 	//Character
 	
 	public static final String CHARACTER_SPEED = "character_speed";
@@ -97,6 +103,8 @@ public class Config {
 		defaultValues.put(PLAYER_TILESET, PLAYER_TILESET_DEFAULT);
 		defaultValues.put(TILE_SIZE, ""+TILE_SIZE_DEFAULT);
 		defaultValues.put(START_MAP, START_MAP_DEFAULT);
+		defaultValues.put(FONT_FILE, FONT_FILE_DEFAULT);
+		defaultValues.put(FONT_NAME, FONT_NAME_DEFAULT);
 		defaultValues.put(CHARACTER_SPEED, ""+CHARACTER_SPEED_DEFAULT);
 		defaultValues.put(HITBOX_START_X, ""+HITBOX_START_X_DEFAULT);
 		defaultValues.put(HITBOX_START_Y, ""+HITBOX_START_Y_DEFAULT);

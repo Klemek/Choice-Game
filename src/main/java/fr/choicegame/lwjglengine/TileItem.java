@@ -3,21 +3,14 @@ package fr.choicegame.lwjglengine;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.joml.Vector3f;
-
 import fr.choicegame.Config;
+import fr.choicegame.lwjglengine.graph.Material;
 import fr.choicegame.lwjglengine.graph.Mesh;
 import fr.choicegame.lwjglengine.graph.Texture;
 
 public class TileItem {
 
-    private final List<Mesh> meshes;
-
-    private final Vector3f position;
-
-    private float scale;
-
-    private final Vector3f rotation;
+    private final List<GameItem> items;
     
     private static final int[] INDICES = new int[]{
 									        0, 1, 3, 3, 1, 2,
@@ -27,18 +20,15 @@ public class TileItem {
     private static final float DELTA = 0.01f;
     
     public TileItem(Texture tex, int id) {
-    	meshes = new ArrayList<>();
+    	items = new ArrayList<>();
     	if(tex!= null){
-		    meshes.add(new Mesh(getPositions(Z),tex.getTextCoords(id, Config.getIntValue(Config.TILE_SIZE)), INDICES, tex));
+		    items.add(new GameItem(new Mesh(getPositions(Z),tex.getTextCoords(id, Config.getIntValue(Config.TILE_SIZE)), INDICES, new Material(tex))));
     	} 
-        position = new Vector3f(0, 0, 0);
-        scale = 1;
-        rotation = new Vector3f(0, 0, 0);
     }
     
     public TileItem(Texture[] texs, int[] ids) {
     	
-	    meshes = new ArrayList<>();
+	    items = new ArrayList<>();
 	    
 	    for(int i = 0; i < 4; i++){
 	    	if(texs[i] != null){
@@ -47,15 +37,11 @@ public class TileItem {
 	    			z -= DELTA*(2-i);
 	    		else
 	    			z += DELTA*(i-1);
-	    		meshes.add(new Mesh(getPositions(z),texs[i].getTextCoords(ids[i], Config.getIntValue(Config.TILE_SIZE)), INDICES, texs[i]));
+	    		items.add(new GameItem(new Mesh(getPositions(z),texs[i].getTextCoords(ids[i], Config.getIntValue(Config.TILE_SIZE)), INDICES, new Material(texs[i]))));
 	    	}else{
-	    		meshes.add(null);
+	    		items.add(null);
 	    	}
 	    }
-	    
-        position = new Vector3f(0, 0, 0);
-        scale = 1;
-        rotation = new Vector3f(0, 0, 0);
     }
     
     private static float[] getPositions(float z){
@@ -67,48 +53,33 @@ public class TileItem {
     	    };
     }
 
-    public Vector3f getPosition() {
-        return position;
-    }
+    public List<GameItem> getItems() {
+		return items;
+	}
 
-    public void setPosition(float x, float y) {
-        this.position.x = x;
-        this.position.y = y;
-    }
-
-    public float getScale() {
-        return scale;
+	public void setPosition(float x, float y) {
+        for(GameItem item:items)
+        	if(item != null)
+        		item.setPosition(x, y, Z);
     }
 
     public void setScale(float scale) {
-        this.scale = scale;
+    	for(GameItem item:items)
+    		if(item != null)
+    			item.setScale(scale);
     }
-
-    public Vector3f getRotation() {
-        return rotation;
-    }
+ 
 
     public void setRotation(float x, float y, float z) {
-        this.rotation.x = x;
-        this.rotation.y = y;
-        this.rotation.z = z;
-    }
-
-    public void render(){
-    	for(Mesh mesh: meshes)
-    		if(mesh != null)
-    			mesh.render();
-    }
-    
-    public void render(int i){
-    	if(meshes.size()>i && meshes.get(i) != null)
-    		meshes.get(i).render();
+    	for(GameItem item:items)
+    		if(item != null)
+    			item.setRotation(x, y, z);
     }
     
     public void cleanup(){
-    	for(Mesh mesh: meshes)
-    		if(mesh != null)
-    			mesh.cleanUp();
+    	for(GameItem item: items)
+    		if(item != null)
+    			item.getMesh().cleanUp();
     }
     
 }

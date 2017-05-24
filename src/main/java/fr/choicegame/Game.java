@@ -135,6 +135,9 @@ public class Game implements IGameLogic {
 		if (player != null) {
 			renderer.updateCharacters(0, player, getCurrentMap());
 		}
+		
+		renderer.setHud(new Hud("Choice-Game Beta"));
+		
 		System.out.println("Finished loading");
 		splash.setVisible(false); // end of loading
 	}
