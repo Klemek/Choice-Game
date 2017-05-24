@@ -6,7 +6,6 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 import fr.choicegame.lwjglengine.GameEngine;
-import fr.choicegame.lwjglengine.IGameLogic;
 
 
 public class Splash extends JFrame{
@@ -19,9 +18,9 @@ public class Splash extends JFrame{
 		if(load != null){
 	        boolean vSync = true;
 	        try{
-	            IGameLogic gameLogic = new Game(load, splash);
+	            Game game = new Game(load, splash);
 	            GameEngine gameEng = new GameEngine("Choice game",
-	                600, 480, vSync, gameLogic);
+	                600, 480, vSync, game, game);
 	            gameEng.start();
 	        } catch (Exception excp) {
 	            excp.printStackTrace();

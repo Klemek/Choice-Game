@@ -1,5 +1,7 @@
 package fr.choicegame.lwjglengine;
 
+import fr.choicegame.lwjglengine.Window.KeyEventListener;
+
 public class GameEngine implements Runnable {
 
 	private final Thread gameLoopThread;
@@ -10,10 +12,10 @@ public class GameEngine implements Runnable {
 	private IGameLogic gameLogic;
 	private Window window;
 
-	public GameEngine(String windowTitle, int width, int height, boolean vsSync, IGameLogic gameLogic)
+	public GameEngine(String windowTitle, int width, int height, boolean vsSync, IGameLogic gameLogic, KeyEventListener keylistener)
 			throws Exception {
 		gameLoopThread = new Thread(this, "GAME_LOOP_THREAD");
-		window = new Window(windowTitle, width, height, vsSync);
+		window = new Window(windowTitle, width, height, vsSync, keylistener);
 		this.gameLogic = gameLogic;
 	}
 

@@ -98,6 +98,14 @@ public class TextItem extends GameItem {
 		return new Mesh(positions, textCoords, indices, new Material(fontTexture));
 	}
 
+	public float getWidth(){
+		return Utils.getTextWidth(fontTexture.getFont(), text);
+	}
+	
+	public float getHeight(){
+		return fontTexture.getHeight();
+	}
+	
 	public String getText() {
 		return text;
 	}

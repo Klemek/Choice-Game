@@ -18,6 +18,10 @@ public class EventComputer implements GameEventListener {
 	private static final String VALUE = "VALUE";
 	private static final String ID = "ID";
 	
+	private String savedEvent;
+	private int savedx, savedy, savedi;
+	private HashMap<String, Integer> savedvars;
+	
 	public EventComputer(Game game) {
 		this.game = game;
 	}
@@ -25,17 +29,20 @@ public class EventComputer implements GameEventListener {
 	// Functions
 
 	public void eventCalled(String event, int x, int y) {
-		
+		eventCalled(event, x, y,0,new HashMap<>());
+	}
+	
+	public void eventCalled(String event, int x, int y, int start, HashMap<String, Integer> vars) {
 		String actions[] = event.split("\n");
-		System.out.println("Event in ("+x+","+y+")");
-		HashMap<String, Integer> vars = new HashMap<>();
-		boolean jump = false;
-		for(String action:actions){
+		System.out.println("Event in ("+x+","+y+") "+(start==0?"":"resume"));
+		int jump = 0;
+		for(int i = start; i < actions.length; i++){
+			String action = actions[i];
 			action = action.split("#")[0].trim(); //TODO escape # in text args
 			if(action.length()>0){
 				String spl1[] = action.split(" ",2);
 				String cmd = spl1[0];
-				if(!jump){
+				if(jump == 0){
 					System.out.println(">"+action);//TODO debug
 					String args[] = new String[0];
 					if(spl1.length>1)
@@ -55,11 +62,11 @@ public class EventComputer implements GameEventListener {
 						switch(args.length){
 						case 1: //IFT TRIGNAME
 							if(!game.getTrigger(args[0]))
-								jump = true;
+								jump++;
 							break;
 						case 2: //IFT NOT TRIGNAME
 							if(game.getTrigger(args[1]))
-								jump = true;
+								jump++;
 							break;
 						}
 						break;
@@ -73,32 +80,32 @@ public class EventComputer implements GameEventListener {
 						switch(args[1]){
 						case "==": //IF (VARNAME) == (VALUE)
 							if(vars.getOrDefault(args[0], game.getGlobalVariable(args[0]))!=Integer.parseInt(args[2]))
-								jump = true;
+								jump++;
 							break;
 						case "!=": //IF (VARNAME) != (VALUE)
 							if(vars.getOrDefault(args[0], game.getGlobalVariable(args[0]))==Integer.parseInt(args[2]))
-								jump = true;
+								jump++;
 							break;
 						case ">": //IF (VARNAME) > (VALUE)
 							if(vars.getOrDefault(args[0], game.getGlobalVariable(args[0]))<=Integer.parseInt(args[2]))
-								jump = true;
+								jump++;
 							break;
 						case "<": //IF (VARNAME) < (VALUE)
 							if(vars.getOrDefault(args[0], game.getGlobalVariable(args[0]))>=Integer.parseInt(args[2]))
-								jump = true;
+								jump++;
 							break;
 						case ">=": //IF (VARNAME) >= (VALUE)
 							if(vars.getOrDefault(args[0], game.getGlobalVariable(args[0]))<Integer.parseInt(args[2]))
-								jump = true;
+								jump++;
 							break;
 						case "<=": //IF (VARNAME) <= (VALUE)
 							if(vars.getOrDefault(args[0], game.getGlobalVariable(args[0]))>Integer.parseInt(args[2]))
-								jump = true;
+								jump++;
 							break;
 						}
 						break;
 					case "ELSE":
-						jump = true;
+						jump++;
 						break;
 					case "ICZ": //ICZ (VARNAME) [VALUE] # Increase var from or value 
 						switch(args.length){
@@ -139,18 +146,27 @@ public class EventComputer implements GameEventListener {
 						}
 						break;
 					case "SAY": //SAY (TEXT) [IMAGEID] #Show text (pause game)
-						//TODO EVENT SAY
-						System.out.println(args[0]);
 						switch(args.length){
 						case 1: //SAY (TEXT)
-							break;
+							game.getHud().setMsg(getStringArg(args[0]));
+							pause(event,x,y,i,vars);
+							return;
 						case 2://SAY (TEXT) (IMAGID)
-							break;
+							//TODO Image
+							game.getHud().setMsg(getStringArg(args[0]));
+							pause(event,x,y,i,vars);
+							return;
 						}
-						break;
 					case "DIALOG": //DIALOG (TEXT) (VARNAME) (OPTION1) (OPTION2) ... #Show a choice and return result on a viariable
 						//TODO EVENT DIALOG
-						break;
+						String[] dial = new String[args.length-1];
+						dial[0] = getStringArg(args[0]);
+						for(int j = 1; j < dial.length; j++){
+							dial[j] = getStringArg(args[j+1]);
+						}
+						game.getHud().setDialog(dial,args[1]);
+						pause(event,x,y,i,vars);
+						return;
 					case "SHAKE": //SHAKE (ON/OFF) [TIME] #Toggle shake screen for a time or until off
 						//TODO EVENT SHAKE
 						switch(args.length){
@@ -175,8 +191,9 @@ public class EventComputer implements GameEventListener {
 							break;
 						case 3://INVADD (ITEMID) (NUM) (MSG)
 							game.getPlayer().getInventory().put(itemid1,itemcount1+Integer.parseInt(args[1]));
-							 //TODO MSG
-							break;
+							game.getHud().setMsg(getStringArg(args[2]));
+							pause(event,x,y,i,vars);
+							return;
 						}
 						break;
 					case "INVDEL": //INVDEL (ITEMID) [NUM] [MSG] #Remove all or NUM item(s) to the player and display it (optional)(pause)
@@ -194,8 +211,9 @@ public class EventComputer implements GameEventListener {
 							break;
 						case 3://INVDEL (ITEMID) (NUM) (MSG)
 							game.getPlayer().getInventory().put(itemid2,Math.max(0,itemcount2-Integer.parseInt(args[1])));
-							//TODO MSG
-							break;
+							game.getHud().setMsg(getStringArg(args[2]));
+							pause(event,x,y,i,vars);
+							return;
 						}
 						break;
 					case "MAP": //MAP (X) (Y) (LAYER) [TILESET] [ID] #Edit one map's tile
@@ -267,14 +285,18 @@ public class EventComputer implements GameEventListener {
 						game.getPlayer().setPosition(Integer.parseInt(x+args[0]),Integer.parseInt(y+args[1]));
 						break;
 					}
-				}else if(cmd.equals("ELSE") || cmd.equals("END")){
-					jump = false;
+				}else if((jump == 1 && cmd.equals("ELSE")) || cmd.equals("END")){
+					jump--;
 					System.out.println(">"+cmd);
+				}else if(cmd.equals("IF") || cmd.equals("IFT")){
+					jump++;
+					System.out.println("#"+cmd);
 				}else{
 					System.out.println("#"+action);
 				}
 			}
 		}
+		this.savedEvent = null;
 	}
 	
 	public static ArrayList<String> testEvent(String event) {
@@ -470,6 +492,32 @@ public class EventComputer implements GameEventListener {
 				}
 			}
 		}
+	}
+	
+	private void pause(String event, int x, int y, int i, HashMap<String, Integer> vars){
+		game.setPaused(true);
+		this.savedEvent = event;
+		this.savedx = x;
+		this.savedy = y;
+		this.savedi = i+1;
+		this.savedvars = vars;
+	}
+	
+	public void resume(){
+		if(savedEvent != null){
+			this.eventCalled(savedEvent, savedx, savedy, savedi, savedvars);
+		}
+	}
+	
+	public void setTempVar(String key, Integer value){
+		if(savedvars != null){
+			savedvars.put(key, value);
+		}
+		
+	}
+	
+	private static String getStringArg(String arg){
+		return arg.substring(1,arg.length()-1);
 	}
 	
 	private static boolean isInteger(String s) {

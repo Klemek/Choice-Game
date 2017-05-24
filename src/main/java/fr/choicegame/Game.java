@@ -11,8 +11,9 @@ import fr.choicegame.character.Player;
 import fr.choicegame.event.EventComputer;
 import fr.choicegame.lwjglengine.IGameLogic;
 import fr.choicegame.lwjglengine.Window;
+import fr.choicegame.lwjglengine.Window.KeyEventListener;
 
-public class Game implements IGameLogic {
+public class Game implements IGameLogic, KeyEventListener {
 
 	private HashMap<String, Boolean> triggers;
 	private HashMap<String, Integer> globvars;
@@ -25,7 +26,10 @@ public class Game implements IGameLogic {
 	private Player player;
 
 	private final Renderer renderer;
+	private Hud hud;
 	private final JFrame splash;
+
+	private boolean paused;
 
 	public Game(Loader loader, JFrame splash) {
 
@@ -45,7 +49,7 @@ public class Game implements IGameLogic {
 			String startMap = Config.getValue(Config.START_MAP);
 
 			if (startMap != null) {
-				
+
 				// TODO load all maps
 				this.maps.put(startMap, loader.loadMap(startMap));
 
@@ -89,6 +93,10 @@ public class Game implements IGameLogic {
 		return player;
 	}
 
+	public Hud getHud() {
+		return hud;
+	}
+
 	public void setCurrentMap(String name) {
 		if (maps.containsKey(name)) {
 			this.currentMap = name;
@@ -104,25 +112,26 @@ public class Game implements IGameLogic {
 		renderer.updateMap(getCurrentMap());
 	}
 
-	public void action(EventComputer listener) {
-		if (player != null) {
-			int posX = (int) Math.round(player.getPosX()), posY = (int) Math.round(player.getPosY());
-			switch (player.getFacing()) {
-			case NORTH:
-				maps.get(currentMap).getTile(posX, posY - 1).getEvent().action(posX, posY - 1);
-				break;
-			case EAST:
-				maps.get(currentMap).getTile(posX + 1, posY).getEvent().action(posX + 1, posY);
-				break;
-			case SOUTH:
-				maps.get(currentMap).getTile(posX, posY + 1).getEvent().action(posX, posY + 1);
-				break;
-			case WEST:
-				maps.get(currentMap).getTile(posX - 1, posY).getEvent().action(posX - 1, posY);
-				break;
-			default:
-				break;
-			}
+	public void interact() {
+		if (player != null && !isPaused()) {
+
+				int posX = (int) Math.round(player.getPosX()), posY = (int) Math.round(player.getPosY());
+				switch (player.getFacing()) {
+				case NORTH:
+					maps.get(currentMap).action(posX, posY - 1);
+					break;
+				case EAST:
+					maps.get(currentMap).action(posX + 1, posY);
+					break;
+				case SOUTH:
+					maps.get(currentMap).action(posX, posY + 1);
+					break;
+				case WEST:
+					maps.get(currentMap).action(posX - 1, posY);
+					break;
+				default:
+					break;
+				}
 		}
 	}
 
@@ -135,51 +144,85 @@ public class Game implements IGameLogic {
 		if (player != null) {
 			renderer.updateCharacters(0, player, getCurrentMap());
 		}
-		
-		renderer.setHud(new Hud("Choice-Game Beta"));
-		
+
+		hud = new Hud();
+
+		renderer.setHud(hud);
+
 		System.out.println("Finished loading");
 		splash.setVisible(false); // end of loading
 	}
 
 	@Override
+	public void keyEvent(int key, int action, int mods) {
+		if(isPaused() && action == GLFW_PRESS){
+			
+			if(hud.hasDialog()){
+				
+				if(key == GLFW_KEY_UP || key == GLFW_KEY_W){
+					hud.up();
+				}else if(key == GLFW_KEY_DOWN || key == GLFW_KEY_S){
+					hud.down();
+				}else if(key == GLFW_KEY_E || key == GLFW_KEY_SPACE || key == GLFW_KEY_ENTER){
+					setPaused(false);
+					hud.clear();
+					evComputer.setTempVar(hud.getDialogvar(),hud.getDialogchoice());
+					evComputer.resume();
+				}
+				
+			}else if(key == GLFW_KEY_E || key == GLFW_KEY_SPACE || key == GLFW_KEY_ENTER){
+				setPaused(false);
+				hud.clear();
+				evComputer.resume();
+			}
+		}
+	}
+	
+	@Override
 	public void input(Window window) {
 		// azerty is auto converted to qwerty with lwjgl
-		boolean up = window.isKeyPressed(GLFW_KEY_UP) || window.isKeyPressed(GLFW_KEY_W);
-		boolean down = window.isKeyPressed(GLFW_KEY_DOWN) || window.isKeyPressed(GLFW_KEY_S);
-		boolean left = window.isKeyPressed(GLFW_KEY_LEFT) || window.isKeyPressed(GLFW_KEY_A);
-		boolean right = window.isKeyPressed(GLFW_KEY_RIGHT) || window.isKeyPressed(GLFW_KEY_D);
-
-		if (player != null) {
-
-			player.setWalking((up ^ down) || (left ^ right));
-
-			if (player.isWalking()) {
-				if (up && !down) {
-					if (left && !right) {
-						player.setMoving(Direction.NORTH_WEST);
-					} else if (right && !left) {
-						player.setMoving(Direction.NORTH_EAST);
+		if(!isPaused()){
+		
+			boolean up = window.isKeyPressed(GLFW_KEY_UP) || window.isKeyPressed(GLFW_KEY_W);
+			boolean down = window.isKeyPressed(GLFW_KEY_DOWN) || window.isKeyPressed(GLFW_KEY_S);
+			boolean left = window.isKeyPressed(GLFW_KEY_LEFT) || window.isKeyPressed(GLFW_KEY_A);
+			boolean right = window.isKeyPressed(GLFW_KEY_RIGHT) || window.isKeyPressed(GLFW_KEY_D);
+			
+			if (player != null) {
+				
+				if(window.isKeyPressed(GLFW_KEY_E)){
+					interact();
+				}
+				
+				player.setWalking((up ^ down) || (left ^ right));
+	
+				if (player.isWalking()) {
+					if (up && !down) {
+						if (left && !right) {
+							player.setMoving(Direction.NORTH_WEST);
+						} else if (right && !left) {
+							player.setMoving(Direction.NORTH_EAST);
+						} else {
+							player.setMoving(Direction.NORTH);
+						}
+						player.setFacing(Direction.NORTH);
+					} else if (down && !up) {
+						if (left && !right) {
+							player.setMoving(Direction.SOUTH_WEST);
+						} else if (right && !left) {
+							player.setMoving(Direction.SOUTH_EAST);
+						} else {
+							player.setMoving(Direction.SOUTH);
+						}
+						player.setFacing(Direction.SOUTH);
 					} else {
-						player.setMoving(Direction.NORTH);
-					}
-					player.setFacing(Direction.NORTH);
-				} else if (down && !up) {
-					if (left && !right) {
-						player.setMoving(Direction.SOUTH_WEST);
-					} else if (right && !left) {
-						player.setMoving(Direction.SOUTH_EAST);
-					} else {
-						player.setMoving(Direction.SOUTH);
-					}
-					player.setFacing(Direction.SOUTH);
-				} else {
-					if (left && !right) {
-						player.setMoving(Direction.WEST);
-						player.setFacing(Direction.WEST);
-					} else if (right && !left) {
-						player.setMoving(Direction.EAST);
-						player.setFacing(Direction.EAST);
+						if (left && !right) {
+							player.setMoving(Direction.WEST);
+							player.setFacing(Direction.WEST);
+						} else if (right && !left) {
+							player.setMoving(Direction.EAST);
+							player.setFacing(Direction.EAST);
+						}
 					}
 				}
 			}
@@ -188,10 +231,11 @@ public class Game implements IGameLogic {
 
 	@Override
 	public void update(float interval) {
-		if (player != null) {
+		if (player != null && !isPaused()) {
 			player.update(getCurrentMap());
 			renderer.updateCharacters(interval, player, getCurrentMap());
 		}
+		hud.update(interval);
 	}
 
 	@Override
@@ -203,4 +247,14 @@ public class Game implements IGameLogic {
 	public void cleanup() {
 		renderer.cleanup();
 	}
+
+	public boolean isPaused() {
+		return paused;
+	}
+
+	public void setPaused(boolean pause) {
+		this.paused = pause;
+	}
+
+	
 }

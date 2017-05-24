@@ -9,17 +9,21 @@
   </tile>
   <tile id="1">
    <properties>
-    <property name="event">IFT NOT CHEST1
+    <property name="event">
+    DIALOG &quot;Que voulez-vous faire ?&quot; D0 &quot;Ouvrir le coffre&quot; &quot;Rien&quot;
+    IF D0 == 1
+    IFT NOT CHEST1
    INVVAR 0 KEY
-  IFT KEY
+  IF KEY >= 1
       SAY &quot;Ce coffre est vide&quot;
       TRIGGER CHEST1
   ELSE
       SAY &quot;Vous n'avez pas la clé de ce coffre&quot;
   END
-ELSE
-  SAY &quot;Vous avez déjà fouillé ce coffre&quot;
-END</property>
+	ELSE
+	  SAY &quot;Vous avez déjà fouillé ce coffre&quot;
+	END
+	END</property>
    </properties>
   </tile>
   <tile id="2">

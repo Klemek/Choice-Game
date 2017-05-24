@@ -19,13 +19,15 @@ public class Window {
 	private int width, height;
 	private boolean resized, vsync;
 	private String title;
+	private KeyEventListener listener;
 	
-	public Window(String windowTitle, int width, int height, boolean vsSync) {
+	public Window(String windowTitle, int width, int height, boolean vsSync,KeyEventListener listener) {
 		this.setWidth(width);
 		this.setHeight(height);
 		this.vsync = vsSync;
 		this.resized = false;
 		this.title = windowTitle;
+		this.listener = listener;
 	}
 
 	public void init() {
@@ -59,12 +61,20 @@ public class Window {
 			throw new RuntimeException("Failed to create the GLFW window");
 
 		// Setup resize callback
-				glfwSetWindowSizeCallback(windowHandle, (window, width, height) -> {
-				    Window.this.setWidth(width);
-				    Window.this.setHeight(height);
-				    Window.this.setResized(true);
-				});
-		
+		glfwSetWindowSizeCallback(windowHandle, (window, width, height) -> {
+		    Window.this.setWidth(width);
+		    Window.this.setHeight(height);
+		    Window.this.setResized(true);
+		});
+
+		glfwSetKeyCallback(windowHandle, (window, key, scancode, action, mods) -> {
+			
+			if(listener != null)
+				listener.keyEvent(key, action, mods);
+			/*if ( key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE )
+				glfwSetWindowShouldClose(window, true); // We will detect this in the rendering loop*/
+		});
+				
 		// Setup a key callback. It will be called every time a key is pressed, repeated or released.
 		/*glfwSetKeyCallback(windowHandle, (window, key, scancode, action, mods) -> {
 			if ( key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE )
@@ -155,6 +165,12 @@ public class Window {
 
 	public boolean isVsync() {
 		return vsync;
+	}
+	
+	public static interface KeyEventListener{
+		
+		void keyEvent(int key,int action,int mods);
+		
 	}
 
 	

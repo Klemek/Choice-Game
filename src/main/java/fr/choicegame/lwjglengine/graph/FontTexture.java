@@ -88,6 +88,10 @@ public class FontTexture extends Texture{
 		return charMap.get(c);
 	}
 	
+	public Font getFont() {
+		return font;
+	}
+	
 	public class CharInfo {
 
 	    private final int startX;

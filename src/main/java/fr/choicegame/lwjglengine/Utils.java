@@ -1,5 +1,9 @@
 package fr.choicegame.lwjglengine;
 
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 import java.io.InputStream;
 import java.util.List;
 import java.util.Scanner;
@@ -38,5 +42,13 @@ public class Utils {
     		list[i] = array.get(i);
     	}
     	return list;
+    }
+    
+    public static float getTextWidth(Font font, String text){
+    	BufferedImage img = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
+	    Graphics2D g2D = img.createGraphics();
+	    g2D.setFont(font);
+	    FontMetrics fontMetrics = g2D.getFontMetrics();
+	    return fontMetrics.stringWidth(text);
     }
 }
