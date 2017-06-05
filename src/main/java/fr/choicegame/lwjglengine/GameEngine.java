@@ -32,6 +32,7 @@ public class GameEngine implements Runnable {
 			excp.printStackTrace();
 		} finally{
 			cleanup();
+			System.exit(0);
 		}
 	}
 
