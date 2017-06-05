@@ -53,6 +53,8 @@ public class Game implements IGameLogic, KeyEventListener {
 		this.maps = new HashMap<>();
 
 		evComputer = new EventComputer(this);
+		
+		hud = new Hud();
 
 		renderer = new Renderer(loader);
 
@@ -174,7 +176,9 @@ public class Game implements IGameLogic, KeyEventListener {
 			renderer.updateCharacters(0, player, getCurrentMap());
 		}
 
-		hud = new Hud();
+		hud.init(renderer.getTexture("/blank.png"),
+				renderer.getTexture("/dialog.png"),
+				renderer.getTexture("/cursor.png"));
 
 		renderer.setHud(hud);
 

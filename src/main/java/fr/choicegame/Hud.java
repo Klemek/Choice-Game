@@ -2,7 +2,6 @@ package fr.choicegame;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.io.IOException;
 
 import org.joml.Vector4f;
 
@@ -16,9 +15,11 @@ import fr.choicegame.lwjglengine.graph.Texture;
 
 public class Hud implements IHud {
 
-	private final GameItem[] gameItems;
+	private GameItem[] gameItems;
 
-	private final TextItem infoTextItem, msgTextItem;
+	private TextItem infoTextItem;
+
+	private TextItem msgTextItem;
 	private GameItem dialogBg, dialogCursor, colorFilter;
 
 	private int windowWidth, windowHeight;
@@ -34,8 +35,8 @@ public class Hud implements IHud {
 	private int msgFontSize = 25;
 	
 	private boolean dialog;
-
-	public Hud() throws Exception {
+	
+	public void init(Texture blank, Texture dialogbg, Texture dialogcurs) throws Exception{
 		FontTexture infoFont = new FontTexture(new Font(Config.getValue(Config.FONT_NAME), Font.BOLD, 16), "ISO-8859-1",
 				Color.RED);
 		FontTexture msgFont = new FontTexture(new Font(Config.getValue(Config.FONT_NAME), Font.BOLD, msgFontSize), "ISO-8859-1",
@@ -43,16 +44,16 @@ public class Hud implements IHud {
 		this.infoTextItem = new TextItem("Choice-Game Beta", infoFont);
 		this.msgTextItem = new TextItem("", msgFont);
 		this.msgTextItem.setVisible(false);
-		this.colorFilter = getColorFilter();
+		this.colorFilter = GameItem.simpleQuad(new Material(blank, new Vector4f(1, 0, 0, 0.5f)));
 		this.colorFilter.setVisible(false);
-		this.dialogBg = getDialogBg();
+		this.dialogBg = GameItem.simpleQuad(new Material(dialogbg));
 		this.dialogBg.setVisible(false);
-		this.dialogCursor = getDialogCursor();
+		this.dialogCursor = GameItem.simpleQuad(new Material(dialogcurs));
 		this.dialogCursor.setVisible(false);
 		gameItems = new GameItem[] {colorFilter, dialogBg, msgTextItem, dialogCursor, infoTextItem };
 	}
 
-	private static GameItem getColorFilter() {
+	/*private static GameItem getColorFilter() {
 		Material colorText;
 		try {
 			// TODO without texture
@@ -83,7 +84,7 @@ public class Hud implements IHud {
 			e.printStackTrace();
 			return null;
 		}
-	}
+	}*/
 
 	public void setColorFilter(float r, float g, float b, float a){
 		this.colorFilter.getMesh().getMaterial().setColor(new Vector4f(r,g,b,a));

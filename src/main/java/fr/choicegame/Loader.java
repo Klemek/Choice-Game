@@ -10,6 +10,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.StringReader;
+import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -37,7 +38,7 @@ import fr.choicegame.lwjglengine.graph.Texture;
 public class Loader {
 
 	private static final ArrayList<String> IMAGE_EXT = new ArrayList<>(
-			Arrays.asList(new String[] { "png", "jpg", "gif" }));
+			Arrays.asList(new String[] { "png"}));
 	private static final ArrayList<String> TEXT_EXT = new ArrayList<>(
 			Arrays.asList(new String[] { "txt", "xml", "tmx", "cfg" }));
 
@@ -55,7 +56,12 @@ public class Loader {
 	 */
 	public boolean load() {
 
-		jarFile = new File(getClass().getProtectionDomain().getCodeSource().getLocation().getPath());
+		try {
+			jarFile = new File(java.net.URLDecoder.decode(getClass().getProtectionDomain().getCodeSource().getLocation().getPath(), "UTF-8"));
+		} catch (UnsupportedEncodingException e1) {
+			return false;
+		}
+		System.out.println(jarFile);
 		ide = !jarFile.isFile();
 
 		if (ide) {
@@ -67,7 +73,7 @@ public class Loader {
 		this.loadFile(Config.CONFIG_FILE);
 		Config.loadValues(getTextResource(Config.CONFIG_FILE));
 
-		String[] folders = { "/" + Config.getValue(Config.MAPS_FOLDER), "/" + Config.getValue(Config.TILESETS_FOLDER) };
+		String[] folders = { "/", "/" + Config.getValue(Config.MAPS_FOLDER), "/" + Config.getValue(Config.TILESETS_FOLDER) };
 
 		for (String folderPath : folders) {
 			try {
@@ -103,9 +109,9 @@ public class Loader {
 			while (entries.hasMoreElements()) {
 				String name = entries.nextElement().getName();
 				// filter according to the path
-				if (name.startsWith(folderPath.substring(1) + "/")) {
+				//if (name.startsWith(folderPath.substring(1) + "/")) {
 					loadFile("/" + name);
-				}
+				//}
 			}
 			jar.close();
 		} else { // Run with IDE
@@ -114,9 +120,12 @@ public class Loader {
 				try {
 					final File apps = new File(url.toURI());
 					for (File app : apps.listFiles()) {
-						loadFile(folderPath + "/" + app.getName());
+						loadFile(folderPath + (folderPath.equals("/")?"":"/") + app.getName());
 					}
 				} catch (URISyntaxException ignored) {
+					
+				} catch (IllegalArgumentException e){
+					System.out.println("Could not load '"+folderPath+"'");
 				}
 			}
 		}
