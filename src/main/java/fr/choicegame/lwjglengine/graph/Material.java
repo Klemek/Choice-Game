@@ -1,5 +1,7 @@
 package fr.choicegame.lwjglengine.graph;
 
+import java.awt.Color;
+
 import org.joml.Vector4f;
 
 public class Material {
@@ -16,6 +18,10 @@ public class Material {
 	
 	public Material(Texture texture){
 		this(texture,DEFAULT_COLOR);
+	}
+	
+	public Material(Color c){
+		this(null, new Vector4f((float)c.getRed()/255f,(float)c.getGreen()/255f,(float)c.getBlue()/255f,(float)c.getAlpha()/255f));
 	}
 	
 	public Material(Vector4f color){

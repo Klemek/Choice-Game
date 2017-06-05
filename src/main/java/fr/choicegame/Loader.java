@@ -65,7 +65,7 @@ public class Loader {
 		}
 
 		this.loadFile(Config.CONFIG_FILE);
-		Config.loadValues(getGameFile(Config.CONFIG_FILE));
+		Config.loadValues(getTextResource(Config.CONFIG_FILE));
 
 		String[] folders = { "/" + Config.getValue(Config.MAPS_FOLDER), "/" + Config.getValue(Config.TILESETS_FOLDER) };
 
@@ -197,11 +197,17 @@ public class Loader {
 		return content;
 	}
 
-	public HashMap<String, String> getGameFiles() {
+	public HashMap<String, String> getTextResources() {
 		return this.textResources;
 	}
+	
+	public ArrayList<String> getTextResourcesNames() {
+		ArrayList<String> out = new ArrayList<>();
+		out.addAll(this.textResources.keySet());
+		return out;
+	}
 
-	public String getGameFile(String name) {
+	public String getTextResource(String name) {
 		if (!name.startsWith("/"))
 			name = "/" + name;
 		return this.textResources.get(name);
@@ -423,6 +429,10 @@ public class Loader {
 
 	public static String getExtension(String filePath) {
 		return filePath.substring(filePath.lastIndexOf(".") + 1);
+	}
+	
+	public static String getFileName(String filePath) {
+		return new File(filePath).getName().split("\\.")[0];
 	}
 
 }

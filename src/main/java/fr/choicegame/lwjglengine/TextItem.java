@@ -102,6 +102,21 @@ public class TextItem extends GameItem {
 		return Utils.getTextWidth(fontTexture.getFont(), text);
 	}
 	
+	public void setMaxWidth(float width){
+		int i = 0;
+		int lastspace = 0;
+		while(i < text.length()){
+			if(text.toCharArray()[i]==' ')
+				lastspace = i;
+			if(Utils.getTextWidth(fontTexture.getFont(), text.substring(0,i))>width){
+				text = text.substring(0,lastspace)+"\n"+text.substring(lastspace);
+			}
+			i++;
+		}
+		this.getMesh().cleanUp();
+		this.setMesh(buildMesh());
+	}
+	
 	public float getHeight(){
 		return fontTexture.getHeight()*Utils.countLines(text);
 	}

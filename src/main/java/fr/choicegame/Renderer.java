@@ -23,15 +23,6 @@ import fr.choicegame.lwjglengine.graph.Transformation;
 
 public class Renderer {
 
-	/**
-	 * Field of View in Radians
-	 */
-	private static final float FOV = (float) Math.toRadians(60.0f);
-
-	private static final float Z_NEAR = 0.001f;
-
-	private static final float Z_FAR = 100.f;
-
 	private ShaderProgram shaderProgram, hudShaderProgram;
 
 	private Transformation transformation;
@@ -45,7 +36,9 @@ public class Renderer {
 	private List<TileItem> mapTileItems;
 	private IHud hud;
 	private final Camera camera;
-	private float zoom = 10f;
+	private float zoom = -1f;
+	private float scale = 0.2f;
+	private float blendfix = 1.01f;
 	private float updateTimer = 0f;
 	private static final float UPDATETIME = 0.2f;
 
@@ -76,18 +69,22 @@ public class Renderer {
 		shaderProgram.createUniform("projectionMatrix");
 		shaderProgram.createUniform("modelViewMatrix");
 		shaderProgram.createUniform("texture_sampler");
+		// Create uniform for default colour and the flag that controls it
+		shaderProgram.createUniform("colour");
+		shaderProgram.createUniform("useColour");
 	}
 
 	private void setupHudShader() throws Exception {
 		hudShaderProgram = new ShaderProgram();
 		hudShaderProgram.createVertexShader(Utils.loadResource("/shaders/hud_vertex.vs", this));
-		hudShaderProgram.createFragmentShader(Utils.loadResource("/shaders/hud_fragment.fs", this));
+		hudShaderProgram.createFragmentShader(Utils.loadResource("/shaders/fragment.fs", this));
 		hudShaderProgram.link();
 
 		// Create uniforms for Ortographic-model projection matrix and base
 		// colour
 		hudShaderProgram.createUniform("projModelMatrix");
 		hudShaderProgram.createUniform("colour");
+		hudShaderProgram.createUniform("useColour");
 	}
 
 	public void updateCharacters(float interval, Player p, Map m) {
@@ -103,8 +100,9 @@ public class Renderer {
 			playerTileItem = new TileItem(
 					getTexture("/" + Config.getValue(Config.TILESETS_FOLDER) + "/" + ti.getTileset() + ".png"),
 					ti.getId());
-			playerTileItem.setPosition(p.getPosX(), m.getHeight() - p.getPosY());
-			camera.setPosition(p.getPosX(), m.getHeight() - p.getPosY(), zoom);
+			playerTileItem.setPosition(p.getPosX() * scale, (m.getHeight() - p.getPosY()) * scale);
+			playerTileItem.setScale(scale);
+			camera.setPosition(p.getPosX() * scale, (m.getHeight() - p.getPosY()) * scale, zoom);
 		}
 
 		for (TileItem item : npcTileItems)
@@ -119,7 +117,8 @@ public class Renderer {
 				TileItem item = new TileItem(
 						getTexture("/" + Config.getValue(Config.TILESETS_FOLDER) + "/" + ti.getTileset() + ".png"),
 						ti.getId());
-				item.setPosition(npc.getPosX(), m.getHeight() - npc.getPosY());
+				item.setPosition(npc.getPosX() * scale, (m.getHeight() - npc.getPosY()) * scale);
+				item.setScale(scale);
 				npcTileItems.add(item);
 			}
 
@@ -149,13 +148,13 @@ public class Renderer {
 						}
 					}
 					TileItem item = new TileItem(texs, ids);
-					item.setPosition(x, (m.getHeight() - y));
-					item.setScale(1.0f); // merge borders;
+					item.setPosition(x * scale, (m.getHeight() - y) * scale);
+					item.setScale(scale * blendfix); // merge borders;
 					mapTileItems.add(item);
 				}
 			}
-			camera.setPosition(m.getWidth() / 2f, m.getHeight() / 2f, zoom); // TODO
-																				// position
+			camera.setPosition(scale * m.getWidth() / 2f, scale * m.getHeight() / 2f, zoom); // TODO
+			// position
 		}
 	}
 
@@ -170,7 +169,7 @@ public class Renderer {
 	public void render(Window window) {
 		clear();
 
-		glEnable(GL_DEPTH_TEST);
+		//glEnable(GL_DEPTH_TEST);
 		glEnable(GL_TEXTURE_2D);
 
 		// Enable transparency
@@ -180,7 +179,7 @@ public class Renderer {
 		if (window.isResized()) {
 			glViewport(0, 0, window.getWidth(), window.getHeight());
 			window.setResized(false);
-			if(hud != null)
+			if (hud != null)
 				hud.updateSize(window);
 		}
 
@@ -195,9 +194,8 @@ public class Renderer {
 
 		shaderProgram.setUniform("texture_sampler", 0);
 
-		// Update projection Matrix
-		Matrix4f projectionMatrix = transformation.getProjectionMatrix(FOV, window.getWidth(), window.getHeight(),
-				Z_NEAR, Z_FAR);
+		// Update projection Matrix to make squares
+		Matrix4f projectionMatrix = transformation.getProjectionMatrix(window.getWidth(), window.getHeight());
 		shaderProgram.setUniform("projectionMatrix", projectionMatrix);
 
 		Matrix4f viewMatrix = transformation.getViewMatrix(camera);
@@ -235,11 +233,13 @@ public class Renderer {
 
 	private void renderTileItem(TileItem tileItem, Matrix4f viewMatrix) {
 		for (GameItem gameItem : tileItem.getItems()) {
-			if (gameItem != null) {
+			if (gameItem != null && gameItem.isVisible()) {
 				// Set world matrix for this item
 				Matrix4f modelViewMatrix = transformation.getModelViewMatrix(gameItem, viewMatrix);
 				shaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
-				// Render the mesj for this game item
+				// Render the mesh for this game item
+				shaderProgram.setUniform("colour", gameItem.getMesh().getColour());
+			    shaderProgram.setUniform("useColour", gameItem.getMesh().isTextured() ? 0 : 1);
 				gameItem.getMesh().render();
 			}
 		}
@@ -247,10 +247,12 @@ public class Renderer {
 
 	private void renderTileItem(TileItem tileItem, Matrix4f viewMatrix, int i) {
 		GameItem gameItem = tileItem.getItems().get(i);
-		if (gameItem != null) {
+		if (gameItem != null && gameItem.isVisible()) {
 			Matrix4f modelViewMatrix = transformation.getModelViewMatrix(gameItem, viewMatrix);
 			shaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
-			// Render the mesj for this game item
+			// Render the mesh for this game item
+			shaderProgram.setUniform("colour", gameItem.getMesh().getColour());
+		    shaderProgram.setUniform("useColour", gameItem.getMesh().isTextured() ? 0 : 1);
 			gameItem.getMesh().render();
 		}
 	}
@@ -263,14 +265,16 @@ public class Renderer {
 
 			Matrix4f ortho = transformation.getOrthoProjectionMatrix(0, window.getWidth(), window.getHeight(), 0);
 			for (GameItem gameItem : hud.getGameItems()) {
-				Mesh mesh = gameItem.getMesh();
-				// Set ortohtaphic and model matrix for this HUD item
-				Matrix4f projModelMatrix = transformation.getOrtoProjModelMatrix(gameItem, ortho);
-				hudShaderProgram.setUniform("projModelMatrix", projModelMatrix);
-				hudShaderProgram.setUniform("colour", gameItem.getMesh().getMaterial().getColor());
-
-				// Render the mesh for this HUD item
-				mesh.render();
+				if (gameItem != null && gameItem.isVisible()) {
+					Mesh mesh = gameItem.getMesh();
+					// Set ortohtaphic and model matrix for this HUD item
+					Matrix4f projModelMatrix = transformation.getOrtoProjModelMatrix(gameItem, ortho);
+					hudShaderProgram.setUniform("projModelMatrix", projModelMatrix);
+					shaderProgram.setUniform("colour", gameItem.getMesh().getColour());
+				    shaderProgram.setUniform("useColour", gameItem.getMesh().isTextured() ? 0 : 1);
+					// Render the mesh for this HUD item
+					mesh.render();
+				}
 			}
 
 			hudShaderProgram.unbind();

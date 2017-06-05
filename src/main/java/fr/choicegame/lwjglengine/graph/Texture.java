@@ -12,45 +12,46 @@ import de.matthiasmann.twl.utils.PNGDecoder.Format;
 public class Texture {
 
 	private int textureId;
-	
+
 	private int width, height;
-	
-	public Texture(){}
-	
+
+	public Texture() {
+	}
+
 	public Texture(String fileName) throws IOException {
-		//Load the texture from file
+		// Load the texture from file
 		init(Texture.class.getResourceAsStream(fileName));
 	}
-	
-	protected void init(InputStream is) throws IOException{
+
+	protected void init(InputStream is) throws IOException {
 		PNGDecoder decoder = new PNGDecoder(is);
-		
+
 		width = decoder.getWidth();
 		height = decoder.getHeight();
-		
+
 		ByteBuffer buf = ByteBuffer.allocateDirect(4 * decoder.getWidth() * decoder.getHeight());
 		decoder.decode(buf, decoder.getWidth() * 4, Format.RGBA);
 		buf.flip();
-		
-		// Create a new OpenGL texture 
+
+		// Create a new OpenGL texture
 		textureId = glGenTextures();
 		// Bind the texture
 		glBindTexture(GL_TEXTURE_2D, textureId);
-		//unpack rgba
+		// unpack rgba
 		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-		
+
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-		
-		//load texture
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, decoder.getWidth(),
-			    decoder.getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, buf);
-		
-		//generate set of lower-definitions
+
+		// load texture
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, decoder.getWidth(), decoder.getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE,
+				buf);
+
+		// generate set of lower-definitions
 		glGenerateMipmap(GL_TEXTURE_2D);
 	}
-	
-	public int getId(){
+
+	public int getId() {
 		return textureId;
 	}
 
@@ -62,21 +63,19 @@ public class Texture {
 		return height;
 	}
 
-	public float[] getTextCoords(int id, int texSize){
-		
-		float wcut = (float)texSize/(float)width;
-		float hcut = (float)texSize/(float)height;
-		
-		int wsize = Math.round(width/texSize);
-		
-		int x = id%wsize;
-		int y = id/wsize;
-		
-		return new float[]{
-    	        x*wcut, y*hcut,
-    	        x*wcut, (y+1)*hcut,
-    	        (x+1)*wcut, (y+1)*hcut,
-    	        (x+1)*wcut, y*hcut,
-    	    };
-}
+	public float[] getTextCoords(int id, int texSize) {
+
+		float wcut = (float) texSize / (float) width;
+		float hcut = (float) texSize / (float) height;
+
+		int wsize = Math.round(width / texSize);
+
+		int x = id % wsize;
+		int y = id / wsize;
+
+		return new float[] { x * wcut, y * hcut,
+							x * wcut, (y + 1) * hcut,
+							(x + 1) * wcut, (y + 1) * hcut,
+							(x + 1) * wcut, y * hcut, };
+	}
 }

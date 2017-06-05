@@ -38,6 +38,7 @@ public class EventComputer implements GameEventListener {
 		int jump = 0;
 		for(int i = start; i < actions.length; i++){
 			String action = actions[i];
+			action = action.replace("\\n","\n").replace("\\r","\r");
 			action = action.split("#")[0].trim(); //TODO escape # in text args
 			if(action.length()>0){
 				String spl1[] = action.split(" ",2);
@@ -267,7 +268,6 @@ public class EventComputer implements GameEventListener {
 						//TODO EVENT NPCANIMATION
 						break;
 					case "CHGMAP": //CHGMAP (MAPNAME) [PLAYERX] [PLAYERY]
-						//TODO EVENT CHGMAP
 						switch(args.length){
 						case 1: //CHGMAP (MAPNAME)
 							game.setCurrentMap(args[0]);
@@ -283,6 +283,19 @@ public class EventComputer implements GameEventListener {
 						break;
 					case "MVRPLAYER": //MVRPLAYER (PLAYERDX) (PLAYERDY) #Move player relativelyin current map
 						game.getPlayer().setPosition(Integer.parseInt(x+args[0]),Integer.parseInt(y+args[1]));
+						break;
+					case "FILTER": //FILTER (R) (G) (B) (A) / OFF # Apply filter to game (values in range 0 to 1)
+						switch(args.length){
+						case 1: //FILTER OFF
+							this.game.getHud().clearColorFilter();
+							break;
+						case 4: //FILTER (R) (G) (B) (A)
+							this.game.getHud().setColorFilter(Float.parseFloat(args[0]),
+															Float.parseFloat(args[1]),
+															Float.parseFloat(args[2]),
+															Float.parseFloat(args[3]));
+							break;
+						}
 						break;
 					}
 				}else if((jump == 1 && cmd.equals("ELSE")) || cmd.equals("END")){
@@ -398,6 +411,9 @@ public class EventComputer implements GameEventListener {
 					break;
 				case "MVRPLAYER": //MVRPLAYER (PLAYERDX) (PLAYERDY) #Move player relatively in current map
 					testArgs(i,action,errors,args, new String[][]{{VALUE,VALUE}});
+					break;
+				case "FILTER": //FILTER (R) (G) (B) (A) / OFF # Apply filter to game (values in range 0 to 1)
+					testArgs(i,action,errors,args, new String[][]{{"OFF"},{VALUE,VALUE,VALUE,VALUE}});
 					break;
 				default:
 					errors.add("Unknown event action : ["+i+"]"+action);

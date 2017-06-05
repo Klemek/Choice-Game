@@ -20,6 +20,7 @@ EVENT (PARAM) {OPTIONAL PARAM}
 * SAY (TEXT) {IMAGEID} #Show text (pause game)
 * DIALOG (TEXT) (VARNAME) (OPTION1) (OPTION2) ... #Show a choice and return result on a viariable
 * SHAKE (ON/OFF) {TIME} #Toggle shake screen for a time or until off
+* FILTER (R) (G) (B) (A) / OFF # Apply filter to game (values in range 0 to 1)
 
 ###Game interaction:
 

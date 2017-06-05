@@ -20,7 +20,7 @@ public class Splash extends JFrame{
 	        try{
 	            Game game = new Game(load, splash);
 	            GameEngine gameEng = new GameEngine("Choice game",
-	                600, 480, vSync, game, game);
+	                800, 600, vSync, game, game);
 	            gameEng.start();
 	        } catch (Exception excp) {
 	            excp.printStackTrace();

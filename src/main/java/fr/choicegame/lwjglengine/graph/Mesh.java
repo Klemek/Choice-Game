@@ -10,6 +10,8 @@ import static org.lwjgl.opengl.GL13.*;
 import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL30.*;
+
+import org.joml.Vector4f;
 import org.lwjgl.system.MemoryUtil;
 
 import fr.choicegame.lwjglengine.Utils;
@@ -28,6 +30,10 @@ public class Mesh {
 
 	public Mesh(List<Float> positions, List<Float> textCoords, List<Integer> indices, Material material) {
 		this(Utils.arrayToListFloat(positions),Utils.arrayToListFloat(textCoords),Utils.arrayToListInt(indices),material);
+	}
+	
+	public Mesh(float[] positions, int[] indices, Material material) {
+		this(positions,new float[2*positions.length/3],indices,material);
 	}
 	
 	public Mesh(float[] positions, float[] textCoords, int[] indices, Material material) {
@@ -56,15 +62,6 @@ public class Mesh {
 			glBufferData(GL_ARRAY_BUFFER, verticesBuffer, GL_STATIC_DRAW);
 			glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0);
 			glBindBuffer(GL_ARRAY_BUFFER, 0);
-			
-			//colour vbo
-			/*vboId = glGenBuffers();
-			vboIdList.add(vboId);
-			colourBuffer = MemoryUtil.memAllocFloat(colours.length);
-			colourBuffer.put(colours).flip();
-			glBindBuffer(GL_ARRAY_BUFFER, vboId);
-			glBufferData(GL_ARRAY_BUFFER, colourBuffer, GL_STATIC_DRAW);
-			glVertexAttribPointer(1, 3, GL_FLOAT, false, 0, 0);*/
 			
 			//texture vbo
 			vboId = glGenBuffers();
@@ -118,11 +115,17 @@ public class Mesh {
 	
 	public void render(){
 		// Draw the mesh
+		if(material.getTexture() != null){
 		
-		// Activate first texture unit
-		glActiveTexture(GL_TEXTURE0);
-		// Bind the texture
-		glBindTexture(GL_TEXTURE_2D, material.getTexture().getId());
+			// Activate first texture unit
+			glActiveTexture(GL_TEXTURE0);
+			// Bind the texture
+			glBindTexture(GL_TEXTURE_2D, material.getTexture().getId());
+		
+		}else{
+			//TODO not working
+			glDisable(GL_TEXTURE_2D);
+		}
 		
 	    glBindVertexArray(getVaoId());
 	    glEnableVertexAttribArray(0);
@@ -134,9 +137,21 @@ public class Mesh {
 	    glDisableVertexAttribArray(0);
 	    glDisableVertexAttribArray(1);
 	    glBindVertexArray(0);
+	    
+	    if(material.getTexture() == null){
+	    	glEnable(GL_TEXTURE_2D);
+	    }
 	}
 
 	public Material getMaterial() {
 		return material;
+	}
+	
+	public boolean isTextured(){
+		return material.getTexture() != null;
+	}
+
+	public Vector4f getColour() {
+		return material.getColor();
 	}
 }

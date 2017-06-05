@@ -1,10 +1,22 @@
 package fr.choicegame;
 
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_A;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_D;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_DOWN;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_E;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_ENTER;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_LEFT;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_RIGHT;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_S;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_SPACE;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_UP;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_W;
+import static org.lwjgl.glfw.GLFW.GLFW_PRESS;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.swing.JFrame;
-
-import static org.lwjgl.glfw.GLFW.*;
 
 import fr.choicegame.character.Direction;
 import fr.choicegame.character.Player;
@@ -46,12 +58,13 @@ public class Game implements IGameLogic, KeyEventListener {
 
 		if (loader != null) {
 
+			this.loadMaps(loader);
+			
 			String startMap = Config.getValue(Config.START_MAP);
 
-			if (startMap != null) {
+			if (startMap != null && this.maps.containsKey(startMap)) {
 
-				// TODO load all maps
-				this.maps.put(startMap, loader.loadMap(startMap));
+				//this.maps.put(startMap, loader.loadMap(startMap));
 
 				this.setCurrentMap(startMap);
 
@@ -63,6 +76,17 @@ public class Game implements IGameLogic, KeyEventListener {
 		}
 	}
 
+	private void loadMaps(Loader loader){
+		ArrayList<String> files = loader.getTextResourcesNames();
+		for(String file:files){
+			if(file.endsWith(".tmx")){
+				String mapName = Loader.getFileName(file);
+				this.maps.put(mapName, loader.loadMap(mapName));
+				System.out.println("Map '"+mapName+"' loaded");
+			}
+		}
+	}
+	
 	public boolean getTrigger(String trigname) {
 		if (this.triggers.containsKey(trigname))
 			return this.triggers.get(trigname);
@@ -101,6 +125,11 @@ public class Game implements IGameLogic, KeyEventListener {
 		if (maps.containsKey(name)) {
 			this.currentMap = name;
 			getCurrentMap().setGameEventListener(evComputer);
+			if(this.player != null){
+				this.player.setPosition(0,0);
+				if(hud != null)//all loaded
+					player.update(getCurrentMap());
+			}
 		}
 	}
 
@@ -150,7 +179,18 @@ public class Game implements IGameLogic, KeyEventListener {
 		renderer.setHud(hud);
 
 		System.out.println("Finished loading");
+		
 		splash.setVisible(false); // end of loading
+		
+		if(getCurrentMap()!=null && player!=null){
+			player.update(getCurrentMap());
+			renderer.updateMap(getCurrentMap());
+			if (player != null) {
+				renderer.updateCharacters(0, player, getCurrentMap());
+			}
+		}
+		
+		
 	}
 
 	@Override
@@ -246,6 +286,7 @@ public class Game implements IGameLogic, KeyEventListener {
 	@Override
 	public void cleanup() {
 		renderer.cleanup();
+		hud.cleanup();
 	}
 
 	public boolean isPaused() {

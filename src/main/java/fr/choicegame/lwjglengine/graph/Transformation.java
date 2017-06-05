@@ -31,6 +31,13 @@ public class Transformation {
         projectionMatrix.perspective(fov, aspectRatio, zNear, zFar);
         return projectionMatrix;
     }
+    
+    public final Matrix4f getProjectionMatrix(float width, float height) {
+        float aspectRatio = width / height;        
+        projectionMatrix.identity();
+        projectionMatrix.scale(1f, aspectRatio, 1f);
+        return projectionMatrix;
+    }
 
     public Matrix4f getWorldMatrix(Vector3f offset, Vector3f rotation, float scale) {
         worldMatrix.identity().translate(offset).
