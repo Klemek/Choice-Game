@@ -23,7 +23,7 @@ import fr.choicegame.lwjglengine.graph.Transformation;
 
 public class Renderer {
 
-	private ShaderProgram shaderProgram, hudShaderProgram;
+	private ShaderProgram shaderProgram;
 
 	private Transformation transformation;
 
@@ -54,8 +54,7 @@ public class Renderer {
 		this.textures = loader.loadTextures();
 
 		setupShader();
-		setupHudShader();
-
+		
 		window.setClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
 	}
@@ -72,19 +71,6 @@ public class Renderer {
 		// Create uniform for default colour and the flag that controls it
 		shaderProgram.createUniform("colour");
 		shaderProgram.createUniform("useColour");
-	}
-
-	private void setupHudShader() throws Exception {
-		hudShaderProgram = new ShaderProgram();
-		hudShaderProgram.createVertexShader(Utils.loadResource("/shaders/hud_vertex.vs", this));
-		hudShaderProgram.createFragmentShader(Utils.loadResource("/shaders/fragment.fs", this));
-		hudShaderProgram.link();
-
-		// Create uniforms for Ortographic-model projection matrix and base
-		// colour
-		hudShaderProgram.createUniform("projModelMatrix");
-		hudShaderProgram.createUniform("colour");
-		hudShaderProgram.createUniform("useColour");
 	}
 
 	public void updateCharacters(float interval, Player p, Map m) {
@@ -261,23 +247,24 @@ public class Renderer {
 
 		if (hud != null) {
 
-			hudShaderProgram.bind();
+			shaderProgram.bind();
 
+			shaderProgram.setUniform("projectionMatrix", new Matrix4f());
+			
 			Matrix4f ortho = transformation.getOrthoProjectionMatrix(0, window.getWidth(), window.getHeight(), 0);
 			for (GameItem gameItem : hud.getGameItems()) {
 				if (gameItem != null && gameItem.isVisible()) {
 					Mesh mesh = gameItem.getMesh();
 					// Set ortohtaphic and model matrix for this HUD item
-					Matrix4f projModelMatrix = transformation.getOrtoProjModelMatrix(gameItem, ortho);
-					hudShaderProgram.setUniform("projModelMatrix", projModelMatrix);
+					Matrix4f projModelMatrix = transformation.getModelViewMatrix(gameItem, ortho);
+					shaderProgram.setUniform("modelViewMatrix", projModelMatrix);
 					shaderProgram.setUniform("colour", gameItem.getMesh().getColour());
-				    shaderProgram.setUniform("useColour", gameItem.getMesh().isTextured() ? 0 : 1);
+					shaderProgram.setUniform("useColour", gameItem.getMesh().isTextured() ? 0 : 1);
 					// Render the mesh for this HUD item
 					mesh.render();
 				}
 			}
-
-			hudShaderProgram.unbind();
+			shaderProgram.unbind();
 		}
 	}
 
@@ -294,6 +281,10 @@ public class Renderer {
 		return textures.get(name);
 	}
 
+	public HashMap<String, Texture> getTextures() {
+		return textures;
+	}
+	
 	public void setTextures(HashMap<String, Texture> textures) {
 		this.textures = textures;
 	}

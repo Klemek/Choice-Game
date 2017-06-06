@@ -54,19 +54,6 @@ public class Transformation {
         return orthoMatrix;
     }
     
-    public Matrix4f getOrtoProjModelMatrix(GameItem gameItem, Matrix4f orthoMatrix) {
-        Vector3f rotation = gameItem.getRotation();
-        Matrix4f modelMatrix = new Matrix4f();
-        modelMatrix.identity().translate(gameItem.getPosition()).
-                rotateX((float)Math.toRadians(-rotation.x)).
-                rotateY((float)Math.toRadians(-rotation.y)).
-                rotateZ((float)Math.toRadians(-rotation.z)).
-                scale(gameItem.getScale());
-        Matrix4f orthoMatrixCurr = new Matrix4f(orthoMatrix);
-        orthoMatrixCurr.mul(modelMatrix);
-        return orthoMatrixCurr;
-    }
-    
     public Matrix4f getModelViewMatrix(GameItem gameItem, Matrix4f viewMatrix) {
         Vector3f rotation = gameItem.getRotation();
         modelViewMatrix.identity().translate(gameItem.getPosition()).

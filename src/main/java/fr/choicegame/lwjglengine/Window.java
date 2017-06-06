@@ -17,7 +17,7 @@ public class Window {
 	// The window handle
 	private long windowHandle;
 	private int width, height;
-	private boolean resized, vsync;
+	private boolean resized = true, vsync;
 	private String title;
 	private KeyEventListener listener;
 	
@@ -33,7 +33,8 @@ public class Window {
 	public void init() {
 		
 		//OSX trick to use fonts
-		System.setProperty("java.awt.headless", "true");
+		if(System.getProperty("os.name").contains("OS X"))
+			System.setProperty("java.awt.headless", "true");
 		
 		System.out.println("Loading LWJGL 3 ...");
 		

@@ -170,18 +170,18 @@ public class Game implements IGameLogic, KeyEventListener {
 	public void init(Window window) throws Exception {
 		System.out.println("Initializing renderer and Loading textures ...");
 		renderer.init(window);
+		
+		
 		System.out.println("Creating map...");
 		renderer.updateMap(getCurrentMap());
 		if (player != null) {
 			renderer.updateCharacters(0, player, getCurrentMap());
 		}
 
-		hud.init(renderer.getTexture("/blank.png"),
-				renderer.getTexture("/dialog.png"),
-				renderer.getTexture("/cursor.png"));
-
+		System.out.println("Creating hud...");
+		hud.init(window,renderer.getTextures());
 		renderer.setHud(hud);
-
+		
 		System.out.println("Finished loading");
 		
 		splash.setVisible(false); // end of loading

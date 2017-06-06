@@ -4,18 +4,21 @@ apply plugin: 'application'
 // LWJGL3 gradle code
 import org.gradle.internal.os.OperatingSystem
 
-switch ( OperatingSystem.current() ) {
-	case OperatingSystem.WINDOWS:
-		project.ext.lwjglNatives = "natives-windows"
+if (!project.hasProperty("opsystem")) {
+	switch ( OperatingSystem.current() ) {
+		case OperatingSystem.WINDOWS:
+			project.ext.opsystem = "windows"
+			break
+		case OperatingSystem.LINUX:
+			project.ext.opsystem = "linux"
 		break
-	case OperatingSystem.LINUX:
-		project.ext.lwjglNatives = "natives-linux"
-	break
-	case OperatingSystem.MAC_OS:
-		project.ext.lwjglNatives = "natives-macos"
-		break
+		case OperatingSystem.MAC_OS:
+			project.ext.opsystem = "macos"
+			break
+	}
 }
 
+project.ext.lwjglNatives = "natives-${opsystem}"
 project.ext.lwjglVersion = "3.1.1"
 project.ext.jomlVersion = "1.9.2"
 
@@ -45,7 +48,7 @@ dependencies {
 mainClassName = "fr.choicegame.Splash"
 
 jar {
-  archiveName = "choicegame.jar"
+	archiveName = "choicegame-${opsystem}.jar"
     manifest {
     	attributes 'Main-Class': 'fr.choicegame.Splash',
     		'Class-Path': configurations.compile.collect { it.getName() }.join(' ')
@@ -53,5 +56,5 @@ jar {
 	baseName = project.name + '-all'
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } 
     	configurations.runtime.collect { it.isDirectory() ? it : zipTree(it) }  }
-
 }
+

@@ -85,11 +85,14 @@ public class Loader {
 		}
 
 		//register font
+		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+		
 		if(Config.getValue(Config.FONT_FILE) != null){
-			GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+			
 	    	try {
 				ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, this.getClass().getResourceAsStream("/fonts/"+Config.getValue(Config.FONT_FILE))));
 				System.out.println("Font file '"+Config.getValue(Config.FONT_FILE)+"' loaded");
+				
 	    	} catch (FontFormatException e) {
 				System.out.println("Font file '"+Config.getValue(Config.FONT_FILE)+"' in wrong format");
 			} catch (IOException e) {
@@ -97,7 +100,25 @@ public class Loader {
 			}
 		}
 		
-		return true;
+		//check font
+		boolean found = false;
+		String fontName = Config.getValue(Config.FONT_NAME);
+		for(String font:ge.getAvailableFontFamilyNames()){
+			if(font.equals(fontName)){
+				found = true;
+				break;
+			}
+		}
+		
+		if(found){
+			System.out.println("Font '"+fontName+"' found on the Local Graphics Environment");
+			return true;
+		}
+		else{
+			System.out.println("Font '"+fontName+"' not found on the Local Graphics Environment");
+			return false;
+		}
+		
 	}
 
 	private void loadFolder(String folderPath) throws IOException {
@@ -109,9 +130,11 @@ public class Loader {
 			while (entries.hasMoreElements()) {
 				String name = entries.nextElement().getName();
 				// filter according to the path
-				//if (name.startsWith(folderPath.substring(1) + "/")) {
+				if (name.startsWith(folderPath.substring(1) + "/")) {
 					loadFile("/" + name);
-				//}
+				}else if(folderPath.equals("/") && !name.contains("/")){
+					loadFile("/" + name);
+				}
 			}
 			jar.close();
 		} else { // Run with IDE

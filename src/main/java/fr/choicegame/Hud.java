@@ -2,6 +2,7 @@ package fr.choicegame;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.util.HashMap;
 
 import org.joml.Vector4f;
 
@@ -36,7 +37,8 @@ public class Hud implements IHud {
 	
 	private boolean dialog;
 	
-	public void init(Texture blank, Texture dialogbg, Texture dialogcurs) throws Exception{
+	public void init(Window window,HashMap<String, Texture> textures) throws Exception{
+		
 		FontTexture infoFont = new FontTexture(new Font(Config.getValue(Config.FONT_NAME), Font.BOLD, 16), "ISO-8859-1",
 				Color.RED);
 		FontTexture msgFont = new FontTexture(new Font(Config.getValue(Config.FONT_NAME), Font.BOLD, msgFontSize), "ISO-8859-1",
@@ -44,47 +46,15 @@ public class Hud implements IHud {
 		this.infoTextItem = new TextItem("Choice-Game Beta", infoFont);
 		this.msgTextItem = new TextItem("", msgFont);
 		this.msgTextItem.setVisible(false);
-		this.colorFilter = GameItem.simpleQuad(new Material(blank, new Vector4f(1, 0, 0, 0.5f)));
+		this.colorFilter = GameItem.simpleQuad(new Material(new Vector4f(1, 0, 0, 0.5f)));
 		this.colorFilter.setVisible(false);
-		this.dialogBg = GameItem.simpleQuad(new Material(dialogbg));
+		this.dialogBg = GameItem.simpleQuad(new Material(textures.get("/dialog.png")));
 		this.dialogBg.setVisible(false);
-		this.dialogCursor = GameItem.simpleQuad(new Material(dialogcurs));
+		this.dialogCursor = GameItem.simpleQuad(new Material(textures.get("/cursor.png")));
 		this.dialogCursor.setVisible(false);
 		gameItems = new GameItem[] {colorFilter, dialogBg, msgTextItem, dialogCursor, infoTextItem };
+		this.updateSize(window);
 	}
-
-	/*private static GameItem getColorFilter() {
-		Material colorText;
-		try {
-			// TODO without texture
-			colorText = new Material(new Texture("/blank.png"), new Vector4f(1, 0, 0, 0.5f));
-			return GameItem.simpleQuad(colorText);
-		} catch (IOException e) {
-			e.printStackTrace();
-			return null;
-		}
-
-	}
-
-	private static GameItem getDialogBg() {
-		try {
-			Material dialogText = new Material(new Texture("/dialog.png"));
-			return GameItem.simpleQuad(dialogText);
-		} catch (IOException e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-	
-	private static GameItem getDialogCursor() {
-		try {
-			Material dialogCursor = new Material(new Texture("/cursor.png"));
-			return GameItem.simpleQuad(dialogCursor);
-		} catch (IOException e) {
-			e.printStackTrace();
-			return null;
-		}
-	}*/
 
 	public void setColorFilter(float r, float g, float b, float a){
 		this.colorFilter.getMesh().getMaterial().setColor(new Vector4f(r,g,b,a));
@@ -146,6 +116,7 @@ public class Hud implements IHud {
 	public void updateSize(Window window) {
 		windowWidth = window.getWidth();
 		windowHeight = window.getHeight();
+		System.out.println("Window size is : "+windowWidth+"x"+windowHeight+"px");
 		updatePos();
 	}
 

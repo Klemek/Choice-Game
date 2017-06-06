@@ -123,7 +123,6 @@ public class Mesh {
 			glBindTexture(GL_TEXTURE_2D, material.getTexture().getId());
 		
 		}else{
-			//TODO not working
 			glDisable(GL_TEXTURE_2D);
 		}
 		
