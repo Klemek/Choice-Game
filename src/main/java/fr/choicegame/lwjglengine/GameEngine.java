@@ -8,12 +8,12 @@ public class GameEngine implements Runnable {
 
 	private static final int TARGET_UPS = 30;
 	private static final int TARGET_FPS = 75;
-	
+
 	private IGameLogic gameLogic;
 	private Window window;
 
-	public GameEngine(String windowTitle, int width, int height, boolean vsSync, IGameLogic gameLogic, KeyEventListener keylistener)
-			throws Exception {
+	public GameEngine(String windowTitle, int width, int height, boolean vsSync, IGameLogic gameLogic,
+			KeyEventListener keylistener) throws Exception {
 		gameLoopThread = new Thread(this, "GAME_LOOP_THREAD");
 		window = new Window(windowTitle, width, height, vsSync, keylistener);
 		this.gameLogic = gameLogic;
@@ -25,14 +25,28 @@ public class GameEngine implements Runnable {
 
 	@Override
 	public void run() {
+		String error = null;
 		try {
 			init();
 			gameLoop();
-		} catch (Exception excp) {
-			excp.printStackTrace();
-		} finally{
-			cleanup();
-			System.exit(0);
+		} catch (Exception e) {
+			e.printStackTrace();
+			error = e.getMessage();
+		} finally {
+			try {
+
+				cleanup();
+			} catch (Exception e) {
+				e.printStackTrace();
+				error = e.getMessage();
+			}
+			if (error != null) {
+				//TODO write error file
+				System.exit(-1);
+			} else {
+				System.exit(0);
+			}
+
 		}
 	}
 
@@ -60,11 +74,11 @@ public class GameEngine implements Runnable {
 			}
 
 			render();
-			if(!window.isVsync())
+			if (!window.isVsync())
 				sync(current);
 		}
 	}
-	
+
 	protected void input() {
 		gameLogic.input(window);
 	}
@@ -77,8 +91,8 @@ public class GameEngine implements Runnable {
 		gameLogic.render(window);
 		window.update();
 	}
-	
-	protected void cleanup(){
+
+	protected void cleanup() {
 		gameLogic.cleanup();
 	}
 
@@ -96,7 +110,5 @@ public class GameEngine implements Runnable {
 	private double getTime() {
 		return System.currentTimeMillis() / 1000d;
 	}
-
-	
 
 }

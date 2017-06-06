@@ -22,8 +22,9 @@ public class Splash extends JFrame{
 	            GameEngine gameEng = new GameEngine("Choice game",
 	                800, 600, vSync, game, game);
 	            gameEng.start();
-	        } catch (Exception excp) {
-	            excp.printStackTrace();
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	            //TODO write error file
 	            System.exit(-1);
 	        }
 		}
