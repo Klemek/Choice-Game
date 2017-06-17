@@ -279,7 +279,7 @@ public class Loader {
 								Integer[][] layer = new Integer[width][height];
 								for (int x = 0; x < width; x++) {
 									for (int y = 0; y < height; y++) {
-										layer[x][y] = Integer.parseInt(slayer[x * width + y]);
+										layer[x][y] = Integer.parseInt(slayer[y * width + x]);
 									}
 								}
 								layers.put(layername, layer);
@@ -356,12 +356,12 @@ public class Loader {
 								TileImage[] images = new TileImage[4];
 								TileType ttype = TileType.VOID;
 								Event event = null;
-								int bg1 = layers.get(bg1_key)[y][x];
-								int bg2 = layers.get(bg2_key)[y][x];
-								int fg1 = layers.get(fg1_key)[y][x];
-								int fg2 = layers.get(fg2_key)[y][x];
-								int info = layers.get(info_key)[y][x];
-								int type = layers.get(type_key)[y][x];
+								int bg1 = layers.get(bg1_key)[x][y];
+								int bg2 = layers.get(bg2_key)[x][y];
+								int fg1 = layers.get(fg1_key)[x][y];
+								int fg2 = layers.get(fg2_key)[x][y];
+								int info = layers.get(info_key)[x][y];
+								int type = layers.get(type_key)[x][y];
 
 								if (bg1 != 0 && tilesets.containsKey(bg1)) {
 									String tileset = tilesets.get(bg1);
