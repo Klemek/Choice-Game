@@ -1,17 +1,6 @@
 package fr.choicegame;
 
-import static org.lwjgl.glfw.GLFW.GLFW_KEY_A;
-import static org.lwjgl.glfw.GLFW.GLFW_KEY_D;
-import static org.lwjgl.glfw.GLFW.GLFW_KEY_DOWN;
-import static org.lwjgl.glfw.GLFW.GLFW_KEY_E;
-import static org.lwjgl.glfw.GLFW.GLFW_KEY_ENTER;
-import static org.lwjgl.glfw.GLFW.GLFW_KEY_LEFT;
-import static org.lwjgl.glfw.GLFW.GLFW_KEY_RIGHT;
-import static org.lwjgl.glfw.GLFW.GLFW_KEY_S;
-import static org.lwjgl.glfw.GLFW.GLFW_KEY_SPACE;
-import static org.lwjgl.glfw.GLFW.GLFW_KEY_UP;
-import static org.lwjgl.glfw.GLFW.GLFW_KEY_W;
-import static org.lwjgl.glfw.GLFW.GLFW_PRESS;
+import static org.lwjgl.glfw.GLFW.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,7 +30,7 @@ public class Game implements IGameLogic, KeyEventListener {
 	private Hud hud;
 	private final JFrame splash;
 
-	private boolean paused;
+	private boolean paused, shouldClose;
 
 	public Game(Loader loader, JFrame splash) {
 
@@ -199,25 +188,46 @@ public class Game implements IGameLogic, KeyEventListener {
 
 	@Override
 	public void keyEvent(int key, int action, int mods) {
-		if(isPaused() && action == GLFW_PRESS){
+		
+		if(action == GLFW_PRESS){
 			
-			if(hud.hasDialog()){
-				
-				if(key == GLFW_KEY_UP || key == GLFW_KEY_W){
-					hud.up();
-				}else if(key == GLFW_KEY_DOWN || key == GLFW_KEY_S){
-					hud.down();
+			if(key == GLFW_KEY_ESCAPE){
+				if(hud.hasMenu()){
+					hud.clearMenu();
+					if(!hud.hasMsg())
+						setPaused(false);
+				}else{
+					hud.openMenu();
+					setPaused(true);
+				}
+			}
+			
+			if(isPaused()){
+				if(hud.hasDialog() || hud.hasMenu()){
+					if(key == GLFW_KEY_UP || key == GLFW_KEY_W){
+						hud.up();
+					}else if(key == GLFW_KEY_DOWN || key == GLFW_KEY_S){
+						hud.down();
+					}else if(key == GLFW_KEY_E || key == GLFW_KEY_SPACE || key == GLFW_KEY_ENTER){
+						if(hud.hasDialog()){
+							setPaused(false);
+							hud.clearMsg();
+							evComputer.setTempVar(hud.getDialogvar(),hud.getDialogchoice());
+							evComputer.resume();
+						}else{
+							hud.clearMenu();
+							if(!hud.hasMsg())
+								setPaused(false);
+							if(hud.getMenuChoice()==2){
+								shouldClose = true;
+							}
+						}
+					}
 				}else if(key == GLFW_KEY_E || key == GLFW_KEY_SPACE || key == GLFW_KEY_ENTER){
 					setPaused(false);
-					hud.clear();
-					evComputer.setTempVar(hud.getDialogvar(),hud.getDialogchoice());
+					hud.clearMsg();
 					evComputer.resume();
 				}
-				
-			}else if(key == GLFW_KEY_E || key == GLFW_KEY_SPACE || key == GLFW_KEY_ENTER){
-				setPaused(false);
-				hud.clear();
-				evComputer.resume();
 			}
 		}
 	}
@@ -299,6 +309,11 @@ public class Game implements IGameLogic, KeyEventListener {
 
 	public void setPaused(boolean pause) {
 		this.paused = pause;
+	}
+
+	@Override
+	public boolean shouldClose() {
+		return shouldClose;
 	}
 
 	

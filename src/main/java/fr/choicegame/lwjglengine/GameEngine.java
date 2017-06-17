@@ -34,7 +34,6 @@ public class GameEngine implements Runnable {
 			error = e.getMessage();
 		} finally {
 			try {
-
 				cleanup();
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -60,7 +59,7 @@ public class GameEngine implements Runnable {
 		double previous = getTime();
 		double steps = 0.0;
 		boolean running = true;
-		while (running && !window.windowShouldClose()) {
+		while (running && !window.windowShouldClose() && !gameLogic.shouldClose()) {
 			double current = getTime();
 			double elapsed = current - previous;
 			previous = current;

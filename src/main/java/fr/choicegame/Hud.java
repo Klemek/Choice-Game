@@ -6,6 +6,7 @@ import java.util.HashMap;
 
 import org.joml.Vector4f;
 
+import fr.choicegame.lwjglengine.DialogItem;
 import fr.choicegame.lwjglengine.GameItem;
 import fr.choicegame.lwjglengine.IHud;
 import fr.choicegame.lwjglengine.TextItem;
@@ -20,22 +21,25 @@ public class Hud implements IHud {
 
 	private TextItem infoTextItem;
 
-	private TextItem msgTextItem;
-	private GameItem dialogBg, dialogCursor, colorFilter;
+	private TextItem msgTextItem, menuTextItem;
+	private GameItem colorFilter;
+	private DialogItem dialogBg, menuBg;
 
 	private int windowWidth, windowHeight;
 
 	//private static final String WAIT_CHAR = "_";
 
 	private float updateTimer = 0f;
-	private String[] dialogmsg;
-	private int dialogchoice;
+	private String[] dialogmsg, menumsg;
+	private int dialogchoice, menuchoice;
 	private String dialogvar;
 	private static final float UPDATETIME = 0.5f;
 
 	private int msgFontSize = 25;
 	
-	private boolean dialog;
+	
+	
+	private boolean dialog, menu;
 	
 	public void init(Window window,HashMap<String, Texture> textures) throws Exception{
 		
@@ -44,15 +48,25 @@ public class Hud implements IHud {
 		FontTexture msgFont = new FontTexture(new Font(Config.getValue(Config.FONT_NAME), Font.BOLD, msgFontSize), "ISO-8859-1",
 				Color.WHITE);
 		this.infoTextItem = new TextItem("Choice-Game Beta", infoFont);
+		
 		this.msgTextItem = new TextItem("", msgFont);
 		this.msgTextItem.setVisible(false);
+		
 		this.colorFilter = GameItem.simpleQuad(new Material(new Vector4f(1, 0, 0, 0.5f)));
 		this.colorFilter.setVisible(false);
-		this.dialogBg = GameItem.simpleQuad(new Material(textures.get("/dialog.png")));
+		
+		this.dialogBg = new DialogItem(textures.get("/dialog.png"),20,6);
+		this.dialogBg.setScale(2f);
 		this.dialogBg.setVisible(false);
-		this.dialogCursor = GameItem.simpleQuad(new Material(textures.get("/cursor.png")));
-		this.dialogCursor.setVisible(false);
-		gameItems = new GameItem[] {colorFilter, dialogBg, msgTextItem, dialogCursor, infoTextItem };
+		
+		this.menuBg = new DialogItem(textures.get("/dialog.png"),6,5);
+		this.menuBg.setScale(2f);
+		this.menuBg.setVisible(false);
+		
+		this.menuTextItem = new TextItem("", msgFont);
+		this.menuTextItem.setVisible(false);
+		
+		gameItems = new GameItem[] {colorFilter, dialogBg, msgTextItem, menuBg, menuTextItem, infoTextItem };
 		this.updateSize(window);
 	}
 
@@ -79,17 +93,27 @@ public class Hud implements IHud {
 		this.dialog = true;
 		this.msgTextItem.setVisible(true);
 		this.dialogBg.setVisible(true);
-		this.msgTextItem.setText(getDialogMsg());
+		this.msgTextItem.setText(getDialogMsg(dial,dialogchoice,"\t"));
+		updatePos();
+	}
+	
+	public void openMenu(){
+		this.menumsg = new String[]{"Menu","Continuer","Quitter"};
+		this.menuchoice = 1;
+		this.menu = true;
+		this.menuTextItem.setVisible(true);
+		this.menuBg.setVisible(true);
+		this.menuTextItem.setText(getDialogMsg(menumsg,menuchoice," "));
 		updatePos();
 	}
 
-	private String getDialogMsg() {
-		String msg = dialogmsg[0];
-		for (int i = 1; i < dialogmsg.length; i++) {
-			if (i == dialogchoice) {
-				msg += "\n   >" + dialogmsg[i];
+	private String getDialogMsg(String[] vals, int choice, String space) {
+		String msg = vals[0];
+		for (int i = 1; i < vals.length; i++) {
+			if (i == choice) {
+				msg += "\n"+space+">" + vals[i];
 			} else {
-				msg += "\n    " + dialogmsg[i];
+				msg += "\n"+space+"  " + vals[i];
 			}
 		}
 		return msg;
@@ -98,13 +122,27 @@ public class Hud implements IHud {
 	public boolean hasDialog() {
 		return dialog;
 	}
+	
+	public boolean hasMsg(){
+		return  dialogBg.isVisible();
+	}
+	
+	public boolean hasMenu(){
+		return menu;
+	}
 
-	public void clear() {
+	public void clearMsg() {
 		this.msgTextItem.setText("");
 		this.msgTextItem.setVisible(false);
 		this.dialogBg.setVisible(false);
-		this.dialogCursor.setVisible(false);
 		this.dialog = false;
+	}
+	
+	public void clearMenu() {
+		this.menuBg.setVisible(false);
+		this.menuTextItem.setVisible(false);
+		this.menuTextItem.setText("");
+		this.menu = false;
 	}
 
 	@Override
@@ -121,27 +159,43 @@ public class Hud implements IHud {
 	}
 
 	public void up() {
-		if (dialog) {
+		if(menu){
+			menuchoice--;
+			if (menuchoice == 0) {
+				menuchoice = menumsg.length - 1;
+			}
+			this.menuTextItem.setText(getDialogMsg(menumsg,menuchoice," "));
+		}else if (dialog) {
 			dialogchoice--;
 			if (dialogchoice == 0) {
 				dialogchoice = dialogmsg.length - 1;
 			}
-			this.msgTextItem.setText(getDialogMsg());
+			this.msgTextItem.setText(getDialogMsg(dialogmsg,dialogchoice,"\t"));
 		}
 	}
 
 	public void down() {
-		if (dialog) {
+		if(menu){
+			menuchoice++;
+			if (menuchoice == menumsg.length) {
+				menuchoice = 1;
+			}
+			this.menuTextItem.setText(getDialogMsg(menumsg,menuchoice," "));
+		}else if (dialog) {
 			dialogchoice++;
 			if (dialogchoice == dialogmsg.length) {
 				dialogchoice = 1;
 			}
-			this.msgTextItem.setText(getDialogMsg());
+			this.msgTextItem.setText(getDialogMsg(dialogmsg,dialogchoice,"\t"));
 		}
 	}
 
 	public int getDialogchoice() {
 		return dialogchoice;
+	}
+	
+	public int getMenuChoice(){
+		return menuchoice;
 	}
 
 	public String getDialogvar() {
@@ -154,18 +208,27 @@ public class Hud implements IHud {
 		this.colorFilter.setScale(Math.max(windowHeight, windowWidth));
 		this.colorFilter.setPosition(windowWidth / 2, windowHeight / 2, 0);
 		
-		float dialogwidth = this.dialogBg.getRatio()*msgFontSize*7f;
+		//menu
+		float cx = windowWidth / 2f;
+		float cy = windowHeight / 2f;
 		
-		this.dialogBg.setScale(dialogwidth);
-		this.dialogBg.setPosition(windowWidth / 2f, (windowHeight * 19f / 20f)-msgFontSize*3.5f, 0);
+		this.menuBg.setPosition(cx, cy, 0);
+
+		this.menuTextItem.setMaxWidth(this.menuBg.getWidth()-2*msgFontSize);
+		this.menuTextItem.setPosition(cx - this.menuBg.getWidth()/2f + msgFontSize,
+				cy - this.menuBg.getHeight()/2f + msgFontSize, 0f);
+
+		//msg
+		cx = windowWidth / 2f;
+		cy = (windowHeight * 19f / 20f)- this.dialogBg.getHeight()/2f;
 		
-		this.dialogCursor.setScale(-msgFontSize);
-		this.dialogCursor.setPosition(windowWidth / 2f + dialogwidth/2f - msgFontSize, (windowHeight * 19f / 20f)-msgFontSize, 0);
+		this.dialogBg.setPosition(cx, cy, 0);
+
+		this.msgTextItem.setMaxWidth(this.dialogBg.getWidth()-2*msgFontSize);
+		this.msgTextItem.setPosition(cx - this.dialogBg.getWidth()/2f + msgFontSize,
+				cy - this.dialogBg.getHeight()/2f + msgFontSize, 0f);
 		
-		this.msgTextItem.setMaxWidth(dialogwidth-2*msgFontSize);
 		
-		this.msgTextItem.setPosition(windowWidth / 2f - dialogwidth/2f + msgFontSize,
-				(windowHeight * 19f / 20f)-msgFontSize*6.5f, 0f);
 	}
 
 	public void update(float interval) {
@@ -173,16 +236,7 @@ public class Hud implements IHud {
 		if (updateTimer > UPDATETIME) {
 			updateTimer -= UPDATETIME;
 			if (!dialog && dialogBg.isVisible()) {
-				dialogCursor.setVisible(!dialogCursor.isVisible());
-				/*String msg = this.msgTextItem.getText();
-				if (msg.length() > 0) {
-					if (msg.endsWith(WAIT_CHAR)) {
-						msg = msg.substring(0, msg.length() - WAIT_CHAR.length());
-					} else {
-						msg += WAIT_CHAR;
-					}
-					this.msgTextItem.setText(msg);
-				}*/
+				dialogBg.showCursor(!dialogBg.isCursorShown());
 			}
 		}
 	}

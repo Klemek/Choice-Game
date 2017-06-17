@@ -13,6 +13,8 @@ public class TextItem extends GameItem {
 
 	private static final int VERTICES_PER_QUAD = 4;
 
+	private static final int TABWIDTH = 4;
+	
 	private String text;
 
 	private FontTexture fontTexture;
@@ -48,7 +50,7 @@ public class TextItem extends GameItem {
 				x = 0;
 				break;
 			case '\t':
-				x = medTileWidth*8*(1+(int)((float)x/(8f*medTileWidth)));
+				x = medTileWidth*TABWIDTH*(1+(int)((float)x/(8f*medTileWidth)));
 				break;
 			default:
 				FontTexture.CharInfo charInfo = fontTexture.getCharInfo(chars[i]);

@@ -18,6 +18,9 @@ if (!project.hasProperty("opsystem")) {
 	}
 }
 
+project.ext.projectVersion = "dev-1-0"
+mainClassName = "fr.choicegame.Splash"
+
 project.ext.lwjglNatives = "natives-${opsystem}"
 project.ext.lwjglVersion = "3.1.1"
 project.ext.jomlVersion = "1.9.2"
@@ -44,11 +47,8 @@ dependencies {
 	compile fileTree(dir: 'libs', include: ['*.jar'])
 }
 
-
-mainClassName = "fr.choicegame.Splash"
-
 jar {
-	archiveName = "choicegame-${opsystem}.jar"
+	archiveName = "choicegame-${opsystem}-${projectVersion}.jar"
     manifest {
     	attributes 'Main-Class': 'fr.choicegame.Splash',
     		'Class-Path': configurations.compile.collect { it.getName() }.join(' ')
