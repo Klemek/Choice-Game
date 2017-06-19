@@ -23,8 +23,10 @@ FILTER OFF</property>
   </tile>
   <tile id="1">
    <properties>
-    <property name="event">FILTER 0 0 0 1
-CHGMAP &quot;maison&quot; 1 0</property>
+    <property name="event">IFC
+   FILTER 0 0 0 1
+   CHGMAP &quot;maison&quot; 1 0
+END</property>
    </properties>
   </tile>
   <tile id="2">

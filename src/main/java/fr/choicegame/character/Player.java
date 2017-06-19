@@ -47,36 +47,36 @@ public class Player extends Character {
 			
 			if(dx>0){
 				if(posx2-(int)posx2<=char_spd){
-					m.action((int)posx2,(int)posy);
+					m.action((int)posx2,(int)posy, true);
 				}
 			}else if(dx<0){
 				if((int)(posx+1)-posx<=char_spd){
-					m.action((int)posx,(int)posy);
+					m.action((int)posx,(int)posy, true);
 				}
 			}
 			
 			if(dy>0){
 				if(posy2-(int)posy2<=char_spd){
-					m.action((int)posx,(int)posy2);
+					m.action((int)posx,(int)posy2, true);
 				}
 			}else if(dy<0){
 				if((int)(posy+1)-posy<=char_spd){
-					m.action((int)posx,(int)posy);
+					m.action((int)posx,(int)posy, true);
 				}
 			}
 			
 			//TODO diagonal trigger + optimize code
 			
 		}else{ //first appearance in map
-			m.action((int)(posx),(int)(posy));
+			m.action((int)(posx),(int)(posy), true);
 			boolean overx = (int)(posx2)>(int)(posx);
 			boolean overy = (int)(posy2)>(int)(posy);
 			if(overx)
-				m.action((int)posx2,(int)posy);
+				m.action((int)posx2,(int)posy, true);
 			if(overy)
-				m.action((int)posx,(int)posy2);
+				m.action((int)posx,(int)posy2, true);
 			if(overx && overy)
-				m.action((int)posx2,(int)posy2);
+				m.action((int)posx2,(int)posy2, true);
 		}
 		lastPos = new float[]{getPosX(),getPosY()};
 	}

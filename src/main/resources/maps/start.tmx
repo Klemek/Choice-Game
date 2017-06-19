@@ -4,7 +4,9 @@
   <image source="infotileset.png" width="320" height="64"/>
   <tile id="0">
    <properties>
-    <property name="event" value="CHGMAP &quot;maison&quot;"/>
+    <property name="event">IFC
+   CHGMAP &quot;maison&quot;
+END</property>
    </properties>
   </tile>
   <tile id="1">

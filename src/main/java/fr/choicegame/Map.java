@@ -37,8 +37,8 @@ public class Map {
 		return tileMap[x][y];
 	}
 	
-	public void action(int x, int y){
-		tileMap[x][y].action(x, y);
+	public void action(int x, int y, boolean collide){
+		tileMap[x][y].action(x, y, collide);
 	}
 	
 	public int getWidth() {

@@ -26,9 +26,9 @@ public class Event {
 	
 	// Functions
 	
-	public void action(int x, int y) {
+	public void action(int x, int y, boolean collide) {
 		if(listener != null)
-			this.listener.eventCalled(actions, x, y);
+			this.listener.eventCalled(actions, x, y, collide);
 	}
 	
 }

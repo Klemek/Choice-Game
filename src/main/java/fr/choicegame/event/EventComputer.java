@@ -20,6 +20,7 @@ public class EventComputer implements GameEventListener {
 	
 	private String savedEvent;
 	private int savedx, savedy, savedi;
+	private boolean savedc;
 	private HashMap<String, Integer> savedvars;
 	
 	public EventComputer(Game game) {
@@ -28,11 +29,11 @@ public class EventComputer implements GameEventListener {
 	
 	// Functions
 
-	public void eventCalled(String event, int x, int y) {
-		eventCalled(event, x, y,0,new HashMap<>());
+	public void eventCalled(String event, int x, int y, boolean collide) {
+		eventCalled(event, x, y,0,new HashMap<>(), collide);
 	}
 	
-	public void eventCalled(String event, int x, int y, int start, HashMap<String, Integer> vars) {
+	public void eventCalled(String event, int x, int y, int start, HashMap<String, Integer> vars, boolean collide) {
 		String actions[] = event.split("\n");
 		System.out.println("Event in ("+x+","+y+") "+(start==0?"":"resume"));
 		int jump = 0;
@@ -105,6 +106,17 @@ public class EventComputer implements GameEventListener {
 							break;
 						}
 						break;
+					case "IFC": //IFC [TRUE/FALSE] #Test event touched (true) or interacted (false)
+						
+						if(args.length == 0){
+							if(!collide)
+								jump++;
+						}else{
+							if((args[0].equals("TRUE") && !collide) || (args[0].equals("FALSE") && collide)){
+								jump++;
+							}
+						}
+						break;
 					case "ELSE":
 						jump++;
 						break;
@@ -150,12 +162,12 @@ public class EventComputer implements GameEventListener {
 						switch(args.length){
 						case 1: //SAY (TEXT)
 							game.getHud().setMsg(getStringArg(args[0]));
-							pause(event,x,y,i,vars);
+							pause(event,x,y,i,vars,collide);
 							return;
 						case 2://SAY (TEXT) (IMAGID)
 							//TODO Image
 							game.getHud().setMsg(getStringArg(args[0]));
-							pause(event,x,y,i,vars);
+							pause(event,x,y,i,vars,collide);
 							return;
 						}
 					case "DIALOG": //DIALOG (TEXT) (VARNAME) (OPTION1) (OPTION2) ... #Show a choice and return result on a viariable
@@ -166,7 +178,7 @@ public class EventComputer implements GameEventListener {
 							dial[j] = getStringArg(args[j+1]);
 						}
 						game.getHud().setDialog(dial,args[1]);
-						pause(event,x,y,i,vars);
+						pause(event,x,y,i,vars,collide);
 						return;
 					case "SHAKE": //SHAKE (ON/OFF) [TIME] #Toggle shake screen for a time or until off
 						//TODO EVENT SHAKE
@@ -193,7 +205,7 @@ public class EventComputer implements GameEventListener {
 						case 3://INVADD (ITEMID) (NUM) (MSG)
 							game.getPlayer().getInventory().put(itemid1,itemcount1+Integer.parseInt(args[1]));
 							game.getHud().setMsg(getStringArg(args[2]));
-							pause(event,x,y,i,vars);
+							pause(event,x,y,i,vars,collide);
 							return;
 						}
 						break;
@@ -213,7 +225,7 @@ public class EventComputer implements GameEventListener {
 						case 3://INVDEL (ITEMID) (NUM) (MSG)
 							game.getPlayer().getInventory().put(itemid2,Math.max(0,itemcount2-Integer.parseInt(args[1])));
 							game.getHud().setMsg(getStringArg(args[2]));
-							pause(event,x,y,i,vars);
+							pause(event,x,y,i,vars,collide);
 							return;
 						}
 						break;
@@ -354,6 +366,10 @@ public class EventComputer implements GameEventListener {
 				case "IF": //IF (VARNAME) (==/!=/>/</>=/<=) (VALUE) ... [ELSE ...] END #Test variable
 					jumplvl++;
 					testArgs(i,action,errors,args, new String[][]{{VARIABLE,"==/!=/>/</>=/<=", VALUE}});
+					break;
+				case "IFC": //IFC [TRUE/FALSE] #Test event touched (true) or interacted (false)
+					jumplvl++;
+					testArgs(i,action,errors,args, new String[][]{{},{"TRUE/FALSE"}});
 					break;
 				case "ICZ": //ICZ (VARNAME) [VALUE] # Increase var from 1 or value 
 					testArgs(i,action,errors,args, new String[][]{{VARIABLE},{VARIABLE, VALUE}});
@@ -509,18 +525,19 @@ public class EventComputer implements GameEventListener {
 		}
 	}
 	
-	private void pause(String event, int x, int y, int i, HashMap<String, Integer> vars){
+	private void pause(String event, int x, int y, int i, HashMap<String, Integer> vars, boolean collide){
 		game.setPaused(true);
 		this.savedEvent = event;
 		this.savedx = x;
 		this.savedy = y;
 		this.savedi = i+1;
 		this.savedvars = vars;
+		this.savedc = collide;
 	}
 	
 	public void resume(){
 		if(savedEvent != null){
-			this.eventCalled(savedEvent, savedx, savedy, savedi, savedvars);
+			this.eventCalled(savedEvent, savedx, savedy, savedi, savedvars, savedc);
 		}
 	}
 	

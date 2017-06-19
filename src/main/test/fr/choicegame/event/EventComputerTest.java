@@ -17,7 +17,7 @@ public class EventComputerTest {
 		Game game = new Game(null, null); // TODO loader
 		Event ev = new Event(loadEvent("eventtest1.txt"), game.getEventComputer());
 		
-		ev.action(0, 0);
+		ev.action(0, 0, false);
 		
 		assertEquals("TRIGTEST1",true,game.getTrigger("TRIGTEST1"));
 		assertEquals("TESTVAR2",10,game.getGlobalVariable("TESTVAR2"));

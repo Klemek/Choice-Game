@@ -144,16 +144,16 @@ public class Game implements IGameLogic, KeyEventListener {
 				int posX = (int) Math.round(player.getPosX()), posY = (int) Math.round(player.getPosY());
 				switch (player.getFacing()) {
 				case NORTH:
-					maps.get(currentMap).action(posX, posY - 1);
+					maps.get(currentMap).action(posX, posY - 1, false);
 					break;
 				case EAST:
-					maps.get(currentMap).action(posX + 1, posY);
+					maps.get(currentMap).action(posX + 1, posY, false);
 					break;
 				case SOUTH:
-					maps.get(currentMap).action(posX, posY + 1);
+					maps.get(currentMap).action(posX, posY + 1, false);
 					break;
 				case WEST:
-					maps.get(currentMap).action(posX - 1, posY);
+					maps.get(currentMap).action(posX - 1, posY, false);
 					break;
 				default:
 					break;

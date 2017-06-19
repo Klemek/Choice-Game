@@ -25,9 +25,9 @@ public class Tile {
 		this.images = images;
 	}
 	
-	public void action(int x, int y){
+	public void action(int x, int y, boolean collide){
 		if(event != null)
-			event.action(x, y);
+			event.action(x, y, collide);
 	}
 	
 	public Event getEvent() {
