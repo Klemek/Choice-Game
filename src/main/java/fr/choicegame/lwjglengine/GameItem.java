@@ -101,33 +101,38 @@ public class GameItem {
 		}
 	}
 	
+	
 	public static GameItem simpleQuad(Material material){
+		return simpleQuad(material,1f);
+	}
+	
+	public static GameItem simpleQuad(Material material, float scale){
 		
 		float[] positions;
 		
 		if(material.getTexture() != null){
-			positions = getQuadPositions(((float)material.getTexture().getWidth())/((float)material.getTexture().getHeight()));
+			positions = getQuadPositions(((float)material.getTexture().getWidth())/((float)material.getTexture().getHeight()),scale);
 		}else{
-			positions = getQuadPositions(1f);
+			positions = getQuadPositions(1f, scale);
 		}
 		
 		return new GameItem(new Mesh(positions, QUAD_TEXTCOORDS, QUAD_INDICES, material));
 	}
 	
-	public static float[] getQuadPositions(float ratio){
+	public static float[] getQuadPositions(float ratio, float scale){
 		if(ratio>1){
 			return new float[]{
-			        -0.5f,  1f/(2f*ratio),
-			        -0.5f, -1f/(2f*ratio),
-			         0.5f, -1f/(2f*ratio),
-			         0.5f,  1f/(2f*ratio),
+			        -scale/2f,  scale/(2f*ratio),
+			        -scale/2f, -scale/(2f*ratio),
+			        scale/2f, -scale/(2f*ratio),
+			        scale/2f,  scale/(2f*ratio),
 			    };
 		}else{
 			return new float[]{
-					-ratio/2f,  0.5f,
-			        -ratio/2f, -0.5f,
-			        ratio/2f, -0.5f,
-			        ratio/2f,  0.5f,
+					-ratio*scale/2f,  scale/2f,
+			        -ratio*scale/2f, -scale/2f,
+			        ratio*scale/2f, -scale/2f,
+			        ratio*scale/2f,  scale/2f,
 			    };
 		}
 	}

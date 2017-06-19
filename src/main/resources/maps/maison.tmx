@@ -18,19 +18,22 @@
   <tile id="0">
    <properties>
     <property name="event">MVPLAYER 9 13
-FILTER OFF</property>
+FILTER OFF
+PAUSE 0.5</property>
    </properties>
   </tile>
   <tile id="1">
    <properties>
     <property name="event">MVPLAYER 9 2
-FILTER OFF</property>
+FILTER OFF
+PAUSE 0.5</property>
    </properties>
   </tile>
   <tile id="2">
    <properties>
     <property name="event">IFC
    FILTER 0 0 0 1
+   PAUSE 0.5
    CHGMAP &quot;start&quot; 1 0
 END</property>
    </properties>
@@ -39,6 +42,7 @@ END</property>
    <properties>
     <property name="event">IFC
    FILTER 0 0 0 1
+   PAUSE 0.5
    CHGMAP &quot;sous-sol&quot;
 END</property>
    </properties>
@@ -47,13 +51,41 @@ END</property>
    <properties>
     <property name="event">IFC
    FILTER 0 0 0 1
+   PAUSE 0.5
    CHGMAP &quot;1er-etage&quot;
 END</property>
    </properties>
   </tile>
   <tile id="5">
    <properties>
-    <property name="event" value=""/>
+    <property name="event">DIALOG &quot;Composer quel numéro ?&quot; NUM &quot;Au hasard&quot; &quot;18&quot; &quot;3630&quot; &quot;Raccrocher&quot;
+
+
+IF NUM == 1
+   SAY &quot;'Allo ?'&quot;
+   FILTER 0 0 0 0.5 0.1
+   SAY &quot;...&quot;
+   FILTER OFF 0.1
+   SAY &quot;Il n'y a personne...&quot;
+END
+
+IF NUM == 2
+   SAY &quot;'Allo ?'&quot;
+   FILTER 0 0 0 0.5 0.1
+   SAY &quot;*musique des pompiers*&quot;
+   FILTER OFF 0.1
+   SAY &quot;Ca ne s'arrête pas...&quot;
+END
+
+IF NUM == 3
+   SAY &quot;'Allo père nöel ?'&quot;
+   FILTER 0 0 0 0.5 0.1
+   SAY &quot;Le père nöel n'existe pas !&quot;
+   FILTER OFF 0.1
+   SAY &quot;Il a raccroché !&quot;
+END
+
+SAY &quot;Vous raccrochez le téléphone&quot;</property>
    </properties>
   </tile>
   <tile id="6">
@@ -231,7 +263,7 @@ END</property>
  <layer name="info" width="20" height="15">
   <data encoding="csv">
 3,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,8,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,6,0,7,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,

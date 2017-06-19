@@ -21,7 +21,7 @@ EVENT (PARAM) {OPTIONAL PARAM}
 * SAY (TEXT) {IMAGEID} #Show text (pause game)
 * DIALOG (TEXT) (VARNAME) (OPTION1) (OPTION2) ... #Show a choice and return result on a viariable
 * SHAKE (ON/OFF) {TIME} #Toggle shake screen for a time or until off
-* FILTER (R) (G) (B) (A) / OFF # Apply filter to game (values in range 0 to 1)
+* FILTER (R) (G) (B) (A) {TIME} / OFF {TIME} # Apply filter to game (rgba values in range 0 to 1) default time 1 second
 
 ### Game interaction:
 
@@ -35,6 +35,9 @@ EVENT (PARAM) {OPTIONAL PARAM}
 * CHGMAP (MAPNAME) {PLAYERX} {PLAYERY} #Change map and (optional) move player in it
 * MVPLAYER (PLAYERX) (PLAYERY) #Move player in current map
 * MVRPLAYER (PLAYERDX) (PLAYERDY) #Move player relatively in current map
+* STOP {ON/OFF} #Prevent player from moving
+* WAIT (TIME) #Wait a amount of time before other event
+* PAUSE (TIME) #Pause game (wait + prevent player from moving)
 
 ## Exemples
 ### Example 1 (Bed):

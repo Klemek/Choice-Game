@@ -24,8 +24,8 @@ public class Hud implements IHud {
 	private TextItem msgTextItem, menuTextItem;
 	private GameItem colorFilter;
 	private float transp_start, transp_goal, fade_start;
-	private static final float FADE_TIME = 0.5f;
-	private float refresh_timer;
+	public static final float DEFAULT_FADE_TIME = 0.5f;
+	private float refresh_timer, fade_time;
 	private boolean fade;
 
 	private DialogItem dialogBg, menuBg;
@@ -43,7 +43,6 @@ public class Hud implements IHud {
 	private boolean dialog, menu;
 	
 	public void init(Window window,HashMap<String, Texture> textures) throws Exception{
-		
 		FontTexture infoFont = new FontTexture(new Font(Config.getValue(Config.FONT_NAME), Font.BOLD, 16), "ISO-8859-1",
 				Color.RED);
 		FontTexture msgFont = new FontTexture(new Font(Config.getValue(Config.FONT_NAME), Font.BOLD, msgFontSize), "ISO-8859-1",
@@ -53,8 +52,8 @@ public class Hud implements IHud {
 		this.msgTextItem = new TextItem("", msgFont);
 		this.msgTextItem.setVisible(false);
 		
-		this.colorFilter = GameItem.simpleQuad(new Material(new Vector4f(1, 0, 0, 1f)));
-		this.colorFilter.setVisible(false);
+		this.colorFilter = GameItem.simpleQuad(new Material(new Vector4f(0,0,0,1)),2000f);
+		this.colorFilter.setVisible(true);
 		
 		this.dialogBg = new DialogItem(textures.get("/dialog.png"),20,6);
 		this.dialogBg.setScale(2f);
@@ -67,24 +66,35 @@ public class Hud implements IHud {
 		this.menuTextItem = new TextItem("", msgFont);
 		this.menuTextItem.setVisible(false);
 		
-		gameItems = new GameItem[] {colorFilter, dialogBg, msgTextItem, menuBg, menuTextItem, infoTextItem };
+		gameItems = new GameItem[] {colorFilter, dialogBg, msgTextItem, menuBg, menuTextItem, infoTextItem};
 		this.updateSize(window);
 	}
 
-	public void setColorFilter(float r, float g, float b, float a){
-		this.transp_start = this.colorFilter.getMesh().getMaterial().getColor().w;
-		this.transp_goal = a;
-		this.fade_start = refresh_timer;
-		this.fade = true;
-		this.colorFilter.getMesh().getMaterial().setColor(new Vector4f(r,g,b,transp_start));
-		this.colorFilter.setVisible(true);
+	public void setColorFilter(float r, float g, float b, float a, float fade_time){
+		if(fade_time <= 0){
+			this.colorFilter.getMesh().getMaterial().setColor(new Vector4f(r,g,b,a));
+		}else{
+			this.transp_start = this.colorFilter.getMesh().getMaterial().getColor().w;
+			this.transp_goal = a;
+			this.fade_start = refresh_timer;
+			this.fade = true;
+			this.colorFilter.getMesh().getMaterial().setColor(new Vector4f(r,g,b,transp_start));
+			this.colorFilter.setVisible(true);
+			this.fade_time = fade_time;
+		}
 	}
 	
-	public void clearColorFilter(){
-		this.transp_goal = 0f;
-		this.transp_start = this.colorFilter.getMesh().getMaterial().getColor().w;
-		this.fade_start = refresh_timer;
-		this.fade = true;
+	public void clearColorFilter(float fade_time){
+		if(fade_time <= 0){
+			this.colorFilter.setVisible(false);
+			this.colorFilter.getMesh().getMaterial().setColor(new Vector4f(0f,0f,0f,0f));
+		}else{
+			this.transp_goal = 0f;
+			this.transp_start = this.colorFilter.getMesh().getMaterial().getColor().w;
+			this.fade_start = refresh_timer;
+			this.fade = true;
+			this.fade_time = fade_time;
+		}
 	}
 	
 	public void setMsg(String msg) {
@@ -101,6 +111,7 @@ public class Hud implements IHud {
 		this.dialog = true;
 		this.msgTextItem.setVisible(true);
 		this.dialogBg.setVisible(true);
+		this.dialogBg.showCursor(false);
 		this.msgTextItem.setText(getDialogMsg(dial,dialogchoice,"\t"));
 		updatePos();
 	}
@@ -119,9 +130,9 @@ public class Hud implements IHud {
 		String msg = vals[0];
 		for (int i = 1; i < vals.length; i++) {
 			if (i == choice) {
-				msg += "\n"+space+">" + vals[i];
+				msg += "\n"+space+"> " + vals[i];
 			} else {
-				msg += "\n"+space+"  " + vals[i];
+				msg += "\n"+space+"   " + vals[i];
 			}
 		}
 		return msg;
@@ -213,7 +224,7 @@ public class Hud implements IHud {
 	private void updatePos() {
 		this.infoTextItem.setPosition(2f, windowHeight - 20f);
 		
-		this.colorFilter.setScale(Math.max(windowHeight, windowWidth));
+		this.colorFilter.setScale(Math.max(windowHeight, windowWidth)/2000f); //can't scale more than times 
 		this.colorFilter.setPosition(windowWidth / 2, windowHeight / 2);
 		
 		//menu
@@ -243,9 +254,9 @@ public class Hud implements IHud {
 		
 		refresh_timer += interval;
 		
-		if(fade){
-			if(refresh_timer-fade_start < FADE_TIME){
-				float transp = transp_start+(transp_goal-transp_start)*(refresh_timer-fade_start)/FADE_TIME;
+		if(fade && colorFilter.isVisible()){
+			if(refresh_timer-fade_start < fade_time){
+				float transp = transp_start+(transp_goal-transp_start)*(refresh_timer-fade_start)/fade_time;
 				this.colorFilter.getMesh().getColour().setComponent(3, transp);
 			}else{
 				fade = false;

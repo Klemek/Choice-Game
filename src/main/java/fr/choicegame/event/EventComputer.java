@@ -2,9 +2,9 @@ package fr.choicegame.event;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Scanner;
 
 import fr.choicegame.Game;
+import fr.choicegame.Hud;
 import fr.choicegame.Tile;
 import fr.choicegame.TileImage;
 
@@ -162,11 +162,13 @@ public class EventComputer implements GameEventListener {
 						switch(args.length){
 						case 1: //SAY (TEXT)
 							game.getHud().setMsg(getStringArg(args[0]));
+							game.setWaitInput(true);
 							pause(event,x,y,i,vars,collide);
 							return;
 						case 2://SAY (TEXT) (IMAGID)
 							//TODO Image
 							game.getHud().setMsg(getStringArg(args[0]));
+							game.setWaitInput(true);
 							pause(event,x,y,i,vars,collide);
 							return;
 						}
@@ -178,6 +180,7 @@ public class EventComputer implements GameEventListener {
 							dial[j] = getStringArg(args[j+1]);
 						}
 						game.getHud().setDialog(dial,args[1]);
+						game.setWaitInput(true);
 						pause(event,x,y,i,vars,collide);
 						return;
 					case "SHAKE": //SHAKE (ON/OFF) [TIME] #Toggle shake screen for a time or until off
@@ -205,6 +208,7 @@ public class EventComputer implements GameEventListener {
 						case 3://INVADD (ITEMID) (NUM) (MSG)
 							game.getPlayer().getInventory().put(itemid1,itemcount1+Integer.parseInt(args[1]));
 							game.getHud().setMsg(getStringArg(args[2]));
+							game.setWaitInput(true);
 							pause(event,x,y,i,vars,collide);
 							return;
 						}
@@ -225,6 +229,7 @@ public class EventComputer implements GameEventListener {
 						case 3://INVDEL (ITEMID) (NUM) (MSG)
 							game.getPlayer().getInventory().put(itemid2,Math.max(0,itemcount2-Integer.parseInt(args[1])));
 							game.getHud().setMsg(getStringArg(args[2]));
+							game.setWaitInput(true);
 							pause(event,x,y,i,vars,collide);
 							return;
 						}
@@ -295,19 +300,48 @@ public class EventComputer implements GameEventListener {
 					case "MVRPLAYER": //MVRPLAYER (PLAYERDX) (PLAYERDY) #Move player relativelyin current map
 						game.getPlayer().setPosition(Integer.parseInt(x+args[0]),Integer.parseInt(y+args[1]));
 						break;
-					case "FILTER": //FILTER (R) (G) (B) (A) / OFF # Apply filter to game (values in range 0 to 1)
+					case "FILTER": //FILTER (R) (G) (B) (A) {TIME} / OFF {TIME} # Apply filter to game (values in range 0 to 1) default time 1 second
 						switch(args.length){
 						case 1: //FILTER OFF
-							this.game.getHud().clearColorFilter();
+							this.game.getHud().clearColorFilter(Hud.DEFAULT_FADE_TIME);
+							break;
+						case 2: //FILTER OFF (TIME)
+							this.game.getHud().clearColorFilter(Float.parseFloat(args[1]));
 							break;
 						case 4: //FILTER (R) (G) (B) (A)
 							this.game.getHud().setColorFilter(Float.parseFloat(args[0]),
 															Float.parseFloat(args[1]),
 															Float.parseFloat(args[2]),
-															Float.parseFloat(args[3]));
+															Float.parseFloat(args[3]),
+															Hud.DEFAULT_FADE_TIME);
+							break;
+						case 5: //FILTER (R) (G) (B) (A) (TIME)
+							this.game.getHud().setColorFilter(Float.parseFloat(args[0]),
+															Float.parseFloat(args[1]),
+															Float.parseFloat(args[2]),
+															Float.parseFloat(args[3]),
+															Float.parseFloat(args[4]));
 							break;
 						}
 						break;
+					case "STOP": // STOP {ON/OFF} #Prevent player from moving
+						switch(args.length){
+						case 0:
+							this.game.setStopPlayer(true);
+							break;
+						case 1:
+							this.game.setStopPlayer(args[1].equals("ON"));
+							break;
+						}
+						break;
+					case "WAIT": // WAIT (TIME) #Wait a amount of time before other event
+						this.game.setWaitTime(Float.parseFloat(args[0]), false);
+						pause(event,x,y,i,vars,collide);
+						return;
+					case "PAUSE": // PAUSE (TIME) #Pause game (wait + prevent player from moving)
+						this.game.setWaitTime(Float.parseFloat(args[0]), true);
+						pause(event,x,y,i,vars,collide);
+						return;
 					}
 				}else if((jump == 1 && cmd.equals("ELSE")) || cmd.equals("END")){
 					jump--;
@@ -427,8 +461,17 @@ public class EventComputer implements GameEventListener {
 				case "MVRPLAYER": //MVRPLAYER (PLAYERDX) (PLAYERDY) #Move player relatively in current map
 					testArgs(i,action,errors,args, new String[][]{{VALUE,VALUE}});
 					break;
-				case "FILTER": //FILTER (R) (G) (B) (A) / OFF # Apply filter to game (values in range 0 to 1)
-					testArgs(i,action,errors,args, new String[][]{{"OFF"},{VALUE,VALUE,VALUE,VALUE}});
+				case "FILTER": //FILTER (R) (G) (B) (A) {TIME} / OFF # Apply filter to game (values in range 0 to 1)
+					testArgs(i,action,errors,args, new String[][]{{"OFF"},{"OFF",VALUE},{VALUE,VALUE,VALUE,VALUE},{VALUE,VALUE,VALUE,VALUE,VALUE}});
+					break;
+				case "STOP": // STOP {ON/OFF} #Prevent player from moving
+					testArgs(i,action,errors,args, new String[][]{{},{"ON/OFF"}});
+					break;
+				case "WAIT": // WAIT (TIME) #Wait a amount of time before other event
+					testArgs(i,action,errors,args, new String[][]{{VALUE}});
+					break;
+				case "PAUSE": // PAUSE (TIME) #Pause game (wait + prevent player from moving)
+					testArgs(i,action,errors,args, new String[][]{{VALUE}});
 					break;
 				default:
 					errors.add("Unknown event action : ["+i+"]"+action);
@@ -497,7 +540,7 @@ public class EventComputer implements GameEventListener {
 						errors.add("Argument "+(j2+1)+" must be a TEXT : ["+i+"]"+action);
 					break;
 				case VALUE:
-					if(!isInteger(args[j2]))
+					if(!isValue(args[j2]))
 						errors.add("Argument "+(j2+1)+" must be a VALUE : ["+i+"]"+action);
 					break;
 				case ID:
@@ -526,7 +569,6 @@ public class EventComputer implements GameEventListener {
 	}
 	
 	private void pause(String event, int x, int y, int i, HashMap<String, Integer> vars, boolean collide){
-		game.setPaused(true);
 		this.savedEvent = event;
 		this.savedx = x;
 		this.savedy = y;
@@ -553,11 +595,21 @@ public class EventComputer implements GameEventListener {
 	}
 	
 	private static boolean isInteger(String s) {
-	    @SuppressWarnings("resource")
-		Scanner sc = new Scanner(s.trim());
-	    if(!sc.hasNextInt()) return false;
-	    sc.nextInt();
-	    return !sc.hasNext();
+	    try{
+	    	Integer.parseInt(s);
+	    	return true;
+	    }catch(NumberFormatException e){
+	    	return false;
+	    }
+	}
+	
+	private static boolean isValue(String s) {
+		try{
+	    	Float.parseFloat(s);
+	    	return true;
+	    }catch(NumberFormatException e){
+	    	return false;
+	    }
 	}
 	
 }

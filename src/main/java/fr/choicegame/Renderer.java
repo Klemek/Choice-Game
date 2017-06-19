@@ -259,9 +259,15 @@ public class Renderer {
 					Mesh mesh = gameItem.getMesh();
 					// Set ortohtaphic and model matrix for this HUD item
 					Matrix4f projModelMatrix = transformation.getModelViewMatrix(gameItem, ortho, CAMERA_DEPTH);
+					/*if(!gameItem.getMesh().isTextured()){
+						projModelMatrix = transformation.getModelViewMatrix(gameItem, ortho, CAMERA_DEPTH-0.5f);
+					}else{
+						projModelMatrix = transformation.getModelViewMatrix(gameItem, ortho, CAMERA_DEPTH-1f);
+					}*/
 					shaderProgram.setUniform("modelViewMatrix", projModelMatrix);
 					shaderProgram.setUniform("colour", gameItem.getMesh().getColour());
 					shaderProgram.setUniform("useColour", gameItem.getMesh().isTextured() ? 0 : 1);
+					
 					// Render the mesh for this HUD item
 					mesh.render();
 				}

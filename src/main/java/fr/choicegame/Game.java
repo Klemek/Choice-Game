@@ -30,7 +30,8 @@ public class Game implements IGameLogic, KeyEventListener {
 	private Hud hud;
 	private final JFrame splash;
 
-	private boolean paused, shouldClose;
+	private float wait_time_left;
+	private boolean wait_input, wait, player_stopped, shouldClose;
 
 	public Game(Loader loader, JFrame splash) {
 
@@ -117,6 +118,9 @@ public class Game implements IGameLogic, KeyEventListener {
 	public void setCurrentMap(String name, int x, int y) {
 		if (maps.containsKey(name)) {
 			this.currentMap = name;
+			this.wait = false;
+			this.wait_input = false;
+			this.wait_time_left = 0f;
 			getCurrentMap().setGameEventListener(evComputer);
 			if(this.player != null){
 				this.player.setPosition(x,y);
@@ -139,7 +143,7 @@ public class Game implements IGameLogic, KeyEventListener {
 	}
 
 	public void interact() {
-		if (player != null && !isPaused()) {
+		if (player != null && !wait_input && !player_stopped) {
 
 				int posX = (int) Math.round(player.getPosX()), posY = (int) Math.round(player.getPosY());
 				switch (player.getFacing()) {
@@ -201,14 +205,14 @@ public class Game implements IGameLogic, KeyEventListener {
 				if(hud.hasMenu()){
 					hud.clearMenu();
 					if(!hud.hasMsg())
-						setPaused(false);
+						setWaitInput(false);
 				}else{
 					hud.openMenu();
-					setPaused(true);
+					setWaitInput(true);
 				}
 			}
 			
-			if(isPaused()){
+			if(wait_input){
 				if(hud.hasDialog() || hud.hasMenu()){
 					if(key == GLFW_KEY_UP || key == GLFW_KEY_W){
 						hud.up();
@@ -216,21 +220,22 @@ public class Game implements IGameLogic, KeyEventListener {
 						hud.down();
 					}else if(key == GLFW_KEY_E || key == GLFW_KEY_SPACE || key == GLFW_KEY_ENTER){
 						if(hud.hasDialog()){
-							setPaused(false);
+							wait_input = false;
 							hud.clearMsg();
 							evComputer.setTempVar(hud.getDialogvar(),hud.getDialogchoice());
 							evComputer.resume();
 						}else{
 							hud.clearMenu();
 							if(!hud.hasMsg())
-								setPaused(false);
+								wait_input = false;
 							if(hud.getMenuChoice()==2){
 								shouldClose = true;
 							}
 						}
 					}
 				}else if(key == GLFW_KEY_E || key == GLFW_KEY_SPACE || key == GLFW_KEY_ENTER){
-					setPaused(false);
+					wait_input = false;
+					System.out.println("wait_input:"+wait_input);
 					hud.clearMsg();
 					evComputer.resume();
 				}
@@ -241,7 +246,7 @@ public class Game implements IGameLogic, KeyEventListener {
 	@Override
 	public void input(Window window) {
 		// azerty is auto converted to qwerty with lwjgl
-		if(!isPaused()){
+		if(!player_stopped && !wait_input && !wait){
 		
 			boolean up = window.isKeyPressed(GLFW_KEY_UP) || window.isKeyPressed(GLFW_KEY_W);
 			boolean down = window.isKeyPressed(GLFW_KEY_DOWN) || window.isKeyPressed(GLFW_KEY_S);
@@ -286,16 +291,30 @@ public class Game implements IGameLogic, KeyEventListener {
 					}
 				}
 			}
+		}else{
+			player.setWalking(false);
 		}
 	}
 
 	@Override
 	public void update(float interval) {
-		if (player != null && !isPaused()) {
+		if (player != null) {
 			player.update(getCurrentMap());
 			renderer.updateCharacters(interval, player, getCurrentMap());
 		}
 		hud.update(interval);
+		
+		if(wait_time_left>0){
+			wait_time_left -= interval;
+			if(wait_time_left<=0){
+				wait_time_left = 0;
+				wait = false;
+				evComputer.resume();
+			}
+		}else{
+			wait = false;
+		}
+		
 	}
 
 	@Override
@@ -309,18 +328,22 @@ public class Game implements IGameLogic, KeyEventListener {
 		hud.cleanup();
 	}
 
-	public boolean isPaused() {
-		return paused;
+	public void setWaitInput(boolean pause) {
+		this.wait_input = pause;
+	}
+	
+	public void setStopPlayer(boolean stop){
+		this.player_stopped = stop;
 	}
 
-	public void setPaused(boolean pause) {
-		this.paused = pause;
+	public void setWaitTime(float time, boolean wait){
+		this.wait = wait;
+		this.wait_time_left = time;
 	}
-
+	
 	@Override
 	public boolean shouldClose() {
 		return shouldClose;
 	}
-
 	
 }

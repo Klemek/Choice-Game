@@ -6,8 +6,8 @@ public class GameEngine implements Runnable {
 
 	private final Thread gameLoopThread;
 
-	private static final int TARGET_UPS = 30;
-	private static final int TARGET_FPS = 75;
+	private static final float TARGET_UPS = 30;
+	private static final float TARGET_FPS = 75;
 
 	private IGameLogic gameLogic;
 	private Window window;

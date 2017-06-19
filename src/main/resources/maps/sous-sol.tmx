@@ -17,14 +17,16 @@
   <image source="infotileset.png" width="320" height="64"/>
   <tile id="0">
    <properties>
-    <property name="event">MVPLAYER 6 2
-FILTER OFF</property>
+    <property name="event">MVPLAYER 7 2
+FILTER OFF
+PAUSE 0.5</property>
    </properties>
   </tile>
   <tile id="1">
    <properties>
     <property name="event">IFC
    FILTER 0 0 0 1
+   PAUSE 0.5
    CHGMAP &quot;maison&quot; 1 0
 END</property>
    </properties>
