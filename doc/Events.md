@@ -1,10 +1,10 @@
 # Events
 
-##Format:
+## Format:
 EVENT (PARAM) {OPTIONAL PARAM}
 
-##List :
-###Logical :
+## List :
+### Logical :
 
 * TRIGGER (TRIGNAME) {ON/OFF} #Create/edit trigger
 * IFT {NOT} (TRIGNAME) ... {ELSE ...} END #Test trigger
@@ -16,14 +16,14 @@ EVENT (PARAM) {OPTIONAL PARAM}
 * DCZ (VARNAME) {VALUE} #Decrease var from 1 or value 
 * INVVAR (ITEMID) (VARNAME) #Get the quantity of an item in the player inventory and put it in a var
 
-###Visual effects:
+### Visual effects:
 
 * SAY (TEXT) {IMAGEID} #Show text (pause game)
 * DIALOG (TEXT) (VARNAME) (OPTION1) (OPTION2) ... #Show a choice and return result on a viariable
 * SHAKE (ON/OFF) {TIME} #Toggle shake screen for a time or until off
 * FILTER (R) (G) (B) (A) / OFF # Apply filter to game (values in range 0 to 1)
 
-###Game interaction:
+### Game interaction:
 
 * INVADD (ITEMID) {NUM} {MSG} #Add 1 or NUM item(s) to the player and display it (optional)(pause)
 * INVDEL (ITEMID) {NUM} {MSG} #Remove all or NUM item(s) to the player and display it (optional)(pause)
@@ -36,8 +36,8 @@ EVENT (PARAM) {OPTIONAL PARAM}
 * MVPLAYER (PLAYERX) (PLAYERY) #Move player in current map
 * MVRPLAYER (PLAYERDX) (PLAYERDY) #Move player relatively in current map
 
-##Exemples
-###Example 1 (Bed):
+## Exemples
+### Example 1 (Bed):
 ```
 DIALOG "What do you want to do ?" CHOICE1 "Sleep until morning"  "Sleep until night"  "Cancel"
 IF CHOICE1==0
@@ -49,7 +49,7 @@ IF CHOICE1==1
    TRIGGER DAY OFF
 END
 ```
-###Example 2 (Chest):
+### Example 2 (Chest):
 ```
 IF NOT CHEST152 #One time event
    INVVAR 152 KEY152
