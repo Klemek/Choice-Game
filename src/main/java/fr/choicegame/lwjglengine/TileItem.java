@@ -12,41 +12,29 @@ public class TileItem {
 
     private final List<GameItem> items;
     
-    private static final float Z = 0f;
-    private static final float DELTA = 0.01f;
-    
     public TileItem(Texture tex, int id) {
     	items = new ArrayList<>();
     	if(tex!= null){
-		    items.add(new GameItem(new Mesh(getPositions(Z),tex.getTextCoords(id, Config.getIntValue(Config.TILE_SIZE)), GameItem.QUAD_INDICES, new Material(tex))));
+		    items.add(new GameItem(new Mesh(GameItem.QUAD_POSITIONS,
+		    							tex.getTextCoords(id, Config.getIntValue(Config.TILE_SIZE)),
+		    							GameItem.QUAD_INDICES,
+		    							new Material(tex))));
     	} 
     }
     
     public TileItem(Texture[] texs, int[] ids) {
     	
 	    items = new ArrayList<>();
-	    
 	    for(int i = 0; i < 4; i++){
 	    	if(texs[i] != null){
-	    		float z = Z;
-	    		if(i<2)
-	    			z -= DELTA*(2-i);
-	    		else
-	    			z += DELTA*(i-1);
-	    		items.add(new GameItem(new Mesh(getPositions(z),texs[i].getTextCoords(ids[i], Config.getIntValue(Config.TILE_SIZE)), GameItem.QUAD_INDICES, new Material(texs[i]))));
+	    		items.add(new GameItem(new Mesh(GameItem.QUAD_POSITIONS,
+    										texs[i].getTextCoords(ids[i], Config.getIntValue(Config.TILE_SIZE)),
+    										GameItem.QUAD_INDICES,
+    										new Material(texs[i]))));
 	    	}else{
 	    		items.add(null);
 	    	}
 	    }
-    }
-    
-    private static float[] getPositions(float z){
-    	return new float[]{
-    	        -0.5f,  0.5f, z,
-    	        -0.5f, -0.5f, z,
-    	         0.5f, -0.5f, z,
-    	         0.5f,  0.5f, z,
-    	    };
     }
 
     public List<GameItem> getItems() {
@@ -56,7 +44,7 @@ public class TileItem {
 	public void setPosition(float x, float y) {
         for(GameItem item:items)
         	if(item != null)
-        		item.setPosition(x, y, Z);
+        		item.setPosition(x, y);
     }
 
     public void setScale(float scale) {
@@ -66,10 +54,10 @@ public class TileItem {
     }
  
 
-    public void setRotation(float x, float y, float z) {
+    public void setRotation(float r) {
     	for(GameItem item:items)
     		if(item != null)
-    			item.setRotation(x, y, z);
+    			item.setRotation(r);
     }
     
     public void cleanup(){

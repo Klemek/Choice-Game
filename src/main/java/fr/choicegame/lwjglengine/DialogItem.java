@@ -9,8 +9,6 @@ import fr.choicegame.lwjglengine.graph.Texture;
 
 public class DialogItem extends GameItem {
 
-	private static final float ZPOS = 0.0f;
-
 	private static final int VERTICES_PER_QUAD = 4;
 
 	private Texture texture;
@@ -64,7 +62,6 @@ public class DialogItem extends GameItem {
 				
 				positions.add(x*tileWidth-cx); // x
 				positions.add(y*tileHeight-cy); // y
-				positions.add(ZPOS); // z
 				textCoords.add(tx/4f);
 				textCoords.add(ty/3f);
 				indices.add(n * VERTICES_PER_QUAD);
@@ -72,7 +69,6 @@ public class DialogItem extends GameItem {
 				// Left Bottom vertex
 				positions.add(x*tileWidth-cx); // x
 				positions.add((y+1)*tileHeight-cy); // y
-				positions.add(ZPOS); // z
 				textCoords.add(tx/4f);
 				textCoords.add((ty+1)/3f);
 				indices.add(n * VERTICES_PER_QUAD + 1);
@@ -80,7 +76,6 @@ public class DialogItem extends GameItem {
 				// Right Bottom vertex
 				positions.add((x+1)*tileWidth-cx); // x
 				positions.add((y+1)*tileHeight-cy); // y
-				positions.add(ZPOS); // z
 				textCoords.add((tx+1)/4f);
 				textCoords.add((ty+1)/3f);
 				indices.add(n * VERTICES_PER_QUAD + 2);
@@ -88,7 +83,6 @@ public class DialogItem extends GameItem {
 				// Right Top vertex
 				positions.add((x+1)*tileWidth-cx); // x
 				positions.add(y*tileHeight-cy); // y
-				positions.add(ZPOS); // z
 				textCoords.add((tx+1)/4f);
 				textCoords.add(ty/3f);
 				indices.add(n * VERTICES_PER_QUAD + 3);
@@ -102,7 +96,6 @@ public class DialogItem extends GameItem {
 			if(show_cursor){
 				positions.add((w-1.5f)*tileWidth-cx); // x
 				positions.add((h-1.5f)*tileHeight-cy); // y
-				positions.add(ZPOS); // z
 				textCoords.add(3f/4f);
 				textCoords.add(0f);
 				indices.add(n * VERTICES_PER_QUAD);
@@ -110,7 +103,6 @@ public class DialogItem extends GameItem {
 				// Left Bottom vertex
 				positions.add((w-1.5f)*tileWidth-cx); // x
 				positions.add((h-0.5f)*tileHeight-cy); // y
-				positions.add(ZPOS); // z
 				textCoords.add(3f/4f);
 				textCoords.add(1f/3f);
 				indices.add(n * VERTICES_PER_QUAD + 1);
@@ -118,7 +110,6 @@ public class DialogItem extends GameItem {
 				// Right Bottom vertex
 				positions.add((w-0.5f)*tileWidth-cx); // x
 				positions.add((h-0.5f)*tileHeight-cy); // y
-				positions.add(ZPOS); // z
 				textCoords.add(1f);
 				textCoords.add(1f/3f);
 				indices.add(n * VERTICES_PER_QUAD + 2);
@@ -126,7 +117,6 @@ public class DialogItem extends GameItem {
 				// Right Top vertex
 				positions.add((w-0.5f)*tileWidth-cx); // x
 				positions.add((h-1.5f)*tileHeight-cy); // y
-				positions.add(ZPOS); // z
 				textCoords.add(1f);
 				textCoords.add(0f);
 				indices.add(n * VERTICES_PER_QUAD + 3);

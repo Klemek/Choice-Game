@@ -1,6 +1,6 @@
 package fr.choicegame.lwjglengine;
 
-import org.joml.Vector3f;
+import org.joml.Vector2f;
 
 import fr.choicegame.lwjglengine.graph.Material;
 import fr.choicegame.lwjglengine.graph.Mesh;
@@ -13,10 +13,10 @@ public class GameItem {
 	    };
 	
 	public static final float[] QUAD_POSITIONS = new float[]{
-	        -0.5f,  0.5f, 0f,
-	        -0.5f, -0.5f, 0f,
-	         0.5f, -0.5f, 0f,
-	         0.5f,  0.5f, 0f,
+	        -0.5f,  0.5f,
+	        -0.5f, -0.5f,
+	         0.5f, -0.5f,
+	         0.5f,  0.5f,
 	    };
 	
 	public static final float[] QUAD_TEXTCOORDS = new float[] {
@@ -28,11 +28,11 @@ public class GameItem {
 	
     private Mesh mesh;
 
-    private final Vector3f position;
+    private final Vector2f position;
 
     private float scale;
 
-    private final Vector3f rotation;
+    private float rotation;
     
     private boolean visible;
 
@@ -42,20 +42,19 @@ public class GameItem {
     
     public GameItem(Mesh mesh) {
         this.mesh = mesh;
-        position = new Vector3f(0, 0, 0);
+        position = new Vector2f(0, 0);
         scale = 1;
-        rotation = new Vector3f(0, 0, 0);
+        rotation = 0f;
         this.visible = true;
     }
 
-    public Vector3f getPosition() {
+    public Vector2f getPosition() {
         return position;
     }
 
-    public GameItem setPosition(float x, float y, float z) {
+    public GameItem setPosition(float x, float y) {
         this.position.x = x;
         this.position.y = y;
-        this.position.z = z;
         return this;
     }
 
@@ -68,14 +67,12 @@ public class GameItem {
         return this;
     }
 
-    public Vector3f getRotation() {
+    public float getRotation() {
         return rotation;
     }
 
-    public GameItem setRotation(float x, float y, float z) {
-        this.rotation.x = x;
-        this.rotation.y = y;
-        this.rotation.z = z;
+    public GameItem setRotation(float r) {
+        this.rotation = r;
         return this;
     }
 
@@ -120,17 +117,17 @@ public class GameItem {
 	public static float[] getQuadPositions(float ratio){
 		if(ratio>1){
 			return new float[]{
-			        -0.5f,  1f/(2f*ratio), 0f,
-			        -0.5f, -1f/(2f*ratio), 0f,
-			         0.5f, -1f/(2f*ratio), 0f,
-			         0.5f,  1f/(2f*ratio), 0f,
+			        -0.5f,  1f/(2f*ratio),
+			        -0.5f, -1f/(2f*ratio),
+			         0.5f, -1f/(2f*ratio),
+			         0.5f,  1f/(2f*ratio),
 			    };
 		}else{
 			return new float[]{
-					-ratio/2f,  0.5f, 0f,
-			        -ratio/2f, -0.5f, 0f,
-			        ratio/2f, -0.5f, 0f,
-			        ratio/2f,  0.5f, 0f,
+					-ratio/2f,  0.5f,
+			        -ratio/2f, -0.5f,
+			        ratio/2f, -0.5f,
+			        ratio/2f,  0.5f,
 			    };
 		}
 	}

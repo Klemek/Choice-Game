@@ -54,9 +54,7 @@ public class Game implements IGameLogic, KeyEventListener {
 			String startMap = Config.getValue(Config.START_MAP);
 
 			if (startMap != null && this.maps.containsKey(startMap)) {
-
-				//this.maps.put(startMap, loader.loadMap(startMap));
-
+				
 				this.setCurrentMap(startMap);
 
 				String player_tileset = Config.getValue(Config.PLAYER_TILESET);
@@ -113,14 +111,22 @@ public class Game implements IGameLogic, KeyEventListener {
 	}
 
 	public void setCurrentMap(String name) {
+		setCurrentMap(name,0,0);
+	}
+	
+	public void setCurrentMap(String name, int x, int y) {
 		if (maps.containsKey(name)) {
 			this.currentMap = name;
 			getCurrentMap().setGameEventListener(evComputer);
 			if(this.player != null){
-				this.player.setPosition(0,0);
-				if(hud != null)//all loaded
-					player.update(getCurrentMap());
+				this.player.setPosition(x,y);
+				if(hud != null){//all loaded
+					player.updateChar(getCurrentMap(),true);
+					renderer.updateMap(getCurrentMap());
+				}
 			}
+		}else{
+			System.out.println("Unknown map : '"+name+"'");
 		}
 	}
 
@@ -176,7 +182,7 @@ public class Game implements IGameLogic, KeyEventListener {
 		splash.setVisible(false); // end of loading
 		
 		if(getCurrentMap()!=null && player!=null){
-			player.update(getCurrentMap());
+			player.updateChar(getCurrentMap(),true);
 			renderer.updateMap(getCurrentMap());
 			if (player != null) {
 				renderer.updateCharacters(0, player, getCurrentMap());

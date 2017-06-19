@@ -36,10 +36,12 @@ public class Renderer {
 	private List<TileItem> mapTileItems;
 	private IHud hud;
 	private final Camera camera;
-	private float zoom = -1f;
 	private float scale = 0.2f;
-	private float blendfix = 1.01f;
 	private float updateTimer = 0f;
+	
+	private static final float CAMERA_DEPTH = -1f;
+	private static final float MAP_DEPTH = 1f;
+	
 	private static final float UPDATETIME = 0.2f;
 
 	public Renderer(Loader l) {
@@ -88,7 +90,7 @@ public class Renderer {
 					ti.getId());
 			playerTileItem.setPosition(p.getPosX() * scale, (m.getHeight() - p.getPosY()) * scale);
 			playerTileItem.setScale(scale);
-			camera.setPosition(p.getPosX() * scale, (m.getHeight() - p.getPosY()) * scale, zoom);
+			camera.setPosition(p.getPosX() * scale, (m.getHeight() - p.getPosY()) * scale);
 		}
 
 		for (TileItem item : npcTileItems)
@@ -135,11 +137,11 @@ public class Renderer {
 					}
 					TileItem item = new TileItem(texs, ids);
 					item.setPosition(x * scale, (m.getHeight() - y) * scale);
-					item.setScale(scale * blendfix); // merge borders;
+					item.setScale(scale);
 					mapTileItems.add(item);
 				}
 			}
-			camera.setPosition(scale * m.getWidth() / 2f, scale * m.getHeight() / 2f, zoom); // TODO
+			camera.setPosition(scale * m.getWidth() / 2f, scale * m.getHeight() / 2f);
 			// position
 		}
 	}
@@ -184,7 +186,7 @@ public class Renderer {
 		Matrix4f projectionMatrix = transformation.getProjectionMatrix(window.getWidth(), window.getHeight());
 		shaderProgram.setUniform("projectionMatrix", projectionMatrix);
 
-		Matrix4f viewMatrix = transformation.getViewMatrix(camera);
+		Matrix4f viewMatrix = transformation.getViewMatrix(camera, CAMERA_DEPTH);
 
 		// Render each tileItem level by level
 
@@ -221,7 +223,7 @@ public class Renderer {
 		for (GameItem gameItem : tileItem.getItems()) {
 			if (gameItem != null && gameItem.isVisible()) {
 				// Set world matrix for this item
-				Matrix4f modelViewMatrix = transformation.getModelViewMatrix(gameItem, viewMatrix);
+				Matrix4f modelViewMatrix = transformation.getModelViewMatrix(gameItem, viewMatrix,MAP_DEPTH);
 				shaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
 				// Render the mesh for this game item
 				shaderProgram.setUniform("colour", gameItem.getMesh().getColour());
@@ -234,7 +236,7 @@ public class Renderer {
 	private void renderTileItem(TileItem tileItem, Matrix4f viewMatrix, int i) {
 		GameItem gameItem = tileItem.getItems().get(i);
 		if (gameItem != null && gameItem.isVisible()) {
-			Matrix4f modelViewMatrix = transformation.getModelViewMatrix(gameItem, viewMatrix);
+			Matrix4f modelViewMatrix = transformation.getModelViewMatrix(gameItem, viewMatrix,MAP_DEPTH);
 			shaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
 			// Render the mesh for this game item
 			shaderProgram.setUniform("colour", gameItem.getMesh().getColour());
@@ -256,7 +258,7 @@ public class Renderer {
 				if (gameItem != null && gameItem.isVisible()) {
 					Mesh mesh = gameItem.getMesh();
 					// Set ortohtaphic and model matrix for this HUD item
-					Matrix4f projModelMatrix = transformation.getModelViewMatrix(gameItem, ortho);
+					Matrix4f projModelMatrix = transformation.getModelViewMatrix(gameItem, ortho, CAMERA_DEPTH);
 					shaderProgram.setUniform("modelViewMatrix", projModelMatrix);
 					shaderProgram.setUniform("colour", gameItem.getMesh().getColour());
 					shaderProgram.setUniform("useColour", gameItem.getMesh().isTextured() ? 0 : 1);

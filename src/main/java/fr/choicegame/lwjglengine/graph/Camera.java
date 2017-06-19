@@ -1,59 +1,42 @@
 package fr.choicegame.lwjglengine.graph;
 
-import org.joml.Vector3f;
+import org.joml.Vector2f;
 
 public class Camera {
 
-    private final Vector3f position;
-
-    private final Vector3f rotation;
+    private final Vector2f position;
+    private float rotation;
 
     public Camera() {
-        position = new Vector3f(0, 0, 0);
-        rotation = new Vector3f(0, 0, 0);
+        position = new Vector2f(0, 0);
+        rotation = 0f;
     }
 
-    public Camera(Vector3f position, Vector3f rotation) {
+    public Camera(Vector2f position, float rotation) {
         this.position = position;
         this.rotation = rotation;
     }
 
-    public Vector3f getPosition() {
+    public Vector2f getPosition() {
         return position;
     }
 
-    public void setPosition(float x, float y, float z) {
+    public void setPosition(float x, float y) {
         position.x = x;
         position.y = y;
-        position.z = z;
     }
 
-    public void movePosition(float offsetX, float offsetY, float offsetZ) {
-        if ( offsetZ != 0 ) {
-            position.x += (float)Math.sin(Math.toRadians(rotation.y)) *(float)Math.cos(Math.toRadians(rotation.x))* -1.0f * offsetZ;
-            position.y += (float)Math.sin(Math.toRadians(rotation.x)) * offsetZ;
-            position.z += (float)Math.cos(Math.toRadians(rotation.y)) *(float)Math.cos(Math.toRadians(rotation.x)) * offsetZ;
-        }
-        if ( offsetX != 0) {
-            position.x += (float)Math.sin(Math.toRadians(rotation.y - 90)) * -1.0f * offsetX;
-            position.z += (float)Math.cos(Math.toRadians(rotation.y - 90)) * offsetX;
-        }
+    public void movePosition(float offsetX, float offsetY) {
+    	position.x += offsetX;
         position.y += offsetY;
     }
 
-    public Vector3f getRotation() {
-        return rotation;
-    }
+	public float getRotation() {
+		return rotation;
+	}
 
-    public void setRotation(float x, float y, float z) {
-        rotation.x = x;
-        rotation.y = y;
-        rotation.z = z;
-    }
-
-    public void moveRotation(float offsetX, float offsetY, float offsetZ) {
-        rotation.x += offsetX;
-        rotation.y += offsetY;
-        rotation.z += offsetZ;
-    }
+	public void setRotation(float rotation){
+		this.rotation = rotation;
+	}
+	
 }

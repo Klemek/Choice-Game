@@ -23,9 +23,12 @@ public class Player extends Character {
 
 	// Functions
 	
-	@Override
-	protected void updateChar(Map m) {
+	public void updateChar(Map m, boolean forceEvent) {
 		//action events when walked in
+		
+		if(forceEvent){
+			lastPos = new float[]{-1f,-1f};
+		}
 		
 		float hitboxstartx = Config.getFloatValue(Config.HITBOX_START_X);
 		float hitboxstarty = Config.getFloatValue(Config.HITBOX_START_Y);
@@ -76,6 +79,11 @@ public class Player extends Character {
 				m.action((int)posx2,(int)posy2);
 		}
 		lastPos = new float[]{getPosX(),getPosY()};
+	}
+	
+	@Override
+	protected void updateChar(Map m) {
+		updateChar(m,false);
 	}
 	
 }

@@ -60,7 +60,7 @@ public class Mesh {
 			vboIdList.add(vboId);
 			glBindBuffer(GL_ARRAY_BUFFER, vboId);
 			glBufferData(GL_ARRAY_BUFFER, verticesBuffer, GL_STATIC_DRAW);
-			glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0);
+			glVertexAttribPointer(0, 2, GL_FLOAT, false, 0, 0);
 			glBindBuffer(GL_ARRAY_BUFFER, 0);
 			
 			//texture vbo

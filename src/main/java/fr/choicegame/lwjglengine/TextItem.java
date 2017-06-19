@@ -9,8 +9,6 @@ import fr.choicegame.lwjglengine.graph.Mesh;
 
 public class TextItem extends GameItem {
 
-	private static final float ZPOS = 0.0f;
-
 	private static final int VERTICES_PER_QUAD = 4;
 
 	private static final int TABWIDTH = 4;
@@ -59,7 +57,6 @@ public class TextItem extends GameItem {
 				// Left Top vertex
 				positions.add(x); // x
 				positions.add(y); // y
-				positions.add(ZPOS); // z
 				textCoords.add((float)charInfo.getStartX() / (float)fontTexture.getWidth());
 				textCoords.add(0f);
 				indices.add(n * VERTICES_PER_QUAD);
@@ -67,7 +64,6 @@ public class TextItem extends GameItem {
 				// Left Bottom vertex
 				positions.add(x); // x
 				positions.add(y+tileHeight); // y
-				positions.add(ZPOS); // z
 				textCoords.add((float)charInfo.getStartX() / (float)fontTexture.getWidth());
 				textCoords.add((float)tileHeight/ (float)fontTexture.getHeight());
 				indices.add(n * VERTICES_PER_QUAD + 1);
@@ -75,7 +71,6 @@ public class TextItem extends GameItem {
 				// Right Bottom vertex
 				positions.add(x+(float)charInfo.getWidth()); // x
 				positions.add(y+tileHeight); // y
-				positions.add(ZPOS); // z
 				textCoords.add((float)(charInfo.getStartX()+charInfo.getWidth()) / (float)fontTexture.getWidth());
 				textCoords.add((float)tileHeight/ (float)fontTexture.getHeight());
 				indices.add(n * VERTICES_PER_QUAD + 2);
@@ -83,7 +78,6 @@ public class TextItem extends GameItem {
 				// Right Top vertex
 				positions.add(x+(float)charInfo.getWidth()); // x
 				positions.add(y); // y
-				positions.add(ZPOS); // z
 				textCoords.add((float)(charInfo.getStartX()+charInfo.getWidth()) / (float)fontTexture.getWidth());
 				textCoords.add(0f);
 				indices.add(n * VERTICES_PER_QUAD + 3);

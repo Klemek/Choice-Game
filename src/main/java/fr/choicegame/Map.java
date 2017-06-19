@@ -42,11 +42,11 @@ public class Map {
 	}
 	
 	public int getWidth() {
-		return tileMap[0].length;
+		return tileMap.length;
 	}
 	
 	public int getHeight() {
-		return tileMap.length;
+		return tileMap[0].length;
 	}
 
 	public HashMap<String, NPC> getNpcs() {

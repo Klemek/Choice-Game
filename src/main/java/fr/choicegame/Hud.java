@@ -23,11 +23,14 @@ public class Hud implements IHud {
 
 	private TextItem msgTextItem, menuTextItem;
 	private GameItem colorFilter;
+	private float transp_start, transp_goal, fade_start;
+	private static final float FADE_TIME = 0.5f;
+	private float refresh_timer;
+	private boolean fade;
+
 	private DialogItem dialogBg, menuBg;
 
 	private int windowWidth, windowHeight;
-
-	//private static final String WAIT_CHAR = "_";
 
 	private float updateTimer = 0f;
 	private String[] dialogmsg, menumsg;
@@ -36,8 +39,6 @@ public class Hud implements IHud {
 	private static final float UPDATETIME = 0.5f;
 
 	private int msgFontSize = 25;
-	
-	
 	
 	private boolean dialog, menu;
 	
@@ -52,7 +53,7 @@ public class Hud implements IHud {
 		this.msgTextItem = new TextItem("", msgFont);
 		this.msgTextItem.setVisible(false);
 		
-		this.colorFilter = GameItem.simpleQuad(new Material(new Vector4f(1, 0, 0, 0.5f)));
+		this.colorFilter = GameItem.simpleQuad(new Material(new Vector4f(1, 0, 0, 1f)));
 		this.colorFilter.setVisible(false);
 		
 		this.dialogBg = new DialogItem(textures.get("/dialog.png"),20,6);
@@ -71,12 +72,19 @@ public class Hud implements IHud {
 	}
 
 	public void setColorFilter(float r, float g, float b, float a){
-		this.colorFilter.getMesh().getMaterial().setColor(new Vector4f(r,g,b,a));
+		this.transp_start = this.colorFilter.getMesh().getMaterial().getColor().w;
+		this.transp_goal = a;
+		this.fade_start = refresh_timer;
+		this.fade = true;
+		this.colorFilter.getMesh().getMaterial().setColor(new Vector4f(r,g,b,transp_start));
 		this.colorFilter.setVisible(true);
 	}
 	
 	public void clearColorFilter(){
-		this.colorFilter.setVisible(false);
+		this.transp_goal = 0f;
+		this.transp_start = this.colorFilter.getMesh().getMaterial().getColor().w;
+		this.fade_start = refresh_timer;
+		this.fade = true;
 	}
 	
 	public void setMsg(String msg) {
@@ -203,36 +211,53 @@ public class Hud implements IHud {
 	}
 
 	private void updatePos() {
-		this.infoTextItem.setPosition(2f, windowHeight - 20f, 0);
+		this.infoTextItem.setPosition(2f, windowHeight - 20f);
 		
 		this.colorFilter.setScale(Math.max(windowHeight, windowWidth));
-		this.colorFilter.setPosition(windowWidth / 2, windowHeight / 2, 0);
+		this.colorFilter.setPosition(windowWidth / 2, windowHeight / 2);
 		
 		//menu
 		float cx = windowWidth / 2f;
 		float cy = windowHeight / 2f;
 		
-		this.menuBg.setPosition(cx, cy, 0);
+		this.menuBg.setPosition(cx, cy);
 
 		this.menuTextItem.setMaxWidth(this.menuBg.getWidth()-2*msgFontSize);
 		this.menuTextItem.setPosition(cx - this.menuBg.getWidth()/2f + msgFontSize,
-				cy - this.menuBg.getHeight()/2f + msgFontSize, 0f);
+				cy - this.menuBg.getHeight()/2f + msgFontSize);
 
 		//msg
 		cx = windowWidth / 2f;
 		cy = (windowHeight * 19f / 20f)- this.dialogBg.getHeight()/2f;
 		
-		this.dialogBg.setPosition(cx, cy, 0);
+		this.dialogBg.setPosition(cx, cy);
 
 		this.msgTextItem.setMaxWidth(this.dialogBg.getWidth()-2*msgFontSize);
 		this.msgTextItem.setPosition(cx - this.dialogBg.getWidth()/2f + msgFontSize,
-				cy - this.dialogBg.getHeight()/2f + msgFontSize, 0f);
+				cy - this.dialogBg.getHeight()/2f + msgFontSize);
 		
 		
 	}
 
 	public void update(float interval) {
+		
+		refresh_timer += interval;
+		
+		if(fade){
+			if(refresh_timer-fade_start < FADE_TIME){
+				float transp = transp_start+(transp_goal-transp_start)*(refresh_timer-fade_start)/FADE_TIME;
+				this.colorFilter.getMesh().getColour().setComponent(3, transp);
+			}else{
+				fade = false;
+				this.colorFilter.getMesh().getColour().setComponent(3, transp_goal);
+				if(transp_goal == 0f){
+					this.colorFilter.setVisible(false);
+				}
+			}
+		}
+		
 		updateTimer += interval;
+		
 		if (updateTimer > UPDATETIME) {
 			updateTimer -= UPDATETIME;
 			if (!dialog && dialogBg.isVisible()) {

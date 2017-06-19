@@ -229,7 +229,7 @@ public class EventComputer implements GameEventListener {
 							t.setImages(ti);
 							break;
 						case 5: //MAP (X) (Y) (LAYER) [TILESET] [ID]
-							String tileset = args[3];
+							String tileset = getStringArg(args[3]);
 							int id = Integer.parseInt(args[4]);
 							ti[layer] = new TileImage(id,tileset);
 							t.setImages(ti);
@@ -249,7 +249,7 @@ public class EventComputer implements GameEventListener {
 							game.updateMap();
 							break;
 						case 5: //MAPR (DX) (DY) (LAYER) [TILESET] [ID]
-							String tileset = args[3];
+							String tileset = getStringArg(args[3]);
 							int id = Integer.parseInt(args[4]);
 							ti1[layer1] = new TileImage(id,tileset);
 							t1.setImages(ti1);
@@ -258,11 +258,11 @@ public class EventComputer implements GameEventListener {
 						}
 						break;
 					case "PLAYERTILESET": //PLAYERTILESET (TILESET) #Change Player tileset
-						game.getPlayer().setTileset(args[0]);
+						game.getPlayer().setTileset(getStringArg(args[0]));
 						break;
 					case "NPCTILESET": //NPCTILESET (NPCID) (TILESET) #Change NPC tileset
 						//TODO EVENT NPCTILESET
-						game.getCurrentMap().getNpcs().get(args[0]).setTileset(args[1]);
+						game.getCurrentMap().getNpcs().get(getStringArg(args[0])).setTileset(getStringArg(args[1]));
 						break;
 					case "NPCANIMATION": //NPCTILESET (NPCID) (SOUTH/WEST/NORTH/EAST) (STOP/MARCH) #Change NPC animation
 						//TODO EVENT NPCANIMATION
@@ -270,11 +270,10 @@ public class EventComputer implements GameEventListener {
 					case "CHGMAP": //CHGMAP (MAPNAME) [PLAYERX] [PLAYERY]
 						switch(args.length){
 						case 1: //CHGMAP (MAPNAME)
-							game.setCurrentMap(args[0]);
+							game.setCurrentMap(getStringArg(args[0]));
 							break;
 						case 3://CHGMAP (MAPNAME) (PLAYERX) (PLAYERY)
-							game.setCurrentMap(args[0]);
-							game.getPlayer().setPosition(Integer.parseInt(args[1]),Integer.parseInt(args[2]));
+							game.setCurrentMap(getStringArg(args[0]),Integer.parseInt(args[1]),Integer.parseInt(args[2]));
 							break;
 						}
 						break;
