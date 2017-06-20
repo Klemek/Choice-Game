@@ -53,7 +53,7 @@ public class Hud implements IHud {
 		this.msgTextItem.setVisible(false);
 		
 		this.colorFilter = GameItem.simpleQuad(new Material(new Vector4f(0,0,0,1)),2000f);
-		this.colorFilter.setVisible(true);
+		this.colorFilter.setVisible(false);
 		
 		this.dialogBg = new DialogItem(textures.get("/dialog.png"),20,6);
 		this.dialogBg.setScale(2f);
@@ -73,6 +73,7 @@ public class Hud implements IHud {
 	public void setColorFilter(float r, float g, float b, float a, float fade_time){
 		if(fade_time <= 0){
 			this.colorFilter.getMesh().getMaterial().setColor(new Vector4f(r,g,b,a));
+			this.colorFilter.setVisible(true);
 		}else{
 			this.transp_start = this.colorFilter.getMesh().getMaterial().getColor().w;
 			this.transp_goal = a;

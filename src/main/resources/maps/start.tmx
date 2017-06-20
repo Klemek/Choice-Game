@@ -13,11 +13,12 @@ END</property>
   </tile>
   <tile id="1">
    <properties>
-    <property name="event">MVPLAYER 15 18
-FILTER 0 0 0 1 0
-SAY &quot;?&quot;
-FILTER OFF 0.5
-PAUSE 0.5</property>
+    <property name="event">
+    FILTER 0 0 0 1 0
+    MVPLAYER 15 18
+	SAY &quot;?&quot;
+	FILTER OFF 0.5
+	PAUSE 0.5</property>
    </properties>
   </tile>
   <tile id="2">
