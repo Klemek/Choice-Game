@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Events are the main part of the game edition. This is where you will set your story through every interactions your player can make.
+Events are the main part of the game edition. This is where you will set your story through every interactions your player can make. They should be in the properties of the info tiles in your [map creation](Map_creation.md#map-creation).
 
 ## Format:
 EVENT (PARAM) {OPTIONAL PARAM}
