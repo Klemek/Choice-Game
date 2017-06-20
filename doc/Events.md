@@ -1,8 +1,8 @@
 # Events
 
-## Informations
+## Introduction
 
-
+Events are the main part of the game edition. This is where you will set your story through every interactions your player can make.
 
 ## Format:
 EVENT (PARAM) {OPTIONAL PARAM}
@@ -43,6 +43,14 @@ EVENT (PARAM) {OPTIONAL PARAM}
 * STOP {ON/OFF} #Prevent player from moving
 * WAIT (TIME) #Wait a amount of time before other event
 * PAUSE (TIME) #Pause game (wait + prevent player from moving)
+
+## Informations
+
+* When a event like RANDOM, INVVAR or DIALOG set a value in a variable, it will test if a global variable exist before registering it in a temporary variable. So, you can register theses events in a variable like that :
+```
+VARG IMPORTANTCHOICE 0
+DIALOG "What do you want ?" IMPORTANTCHOICE "Pizza" "Icecream"
+```
 
 ## Exemples
 ### Example 1 (Bed):
