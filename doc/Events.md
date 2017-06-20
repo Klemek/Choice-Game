@@ -51,8 +51,9 @@ EVENT (PARAM) {OPTIONAL PARAM}
 VARG IMPORTANTCHOICE 0
 DIALOG "What do you want ?" IMPORTANTCHOICE "Pizza" "Icecream"
 ```
+* Check logs when running the game to see if some commands are wrong, they will not be registered to not corrupt the game.
 
-## Exemples
+## Examples
 ### Example 1 (Bed):
 ```
 DIALOG "What do you want to do ?" CHOICE1 "Sleep until morning"  "Sleep until night"  "Cancel"
