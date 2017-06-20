@@ -53,6 +53,7 @@ jar {
     	attributes 'Main-Class': 'fr.choicegame.Splash',
     		'Class-Path': configurations.compile.collect { it.getName() }.join(' ')
 	}
+	destinationDir = file("$rootDir/builds/")
 	baseName = project.name + '-all'
     from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } 
     	configurations.runtime.collect { it.isDirectory() ? it : zipTree(it) }  }
