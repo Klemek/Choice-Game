@@ -2,6 +2,7 @@ package fr.choicegame.event;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 
 import fr.choicegame.Game;
 import fr.choicegame.Hud;
@@ -16,6 +17,8 @@ public class EventComputer implements GameEventListener {
 	private static final String TRIGGER = "TRIGGER";
 	private static final String TEXT = "TEXT";
 	private static final String VALUE = "VALUE";
+	private static final String INTVALUE = "INTVALUE";
+	private static final String FLOATVALUE = "FLOATVALUE";
 	private static final String ID = "ID";
 	
 	private String savedEvent;
@@ -50,6 +53,9 @@ public class EventComputer implements GameEventListener {
 					if(spl1.length>1)
 						args = getArgs(spl1[1], true);
 					switch(cmd){
+					
+					/* Logical */
+					
 					case "TRIGGER": //TRIGGER (TRIGNAME) [ON/OFF] #Create/edit trigger
 						switch(args.length){
 						case 1: //TRIGGER (TRIGNAME)
@@ -158,6 +164,19 @@ public class EventComputer implements GameEventListener {
 							vars.put(args[1],game.getPlayer().getInventory().get(Integer.parseInt(args[0])));
 						}
 						break;
+					case "RANDOM": //RANDOM (VARNAME) (MINVALUE) (MAXVALUE) #Generate integer random number between min and max and put it in a var
+						int min = Integer.parseInt(args[1]);
+						int max = Integer.parseInt(args[2]);
+						int value = new Random().nextInt(max+1-min)+min;
+						if(game.hasGlobalVariable(args[0])){
+							game.setGlobalVariable(args[0], value);
+						}else{
+							vars.put(args[0], value);
+						}
+						break;
+					
+					/* Visual effects */	
+						
 					case "SAY": //SAY (TEXT) [IMAGEID] #Show text (pause game)
 						switch(args.length){
 						case 1: //SAY (TEXT)
@@ -192,6 +211,33 @@ public class EventComputer implements GameEventListener {
 							break;
 						}
 						break;
+					case "FILTER": //FILTER (R) (G) (B) (A) {TIME} / OFF {TIME} # Apply filter to game (values in range 0 to 1) default time 1 second
+						switch(args.length){
+						case 1: //FILTER OFF
+							this.game.getHud().clearColorFilter(Hud.DEFAULT_FADE_TIME);
+							break;
+						case 2: //FILTER OFF (TIME)
+							this.game.getHud().clearColorFilter(Float.parseFloat(args[1]));
+							break;
+						case 4: //FILTER (R) (G) (B) (A)
+							this.game.getHud().setColorFilter(Float.parseFloat(args[0]),
+															Float.parseFloat(args[1]),
+															Float.parseFloat(args[2]),
+															Float.parseFloat(args[3]),
+															Hud.DEFAULT_FADE_TIME);
+							break;
+						case 5: //FILTER (R) (G) (B) (A) (TIME)
+							this.game.getHud().setColorFilter(Float.parseFloat(args[0]),
+															Float.parseFloat(args[1]),
+															Float.parseFloat(args[2]),
+															Float.parseFloat(args[3]),
+															Float.parseFloat(args[4]));
+							break;
+						}
+						break;
+						
+					/* Game interaction */
+					
 					case "INVADD": //INVADD (ITEMID) [NUM] [MSG] #Add 1 or NUM item(s) to the player and display it (optional)(pause)
 						int itemcount1 = 0;
 						int itemid1 = Integer.parseInt(args[0]);
@@ -300,30 +346,6 @@ public class EventComputer implements GameEventListener {
 					case "MVRPLAYER": //MVRPLAYER (PLAYERDX) (PLAYERDY) #Move player relativelyin current map
 						game.getPlayer().setPosition(Integer.parseInt(x+args[0]),Integer.parseInt(y+args[1]));
 						break;
-					case "FILTER": //FILTER (R) (G) (B) (A) {TIME} / OFF {TIME} # Apply filter to game (values in range 0 to 1) default time 1 second
-						switch(args.length){
-						case 1: //FILTER OFF
-							this.game.getHud().clearColorFilter(Hud.DEFAULT_FADE_TIME);
-							break;
-						case 2: //FILTER OFF (TIME)
-							this.game.getHud().clearColorFilter(Float.parseFloat(args[1]));
-							break;
-						case 4: //FILTER (R) (G) (B) (A)
-							this.game.getHud().setColorFilter(Float.parseFloat(args[0]),
-															Float.parseFloat(args[1]),
-															Float.parseFloat(args[2]),
-															Float.parseFloat(args[3]),
-															Hud.DEFAULT_FADE_TIME);
-							break;
-						case 5: //FILTER (R) (G) (B) (A) (TIME)
-							this.game.getHud().setColorFilter(Float.parseFloat(args[0]),
-															Float.parseFloat(args[1]),
-															Float.parseFloat(args[2]),
-															Float.parseFloat(args[3]),
-															Float.parseFloat(args[4]));
-							break;
-						}
-						break;
 					case "STOP": // STOP {ON/OFF} #Prevent player from moving
 						switch(args.length){
 						case 0:
@@ -372,6 +394,9 @@ public class EventComputer implements GameEventListener {
 				if(spl1.length>1)
 					args = getArgs(spl1[1], true);
 				switch(cmd){
+
+				/* Logical */
+				
 				case "TRIGGER":  //TRIGGER (TRIGNAME) [ON/OFF] #Create/edit trigger
 					testArgs(i,action,errors,args, new String[][]{{TRIGGER},{TRIGGER,"ON/OFF"}});
 					break;
@@ -414,6 +439,12 @@ public class EventComputer implements GameEventListener {
 				case "INVVAR": //INVVAR (ITEMID) (VARNAME) #Get the quantity of an item in the player inventory and put it in a var
 					testArgs(i,action,errors,args, new String[][]{{ID,VARIABLE}});
 					break;
+				case "RANDOM": //RANDOM (VARNAME) (MINVALUE) (MAXVALUE) #Generate integer random number between min and max and put it in a var
+					testArgs(i,action,errors,args, new String[][]{{VARIABLE,INTVALUE,INTVALUE}});
+					break;
+					
+				/* Visual effects */	
+					
 				case "SAY": //SAY (TEXT) [IMAGEID] #Show text (pause game)
 					testArgs(i,action,errors,args, new String[][]{{TEXT},{TEXT,ID}});
 					break;
@@ -431,17 +462,27 @@ public class EventComputer implements GameEventListener {
 				case "SHAKE": //SHAKE (ON/OFF) [TIME] #Toggle shake screen for a time or until off
 					testArgs(i,action,errors,args, new String[][]{{"ON/OFF"},{"ON/OFF",VALUE}});
 					break;
+				case "FILTER": //FILTER (R) (G) (B) (A) {TIME} / OFF # Apply filter to game (rgba values in range 0 to 1)
+					testArgs(i,action,errors,args, new String[][]{
+						{"OFF"},
+						{"OFF",VALUE},
+						{FLOATVALUE,FLOATVALUE,FLOATVALUE,FLOATVALUE},
+						{FLOATVALUE,FLOATVALUE,FLOATVALUE,FLOATVALUE,VALUE}});
+					break;
+					
+				/* Game interaction */
+					
 				case "INVADD": //INVADD (ITEMID) [NUM] [MSG] #Add 1 or NUM item(s) to the player and display it (optional)(pause)
-					testArgs(i,action,errors,args, new String[][]{{ID},{ID,VALUE},{ID,VALUE,TEXT}});
+					testArgs(i,action,errors,args, new String[][]{{ID},{ID,INTVALUE},{ID,VALUE,TEXT}});
 					break;
 				case "INVDEL": //INVDEL (ITEMID) [NUM] [MSG] #Remove all or NUM item(s) to the player and display it (optional)(pause)
-					testArgs(i,action,errors,args, new String[][]{{ID},{ID,VALUE},{ID,VALUE,TEXT}});
+					testArgs(i,action,errors,args, new String[][]{{ID},{ID,INTVALUE},{ID,VALUE,TEXT}});
 					break;
 				case "MAP": //MAP (X) (Y) (LAYER) [TILESET] [ID] #Edit one map's tile
-					testArgs(i,action,errors,args, new String[][]{{VALUE,VALUE,VALUE},{VALUE,VALUE,VALUE,TEXT,ID}});
+					testArgs(i,action,errors,args, new String[][]{{INTVALUE,INTVALUE,INTVALUE},{INTVALUE,INTVALUE,INTVALUE,TEXT,ID}});
 					break;
 				case "MAPR": //MAP (DX) (DY) (LAYER) [TILESET] [ID]  #Edit one map's tile relatively to event's source
-					testArgs(i,action,errors,args, new String[][]{{VALUE,VALUE,VALUE},{VALUE,VALUE,VALUE,TEXT,ID}});
+					testArgs(i,action,errors,args, new String[][]{{INTVALUE,INTVALUE,INTVALUE},{INTVALUE,INTVALUE,INTVALUE,TEXT,ID}});
 					break;
 				case "PLAYERTILESET": //PLAYERTILESET (TILESET) #Change Player tileset
 					testArgs(i,action,errors,args, new String[][]{{TEXT}});
@@ -453,16 +494,13 @@ public class EventComputer implements GameEventListener {
 					testArgs(i,action,errors,args, new String[][]{{ID,TEXT}});
 					break;
 				case "CHGMAP": //CHGMAP (MAPNAME) [PLAYERX] [PLAYERY]
-					testArgs(i,action,errors,args, new String[][]{{TEXT},{TEXT,VALUE,VALUE}});
+					testArgs(i,action,errors,args, new String[][]{{TEXT},{TEXT,INTVALUE,INTVALUE}});
 					break;
 				case "MVPLAYER": //MVPLAYER (PLAYERX) (PLAYERY) #Move player in current map
-					testArgs(i,action,errors,args, new String[][]{{VALUE,VALUE}});
+					testArgs(i,action,errors,args, new String[][]{{INTVALUE,INTVALUE}});
 					break;
 				case "MVRPLAYER": //MVRPLAYER (PLAYERDX) (PLAYERDY) #Move player relatively in current map
-					testArgs(i,action,errors,args, new String[][]{{VALUE,VALUE}});
-					break;
-				case "FILTER": //FILTER (R) (G) (B) (A) {TIME} / OFF # Apply filter to game (values in range 0 to 1)
-					testArgs(i,action,errors,args, new String[][]{{"OFF"},{"OFF",VALUE},{VALUE,VALUE,VALUE,VALUE},{VALUE,VALUE,VALUE,VALUE,VALUE}});
+					testArgs(i,action,errors,args, new String[][]{{INTVALUE,INTVALUE}});
 					break;
 				case "STOP": // STOP {ON/OFF} #Prevent player from moving
 					testArgs(i,action,errors,args, new String[][]{{},{"ON/OFF"}});
@@ -473,6 +511,7 @@ public class EventComputer implements GameEventListener {
 				case "PAUSE": // PAUSE (TIME) #Pause game (wait + prevent player from moving)
 					testArgs(i,action,errors,args, new String[][]{{VALUE}});
 					break;
+				
 				default:
 					errors.add("Unknown event action : ["+i+"]"+action);
 					break;
@@ -542,6 +581,19 @@ public class EventComputer implements GameEventListener {
 				case VALUE:
 					if(!isValue(args[j2]))
 						errors.add("Argument "+(j2+1)+" must be a VALUE : ["+i+"]"+action);
+					break;
+				case INTVALUE:
+					if(!isInteger(args[j2]))
+						errors.add("Argument "+(j2+1)+" must be an INTEGER VALUE : ["+i+"]"+action);
+					break;
+				case FLOATVALUE:
+					if(!isValue(args[j2])){
+						errors.add("Argument "+(j2+1)+" must be a FLOAT VALUE (between 0 and 1) : ["+i+"]"+action);
+					}else{
+						float fvalue = Float.parseFloat(args[j2]);
+						if(fvalue<0 || fvalue>1)
+							errors.add("Argument "+(j2+1)+" must be a FLOAT VALUE (between 0 and 1) : ["+i+"]"+action);
+					}
 					break;
 				case ID:
 					if(!isInteger(args[j2]))

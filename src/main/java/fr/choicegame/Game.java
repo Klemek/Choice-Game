@@ -88,6 +88,10 @@ public class Game implements IGameLogic, KeyEventListener {
 		this.triggers.put(trigname, value);
 	}
 
+	public boolean hasGlobalVariable(String varname) {
+		return this.globvars.containsKey(varname);
+	}
+	
 	public int getGlobalVariable(String varname) {
 		if (this.globvars.containsKey(varname))
 			return this.globvars.get(varname);
@@ -222,7 +226,12 @@ public class Game implements IGameLogic, KeyEventListener {
 						if(hud.hasDialog()){
 							wait_input = false;
 							hud.clearMsg();
-							evComputer.setTempVar(hud.getDialogvar(),hud.getDialogchoice());
+							
+							if(globvars.containsKey(hud.getDialogvar())){
+								globvars.put(hud.getDialogvar(), hud.getDialogchoice());
+							}else{
+								evComputer.setTempVar(hud.getDialogvar(),hud.getDialogchoice());
+							}
 							evComputer.resume();
 						}else{
 							hud.clearMenu();
