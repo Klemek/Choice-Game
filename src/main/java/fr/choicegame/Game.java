@@ -244,7 +244,6 @@ public class Game implements IGameLogic, KeyEventListener {
 					}
 				}else if(key == GLFW_KEY_E || key == GLFW_KEY_SPACE || key == GLFW_KEY_ENTER){
 					wait_input = false;
-					System.out.println("wait_input:"+wait_input);
 					hud.clearMsg();
 					evComputer.resume();
 				}

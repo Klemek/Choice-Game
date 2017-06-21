@@ -18,7 +18,7 @@ if (!project.hasProperty("opsystem")) {
 	}
 }
 
-project.ext.projectVersion = "dev-1-0"
+project.ext.projectVersion = "beta-1-0"
 mainClassName = "fr.choicegame.Splash"
 
 project.ext.lwjglNatives = "natives-${opsystem}"

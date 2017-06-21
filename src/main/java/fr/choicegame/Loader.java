@@ -37,8 +37,7 @@ import fr.choicegame.lwjglengine.graph.Texture;
 
 public class Loader {
 
-	private static final ArrayList<String> IMAGE_EXT = new ArrayList<>(
-			Arrays.asList(new String[] { "png"}));
+	private static final ArrayList<String> IMAGE_EXT = new ArrayList<>(Arrays.asList(new String[] { "png" }));
 	private static final ArrayList<String> TEXT_EXT = new ArrayList<>(
 			Arrays.asList(new String[] { "txt", "xml", "tmx", "cfg" }));
 
@@ -57,7 +56,8 @@ public class Loader {
 	public boolean load() {
 
 		try {
-			jarFile = new File(java.net.URLDecoder.decode(getClass().getProtectionDomain().getCodeSource().getLocation().getPath(), "UTF-8"));
+			jarFile = new File(java.net.URLDecoder
+					.decode(getClass().getProtectionDomain().getCodeSource().getLocation().getPath(), "UTF-8"));
 		} catch (UnsupportedEncodingException e1) {
 			return false;
 		}
@@ -73,7 +73,8 @@ public class Loader {
 		this.loadFile(Config.CONFIG_FILE);
 		Config.loadValues(getTextResource(Config.CONFIG_FILE));
 
-		String[] folders = { "/", "/" + Config.getValue(Config.MAPS_FOLDER), "/" + Config.getValue(Config.TILESETS_FOLDER) };
+		String[] folders = { "/", "/" + Config.getValue(Config.MAPS_FOLDER),
+				"/" + Config.getValue(Config.TILESETS_FOLDER) };
 
 		for (String folderPath : folders) {
 			try {
@@ -84,41 +85,41 @@ public class Loader {
 			}
 		}
 
-		//register font
+		// register font
 		GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-		
-		if(Config.getValue(Config.FONT_FILE) != null){
-			
-	    	try {
-				ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, this.getClass().getResourceAsStream("/fonts/"+Config.getValue(Config.FONT_FILE))));
-				System.out.println("Font file '"+Config.getValue(Config.FONT_FILE)+"' loaded");
-				
-	    	} catch (FontFormatException e) {
-				System.out.println("Font file '"+Config.getValue(Config.FONT_FILE)+"' in wrong format");
+
+		if (Config.getValue(Config.FONT_FILE) != null) {
+
+			try {
+				ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, this.getClass().getResourceAsStream(
+						"/" + Config.getValue(Config.FONTS_FOLDER) + "/" + Config.getValue(Config.FONT_FILE))));
+				System.out.println("Font file '" + Config.getValue(Config.FONT_FILE) + "' loaded");
+
+			} catch (FontFormatException e) {
+				System.out.println("#Font file '" + Config.getValue(Config.FONT_FILE) + "' in wrong format");
 			} catch (IOException e) {
-				System.out.println("Font file '"+Config.getValue(Config.FONT_FILE)+"' not found");
+				System.out.println("#Font file '" + Config.getValue(Config.FONT_FILE) + "' not found");
 			}
 		}
-		
-		//check font
+
+		// check font
 		boolean found = false;
 		String fontName = Config.getValue(Config.FONT_NAME);
-		for(String font:ge.getAvailableFontFamilyNames()){
-			if(font.equals(fontName)){
+		for (String font : ge.getAvailableFontFamilyNames()) {
+			if (font.equals(fontName)) {
 				found = true;
 				break;
 			}
 		}
-		
-		if(found){
-			System.out.println("Font '"+fontName+"' found on the Local Graphics Environment");
+
+		if (found) {
+			System.out.println("Font '" + fontName + "' found on the Local Graphics Environment");
 			return true;
-		}
-		else{
-			System.out.println("Font '"+fontName+"' not found on the Local Graphics Environment");
+		} else {
+			System.out.println("#Font '" + fontName + "' not found on the Local Graphics Environment");
 			return false;
 		}
-		
+
 	}
 
 	private void loadFolder(String folderPath) throws IOException {
@@ -128,12 +129,16 @@ public class Loader {
 			// give all entries in jar
 			final Enumeration<JarEntry> entries = jar.entries();
 			while (entries.hasMoreElements()) {
-				String name = entries.nextElement().getName();
-				// filter according to the path
-				if (name.startsWith(folderPath.substring(1) + "/")) {
-					loadFile("/" + name);
-				}else if(folderPath.equals("/") && !name.contains("/")){
-					loadFile("/" + name);
+				try{
+					String name = entries.nextElement().getName();
+					// filter according to the path
+					if (name.startsWith(folderPath.substring(1) + "/")) {
+						loadFile("/" + name);
+					} else if (folderPath.equals("/") && !name.contains("/")) {
+						loadFile("/" + name);
+					}
+				}catch(IllegalArgumentException e){
+					System.out.println("#Error reading folder : "+folderPath);
 				}
 			}
 			jar.close();
@@ -143,12 +148,12 @@ public class Loader {
 				try {
 					final File apps = new File(url.toURI());
 					for (File app : apps.listFiles()) {
-						loadFile(folderPath + (folderPath.equals("/")?"":"/") + app.getName());
+						loadFile(folderPath + (folderPath.equals("/") ? "" : "/") + app.getName());
 					}
 				} catch (URISyntaxException ignored) {
-					
-				} catch (IllegalArgumentException e){
-					System.out.println("Could not load '"+folderPath+"'");
+
+				} catch (IllegalArgumentException e) {
+					System.out.println("#Could not load '" + folderPath + "'");
 				}
 			}
 		}
@@ -177,7 +182,7 @@ public class Loader {
 				System.out.println("Image File '" + path + "' loaded");
 			} catch (IOException e) {
 				e.printStackTrace();
-				System.out.println("Error on reading '" + path + "': " + e.getMessage());
+				System.out.println("#Error on reading '" + path + "': " + e.getMessage());
 			}
 		}
 		return textures;
@@ -191,7 +196,7 @@ public class Loader {
 				System.out.println("Image File '" + path + "' loaded");
 			} catch (IOException e) {
 				e.printStackTrace();
-				System.out.println("Error on reading '" + path + "': " + e.getMessage());
+				System.out.println("#Error on reading '" + path + "': " + e.getMessage());
 			}
 		}
 		return images;
@@ -217,7 +222,7 @@ public class Loader {
 			System.out.println("File '" + pathToSource + "' not found");
 			return null;
 		} catch (IOException exception) {
-			System.out.println("Error on reading '" + pathToSource + "': " + exception.getMessage());
+			System.out.println("#Error on reading '" + pathToSource + "': " + exception.getMessage());
 			return null;
 		} finally {
 			try {
@@ -232,7 +237,7 @@ public class Loader {
 	public HashMap<String, String> getTextResources() {
 		return this.textResources;
 	}
-	
+
 	public ArrayList<String> getTextResourcesNames() {
 		ArrayList<String> out = new ArrayList<>();
 		out.addAll(this.textResources.keySet());
@@ -261,139 +266,160 @@ public class Loader {
 				if (root.getNodeName().equals("map")) {
 					int width = Integer.parseInt(getAttribute(root, "width", "0"));
 					int height = Integer.parseInt(getAttribute(root, "height", "0"));
-					HashMap<String, Integer[][]> layers = new HashMap<>();
-					HashMap<Integer, String> tilesets = new HashMap<>();
-					HashMap<String, Integer> tilesetsAll = new HashMap<>();
-					HashMap<Integer, Event> events = new HashMap<>();
-					HashMap<Integer, String> npcs = new HashMap<>();
-					HashMap<Integer, TileType> types = new HashMap<>();
 
-					for (int i1 = 0; i1 < root.getChildNodes().getLength(); i1++) {
-						Node child1 = root.getChildNodes().item(i1);
-						switch (child1.getNodeName()) {
-						case "layer":
-							String layername = getAttribute(child1, "name", "unknown");
-							Node data = getChildNode(child1, "data");
-							if (data != null) {
-								String[] slayer = data.getTextContent().replace("\n", "").trim().split(",");
-								Integer[][] layer = new Integer[width][height];
-								for (int x = 0; x < width; x++) {
-									for (int y = 0; y < height; y++) {
-										layer[x][y] = Integer.parseInt(slayer[y * width + x]);
-									}
-								}
-								layers.put(layername, layer);
-							}
-							break;
-						case "tileset":
-							int firstid = Integer.parseInt(getAttribute(child1, "firstgid", "0"));
-							int tilecount = Integer.parseInt(getAttribute(child1, "tilecount", "0"));
-							String tilesetName = getAttribute(child1, "name", "unknown");
-							if (tilesetName.equals(Config.getValue(Config.INFO_TILESET))) {
-								for (int i2 = 0; i2 < child1.getChildNodes().getLength(); i2++) {
-									Node child2 = child1.getChildNodes().item(i2);
-									if (child2.getNodeName().equals("tile")) {
-										int tileId = Integer.parseInt(getAttribute(child2, "id", "0"));
-										HashMap<String, String> props = getTileProperties(child2);
-										if (props.containsKey(Config.getValue(Config.EVENT_PROPERTY))) {
-											String ev = props.get(Config.getValue(Config.EVENT_PROPERTY));
-											
-											ArrayList<String> errors = EventComputer.testEvent(ev);
-											if(errors.size()>0){
-												System.out.println(errors.size()+" errors with event "+tileId+" : ");
-												for(String error:errors){
-													System.out.println(error);
-												}
-											}else{
-												events.put(firstid + tileId, new Event(ev));
-											}
-										} else if (props.containsKey(Config.getValue(Config.NPC_PROPERTY))) {
-											npcs.put(firstid + tileId, props.get(Config.getValue(Config.NPC_PROPERTY)));
-										}
-									}
-								}
-							} else if (tilesetName.equals(Config.getValue(Config.TYPE_TILESET))) {
-								for (int i2 = 0; i2 < child1.getChildNodes().getLength(); i2++) {
-									Node child2 = child1.getChildNodes().item(i2);
-									if (child2.getNodeName().equals("tile")) {
-										int tileId = Integer.parseInt(getAttribute(child2, "id", "0"));
-										HashMap<String, String> props = getTileProperties(child2);
-										if (props.containsKey(Config.getValue(Config.TYPE_PROPERTY))) {
-											switch (props.get(Config.getValue(Config.TYPE_PROPERTY))) {
-											case "1":
-												types.put(firstid + tileId, TileType.FLAT);
-												break;
-											case "2":
-												types.put(firstid + tileId, TileType.SOLID);
-												break;
-											}
-										}
-									}
-								}
-							} else {
-								tilesetsAll.put(tilesetName, firstid);
-								for (int j = firstid; j < firstid + tilecount; j++) {
-									tilesets.put(j, tilesetName);
-								}
-							}
-							break;
-						}
-					}
+					String orientation = getAttribute(root, "orientation", "");
+					String renderorder = getAttribute(root, "renderorder", "");
 
-					String bg1_key = Config.getValue(Config.BACKGROUND_1_LAYER);
-					String bg2_key = Config.getValue(Config.BACKGROUND_2_LAYER);
-					String fg1_key = Config.getValue(Config.FOREGROUND_1_LAYER);
-					String fg2_key = Config.getValue(Config.FOREGROUND_2_LAYER);
-					String info_key = Config.getValue(Config.INFO_LAYER);
-					String type_key = Config.getValue(Config.TYPE_LAYER);
-
-					if (layers.containsKey(bg1_key) && layers.containsKey(bg2_key) && layers.containsKey(fg1_key)
-							&& layers.containsKey(fg2_key) && layers.containsKey(info_key)
-							&& layers.containsKey(type_key)) {
-						map = new Map(width, height);
-						for (int x = 0; x < width; x++) {
-							for (int y = 0; y < height; y++) {
-								TileImage[] images = new TileImage[4];
-								TileType ttype = TileType.VOID;
-								Event event = null;
-								int bg1 = layers.get(bg1_key)[x][y];
-								int bg2 = layers.get(bg2_key)[x][y];
-								int fg1 = layers.get(fg1_key)[x][y];
-								int fg2 = layers.get(fg2_key)[x][y];
-								int info = layers.get(info_key)[x][y];
-								int type = layers.get(type_key)[x][y];
-
-								if (bg1 != 0 && tilesets.containsKey(bg1)) {
-									String tileset = tilesets.get(bg1);
-									images[0] = new TileImage(bg1 - tilesetsAll.get(tileset), tileset);
-								}
-								if (bg2 != 0 && tilesets.containsKey(bg2)) {
-									String tileset = tilesets.get(bg2);
-									images[1] = new TileImage(bg2 - tilesetsAll.get(tileset), tileset);
-								}
-								if (fg1 != 0 && tilesets.containsKey(fg1)) {
-									String tileset = tilesets.get(fg1);
-									images[2] = new TileImage(fg1 - tilesetsAll.get(tileset), tileset);
-								}
-								if (fg2 != 0 && tilesets.containsKey(fg2)) {
-									String tileset = tilesets.get(fg2);
-									images[3] = new TileImage(fg2 - tilesetsAll.get(tileset), tileset);
-								}
-								if (info != 0) {
-									if (npcs.containsKey(info)) {
-										// TODO create NPC
-									}
-									if(events.containsKey(info)){
-										event = events.get(info);
-									}
-								}
-								if (type != 0 && types.containsKey(type))
-									ttype = types.get(type);
-								map.setTile(x, y, new Tile(ttype, images, event));
-							}
-						}
+					if (!orientation.equals("orthogonal")) {
+						System.out.println("#Invalid map : " + mapName + " orientation is not orthogonal");
+					} else if (!renderorder.equals("right-down")) {
+						System.out.println("#Invalid map : " + mapName + " renderorder is not right-down");
 					} else {
-						System.out.println("[LOADER]Invalid map:" + mapName);
+						HashMap<String, Integer[][]> layers = new HashMap<>();
+						HashMap<Integer, String> tilesets = new HashMap<>();
+						HashMap<String, Integer> tilesetsAll = new HashMap<>();
+						HashMap<Integer, Event> events = new HashMap<>();
+						HashMap<Integer, String> npcs = new HashMap<>();
+						HashMap<Integer, TileType> types = new HashMap<>();
+
+						for (int i1 = 0; i1 < root.getChildNodes().getLength(); i1++) {
+							Node child1 = root.getChildNodes().item(i1);
+							switch (child1.getNodeName()) {
+							case "layer":
+								String layername = getAttribute(child1, "name", "unknown");
+								Node data = getChildNode(child1, "data");
+								if (data == null) {
+									System.out.println("#Invalid layer : " + layername + " no data");
+								} else {
+
+									String encoding = getAttribute(data, "encoding", "");
+									if (!encoding.equals("csv")) {
+										System.out.println("#Invalid layer : " + layername + " encoding is not CSV");
+									} else {
+										String[] slayer = data.getTextContent().replace("\n", "").trim().split(",");
+										Integer[][] layer = new Integer[width][height];
+										for (int x = 0; x < width; x++) {
+											for (int y = 0; y < height; y++) {
+												layer[x][y] = Integer.parseInt(slayer[y * width + x]);
+											}
+										}
+										layers.put(layername, layer);
+									}
+								}
+								break;
+							case "tileset":
+								int firstid = Integer.parseInt(getAttribute(child1, "firstgid", "0"));
+								int tilecount = Integer.parseInt(getAttribute(child1, "tilecount", "0"));
+								String tilesetName = getAttribute(child1, "name", "unknown");
+								if (tilesetName.equals(Config.getValue(Config.INFO_TILESET))) {
+									for (int i2 = 0; i2 < child1.getChildNodes().getLength(); i2++) {
+										Node child2 = child1.getChildNodes().item(i2);
+										if (child2.getNodeName().equals("tile")) {
+											int tileId = Integer.parseInt(getAttribute(child2, "id", "0"));
+											HashMap<String, String> props = getTileProperties(child2);
+											if (props.containsKey(Config.getValue(Config.EVENT_PROPERTY))) {
+												String ev = props.get(Config.getValue(Config.EVENT_PROPERTY));
+
+												ArrayList<String> errors = EventComputer.testEvent(ev);
+												if (errors.size() > 0) {
+													System.out.println("#" + errors.size() + " errors with event "
+															+ tileId + " : ");
+													for (String error : errors) {
+														System.out.println(error);
+													}
+												} else {
+													events.put(firstid + tileId, new Event(ev));
+												}
+											} else if (props.containsKey(Config.getValue(Config.NPC_PROPERTY))) {
+												npcs.put(firstid + tileId,
+														props.get(Config.getValue(Config.NPC_PROPERTY)));
+											}
+										}
+									}
+								} else if (tilesetName.equals(Config.getValue(Config.TYPE_TILESET))) {
+									for (int i2 = 0; i2 < child1.getChildNodes().getLength(); i2++) {
+										Node child2 = child1.getChildNodes().item(i2);
+										if (child2.getNodeName().equals("tile")) {
+											int tileId = Integer.parseInt(getAttribute(child2, "id", "0"));
+											HashMap<String, String> props = getTileProperties(child2);
+											if (props.containsKey(Config.getValue(Config.TYPE_PROPERTY))) {
+												switch (props.get(Config.getValue(Config.TYPE_PROPERTY))) {
+												case "1":
+													types.put(firstid + tileId, TileType.FLAT);
+													break;
+												case "2":
+													types.put(firstid + tileId, TileType.SOLID);
+													break;
+												}
+											}
+										}
+									}
+								} else {
+									tilesetsAll.put(tilesetName, firstid);
+									for (int j = firstid; j < firstid + tilecount; j++) {
+										tilesets.put(j, tilesetName);
+									}
+								}
+								break;
+							}
+						}
+
+						String bg1_key = Config.getValue(Config.BACKGROUND_1_LAYER);
+						String bg2_key = Config.getValue(Config.BACKGROUND_2_LAYER);
+						String fg1_key = Config.getValue(Config.FOREGROUND_1_LAYER);
+						String fg2_key = Config.getValue(Config.FOREGROUND_2_LAYER);
+						String info_key = Config.getValue(Config.INFO_LAYER);
+						String type_key = Config.getValue(Config.TYPE_LAYER);
+
+						if (layers.containsKey(bg1_key) && layers.containsKey(bg2_key) && layers.containsKey(fg1_key)
+								&& layers.containsKey(fg2_key) && layers.containsKey(info_key)
+								&& layers.containsKey(type_key)) {
+							map = new Map(width, height);
+							for (int x = 0; x < width; x++) {
+								for (int y = 0; y < height; y++) {
+									TileImage[] images = new TileImage[4];
+									TileType ttype = TileType.VOID;
+									Event event = null;
+									int bg1 = layers.get(bg1_key)[x][y];
+									int bg2 = layers.get(bg2_key)[x][y];
+									int fg1 = layers.get(fg1_key)[x][y];
+									int fg2 = layers.get(fg2_key)[x][y];
+									int info = layers.get(info_key)[x][y];
+									int type = layers.get(type_key)[x][y];
+
+									if (bg1 != 0 && tilesets.containsKey(bg1)) {
+										String tileset = tilesets.get(bg1);
+										images[0] = new TileImage(bg1 - tilesetsAll.get(tileset), tileset);
+									}
+									if (bg2 != 0 && tilesets.containsKey(bg2)) {
+										String tileset = tilesets.get(bg2);
+										images[1] = new TileImage(bg2 - tilesetsAll.get(tileset), tileset);
+									}
+									if (fg1 != 0 && tilesets.containsKey(fg1)) {
+										String tileset = tilesets.get(fg1);
+										images[2] = new TileImage(fg1 - tilesetsAll.get(tileset), tileset);
+									}
+									if (fg2 != 0 && tilesets.containsKey(fg2)) {
+										String tileset = tilesets.get(fg2);
+										images[3] = new TileImage(fg2 - tilesetsAll.get(tileset), tileset);
+									}
+									if (info != 0) {
+										if (npcs.containsKey(info)) {
+											// TODO create NPC
+										}
+										if (events.containsKey(info)) {
+											event = events.get(info);
+										}
+									}
+									if (type != 0 && types.containsKey(type))
+										ttype = types.get(type);
+									map.setTile(x, y, new Tile(ttype, images, event));
+								}
+							}
+						} else {
+							System.out.println("#Invalid map : " + mapName + " non existing layer");
+						}
+
 					}
 
 				}
@@ -462,7 +488,7 @@ public class Loader {
 	public static String getExtension(String filePath) {
 		return filePath.substring(filePath.lastIndexOf(".") + 1);
 	}
-	
+
 	public static String getFileName(String filePath) {
 		return new File(filePath).getName().split("\\.")[0];
 	}

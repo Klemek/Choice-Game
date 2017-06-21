@@ -55,11 +55,11 @@ public class Hud implements IHud {
 		this.colorFilter = GameItem.simpleQuad(new Material(new Vector4f(0,0,0,1)),2000f);
 		this.colorFilter.setVisible(false);
 		
-		this.dialogBg = new DialogItem(textures.get("/dialog.png"),20,6);
+		this.dialogBg = new DialogItem(textures.get("/"+Config.getValue(Config.TILESETS_FOLDER)+"/"+Config.getValue(Config.DIALOG_TILESET)+".png"),20,6);
 		this.dialogBg.setScale(2f);
 		this.dialogBg.setVisible(false);
 		
-		this.menuBg = new DialogItem(textures.get("/dialog.png"),6,5);
+		this.menuBg = new DialogItem(textures.get("/"+Config.getValue(Config.TILESETS_FOLDER)+"/"+Config.getValue(Config.DIALOG_TILESET)+".png"),6,5);
 		this.menuBg.setScale(2f);
 		this.menuBg.setVisible(false);
 		
@@ -174,7 +174,7 @@ public class Hud implements IHud {
 	public void updateSize(Window window) {
 		windowWidth = window.getWidth();
 		windowHeight = window.getHeight();
-		System.out.println("Window size is : "+windowWidth+"x"+windowHeight+"px");
+		System.out.println("Window size is now : "+windowWidth+"x"+windowHeight+"px");
 		updatePos();
 	}
 

@@ -10,3 +10,6 @@ Choice-game is a customizable game-engine where you can play the story you want.
 * [Events](Events.md#events)
 * [The Configuration File](Config.md#the-configuration-file)
 * [Build the Game](Build.md#build-the-game)
+
+## Troubleshooting
+You can see the troubleshooting [here](Build.md#4.-troubleshooting)

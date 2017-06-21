@@ -22,6 +22,9 @@ public class Config {
 	public static final String TILE_SIZE = "tile_size";
 	private static final int TILE_SIZE_DEFAULT = 32;
 	
+	public static final String FONTS_FOLDER = "fonts_folder";
+	private static final String FONTS_FOLDER_DEFAULT = "fonts";
+	
 	public static final String ITEMS_TILESET = "items_tileset";
 	private static final String ITEMS_TILESET_DEFAULT = null;
 	
@@ -36,6 +39,9 @@ public class Config {
 	
 	public static final String FONT_NAME = "font_name";
 	private static final String FONT_NAME_DEFAULT = "Consolas";
+	
+	public static final String DIALOG_TILESET = "dialog_tileset";
+	private static final String DIALOG_TILESET_DEFAULT = null;
 	
 	//Character
 	
@@ -99,8 +105,10 @@ public class Config {
 		defaultValues.putAll(defaultValues);
 		defaultValues.put(TILESETS_FOLDER, TILESETS_FOLDER_DEFAULT);
 		defaultValues.put(MAPS_FOLDER, MAPS_FOLDER_DEFAULT);
+		defaultValues.put(FONTS_FOLDER, FONTS_FOLDER_DEFAULT);
 		defaultValues.put(ITEMS_TILESET, ITEMS_TILESET_DEFAULT);
 		defaultValues.put(PLAYER_TILESET, PLAYER_TILESET_DEFAULT);
+		defaultValues.put(DIALOG_TILESET, DIALOG_TILESET_DEFAULT);
 		defaultValues.put(TILE_SIZE, ""+TILE_SIZE_DEFAULT);
 		defaultValues.put(START_MAP, START_MAP_DEFAULT);
 		defaultValues.put(FONT_FILE, FONT_FILE_DEFAULT);
@@ -137,7 +145,7 @@ public class Config {
 				}
 			}
 		}else{
-			System.out.println("No config file found");
+			System.out.println("#No config file found");
 		}
 	}
 	

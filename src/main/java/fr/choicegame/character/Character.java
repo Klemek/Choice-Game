@@ -81,18 +81,18 @@ public abstract class Character {
 			face = 1;
 			break;
 		case NORTH:
-			face = 2;
+			face = 3;
 			break;
 		case EAST:
-			face = 3;
+			face = 2;
 			break;
 		default:
 			break;
 		}
-		if (!walking || (face % 2 == 1 && i % 2 == 1))
+		if (!walking)
 			return new TileImage(face * 3 + 1, tileset);
 		else
-			return new TileImage(face * 3 + (face % 2 == 1 ? i % 4 : 2 * (i % 2)), tileset);
+			return new TileImage(face * 3 + (i%2==1?1:i % 4), tileset);
 	}
 
 	protected abstract void updateChar(Map m);

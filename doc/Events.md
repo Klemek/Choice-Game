@@ -5,7 +5,7 @@
 Events are the main part of the game edition. This is where you will set your story through every interactions your player can make. They should be in the properties of the info tiles in your [map creation](Map_creation.md#map-creation).
 
 ## Format:
-EVENT (PARAM) {OPTIONAL PARAM}
+	EVENT (PARAM) {OPTIONAL PARAM}
 
 ## List :
 ### Logical :
@@ -26,7 +26,7 @@ EVENT (PARAM) {OPTIONAL PARAM}
 * SAY (TEXT) {IMAGEID} #Show text (pause game)
 * DIALOG (TEXT) (VARNAME) (OPTION1) (OPTION2) ... #Show a choice and return result on a viariable
 * SHAKE (ON/OFF) {TIME} #Toggle shake screen for a time or until off
-* FILTER (R) (G) (B) (A) {TIME} / OFF {TIME} # Apply filter to game (rgba values in range 0 to 1) default time 1 second
+* FILTER (R) (G) (B) (A) {TIME} / OFF {TIME} # Apply filter to game (rgba values in range 0 to 1) default time 0.5 second
 
 ### Game interaction:
 
@@ -47,40 +47,51 @@ EVENT (PARAM) {OPTIONAL PARAM}
 ## Informations
 
 * When a event like RANDOM, INVVAR or DIALOG set a value in a variable, it will test if a global variable exist before registering it in a temporary variable. So, you can register theses events in a variable like that :
-```
-VARG IMPORTANTCHOICE 0
-DIALOG "What do you want ?" IMPORTANTCHOICE "Pizza" "Icecream"
-```
+
+
+	VARG IMPORTANTCHOICE 0
+	DIALOG "What do you want ?" IMPORTANTCHOICE "Pizza" "Icecream"
+
+
 * Check logs when running the game to see if some commands are wrong, they will not be registered to not corrupt the game.
 
 ## Examples
-### Example 1 (Bed):
-```
-DIALOG "What do you want to do ?" CHOICE1 "Sleep until morning"  "Sleep until night"  "Cancel"
-IF CHOICE1==0
-   SAY "You sleep until morning"
-   TRIGGER DAY ON
-END
-IF CHOICE1==1
-   SAY "You sleep until night"
-   TRIGGER DAY OFF
-END
-```
-### Example 2 (Chest):
-```
-IF NOT CHEST152 #One time event
-   INVVAR 152 KEY152
-   IF KEY152>=1
-      INVDEL 152 1 "You use " #"{Clé de coffre}x1"
-      MAPR 0 0 1 CHEST1 1
-      SAY "You find some food"
-      INVADD 12 1 "You find : " 
-      MAPR 0 0 1 CHEST1 0
-      TRIGGER CHEST152 ON
-   ELSE
-      SAY "You don't have this chest's key."
-   END
-ELSE
-   SAY "You already searched this chest."
-END
-```
+### Example 1 (Change map):
+	IFC  # If the player walks on it
+	   FILTER 0 0 0 1  # Add a black filter
+	   PAUSE 0.5  # Pause everything the time the filter fade in
+	   CHGMAP "othermap" 1 0  # Change map at given coordinates
+	END	
+### Example 2 (Enter the map):
+	MVPLAYER 9 13 # Move the player to right spot
+	FILTER OFF # Remove black filter if any
+	PAUSE 0.5 # Pause everything the time the filter fade out
+### Example 3 (Bed):
+	DIALOG "What do you want to do ?" CHOICE1 "Sleep until morning"  "Sleep until night"  "Cancel"
+	IF CHOICE1==0
+	   SAY "You sleep until morning"
+	   TRIGGER DAY ON
+	END
+	IF CHOICE1==1
+	   SAY "You sleep until night"
+	   TRIGGER DAY OFF
+	END
+### Example 4 (Chest):
+	IF NOT CHEST152 # One time event
+	   INVVAR 152 KEY152
+	   IF KEY152>=1
+	      INVDEL 152 1 "You use " # "{Chest key}x1"
+	      MAPR 0 0 1 CHEST1 1 # Change the tile to set it open
+	      SAY "You find some food"
+	      INVADD 12 1 "You find : " # "{Canned food}x1"
+	      MAPR 0 0 1 CHEST1 0 # Change the tile to set it close
+	      TRIGGER CHEST152 ON
+	   ELSE
+	      SAY "You don't have the key of this chest."
+	   END
+	ELSE
+	   SAY "You already searched this chest."
+	END
+
+	
+[Back to Table of Contents](Documentation.md#table-of-contents)

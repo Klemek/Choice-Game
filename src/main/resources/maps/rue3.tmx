@@ -17,7 +17,7 @@
   <image source="infotileset.png" width="320" height="64"/>
   <tile id="0">
    <properties>
-    <property name="event">FILTER 0 0 0 1
+    <property name="event">FILTER 0 0 0 1 0
 MVPLAYER 16 12
 FILTER OFF</property>
    </properties>
@@ -229,7 +229,7 @@ FILTER OFF</property>
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <layer name="type" width="20" height="20" opacity="0">
+ <layer name="type" width="20" height="20" visible="0" opacity="0.71">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
