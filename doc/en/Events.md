@@ -18,7 +18,7 @@ Events are the main part of the game edition. This is where you will set your st
 * IFC {TRUE/FALSE} ... {ELSE ...} END #Test if collision event (TRUE) or interact (FALSE)
 * ICZ (VARNAME) {VALUE} #Increase var from 1 or value 
 * DCZ (VARNAME) {VALUE} #Decrease var from 1 or value 
-* RANDOM (VARNAME) (MINVALUE) (MAXVALUE) #Generate random number between min and max and put it in a var
+* RANDOM (VARNAME) (MINVALUE) (MAXVALUE) #Generate random number between min and max and put it in a variable
 
 ### Visual effects:
 
@@ -45,7 +45,7 @@ Events are the main part of the game edition. This is where you will set your st
 
 ## Informations
 
-* When a event like RANDOM, INVVAR or DIALOG set a value in a variable, it will test if a global variable exist before registering it in a temporary variable. So, you can register theses events in a variable like that :
+* When a event like RANDOM or DIALOG set a value in a variable, it will test if a global variable exist before registering it in a temporary variable. So, you can register theses events in a variable like that :
 
 
 	VARG IMPORTANTCHOICE 0
@@ -81,13 +81,19 @@ Events are the main part of the game edition. This is where you will set your st
 	   TRIGGER DAY OFF
 	END
 ### Example 4 (Chest):
-	IF NOT CHEST152 # One time event
-	   INVVAR 152 KEY152
-	   IF KEY152>=1
-	      INVDEL 152 1 "You use " # "{Chest key}x1"
+	IFT NOT CHEST152 # One time event
+	   IFT KEY152 # chest's key trigger
 	      MAPR 0 0 1 CHEST1 1 # Change the tile to set it open
-	      SAY "You find some food"
-	      INVADD 12 1 "You find : " # "{Canned food}x1"
+	      RANDOM VAL 1 3 # Generate a random number
+	      IF VAL==1
+		      SAY "You find some food"
+		      IF FOOD==0 # the global variable food might not exist
+		      		VARG FOOD 0 #Create the global variable
+		      END
+		      ICZ FOOD 1 # Augmente la variable globale nourriture
+	      ELSE
+	      		SAY "This chest is empty"
+	      END
 	      MAPR 0 0 1 CHEST1 0 # Change the tile to set it close
 	      TRIGGER CHEST152 ON
 	   ELSE
