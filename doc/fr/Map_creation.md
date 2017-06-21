@@ -1,77 +1,107 @@
 # Map Creation
 ## 1. Requirements
-To create your map you will need [Tiled](http://www.mapeditor.org/) a free map editor wich will generate the good map format for this software.
+Pour créer une carte vous aurez besoin de [Tiled](http://www.mapeditor.org/), un éditeur de carte qui va générer le bon format de carte pour ce logiciel.
 
 ## 2. Create a new map
-In Tiled, create a new map in "File>New>New Map..." In order to have the right map format you need to select these options :
+Dans Tiled, créer une nouvelle carte dans "File>New>New Map...". Pour avoir le bon format de carte, vous devez sélectionner ces options :
 
 ![orientation : orthogonal, format : csv, order : right down](img/new_map.png)
 
-Do not forget to choose the right tile size you will use for your tilesets.
-Save your map as .tmx in your wanted location in a "maps" folder (important)
+N'oubliez pas de choisir la bonne taille de tile que vous utiliserez pour vos tilesets.
+Sauvegardez votre map en .tmx où vous le souhaitez dans un dossier "maps" (important)
 ## 3. Import and configure information tilesets
-You will need 2 default tilesets in order to create your map the right way, each one should have the same tile size and will be registered in the same "maps" folder. These will not be shown in the game and their purpose is to only store the information into the map.
+Vous aurez besoin de 2 tilesets par défaut pour créer votre map, chacun devra avoir la même taille de tile et sera sauvegardé dans le même dossier "maps". Ils ne seront pas affichés dans le jeu, leur but est uniquement de stocker les informations dans la map.
 
-* A 'type' tileset, wich will contains 1 or 2 basic tiles to fill/delimit the player area :
+* Un tileset 'type' qui contiendra 1 ou 2  tiles basiques pour remplir/délimiter la zone du joueur : 
 
 ![A 'type' tileset with 1 or 2 tiles](img/typetileset.png)
 
-* An 'info' tileset wich will contains as many events as you want. It may be practical to see wich is wich by labeling them.
+
+* Un tileset 'info' qui contiendra tous les événements que vous voudrez. On peut les distinguer par un label.
 
 ![An 'info' tileset with several events](img/infotileset.png)
 
-Then you will import them into the map this way, remember what there name are for the future. (You can rename them for simplicity)
+Ensuite, vous allez les importer dans la carte de cette façon (rappelez vous leurs noms pour plus tard, en sachant que vous pouvez les renommer).
 
-![select your source and enable 'Embed in map'](img/new_tileset.png)
-
-Now you will edit the type tile
-
-![](img/config_tileset.png)
-
-For each tile, add a new 'int' property named 'type' (or another name but remember it for later). Give it the value 1 for the first tile and the value 2 for the other if you have one.
-
-![Add a new 'int' property named 'type'](img/add_property.png)
-
-## 4. Import your own tilesets
-Now you can import the same way any tilesets you will need to create your map. You will need to place them first in a "tilesets" folder next to the "maps" folder and in a png format. The name of the tileset itself is not important now.
-
-## 5. Create the default layers
-You will need to have 6 layers :
-
-* 2 informations layers : the 'info' layer for the events and the 'type' layer for the player area.
-* 2 foreground layers : they will be shown over the character.
-* 2 background layers : they will be shown below the character.
-
-Your are free to choose the names of these layers. Beware of the order in the software, because they will be shown in this order in it (not in the game).
-
-![](img/layers.png)
-
-## 6. Place your tiles
-Now that you have everything, you can start to make your map in the foreground and background layers.
-
-![](img/example_map1.png)
-
-## 7. Limit the player area
-You will now delimit the player area, in wich he can walk freely. To do so you will need to use the 'type' tileset and the 'type' layer. The tile with the value of '1' will be walkable and the others (void or tile with the value of '2') will not. The opacity of the layer in Tiled can help you create this.
-
-![](img/example_map2.png)
-
-## 8. Create and place events
-Configure your 'info' tileset to add events. To do so, add a new string property named 'event' (or another name but remember it for later). Write the script of your event using the events (read [Events](Events.md#events) for the list of available commands).
-
-![](img/add_event.png)
-
-You can then place your newly created events into the map in the 'info' layer.
-
-![](img/example_map3.png)
-
-## 9. You are done
-Now you can either create new maps or finish the game by creating the configuration file (read [The Configuration File](Config.md#the-configuration-file)) and building it (read [Build the Game](Build.md#build-the-game)).
+[select your source and enable 'Embed in map'](img/new_tileset.png)
 
 
-## 9. Additionnal information for maps
 
-* Your player will spawn in the [0,0] tile. You should place an event here that will move him to the right spot (this event will be computed before everything at the start of the map)
+Maintenant éditez le tile type
+
+
+[](img/config_tileset.png)
+
+
+ou pour chaque tile, ajouter une nouvelle propriété 'int' nommée 'type' (ou autre chose, mais rappelez vous du nom). Donnez lui la valeur 1 pour la première tile et la valeur 2 pour l'autre (si autre il y a).
+
+
+[Add a new 'int' property named 'type'](img/add_property.png)
+
+
+# 4. Import your own tilesets
+
+ow you can import the same way any tilesets you will need to create your map. You will need to place them first in a "tilesets" folder next to the "maps" folder and in a png format. The name of the tileset itself is not important now.
+Désormais vous pouvez importer de la même façon n'importe quel tileset dont vous auriez besoin pour créer votre map. Vous devrez d'abord les placer dans un fichier "tileset" à côté du dossier "maps" et dans un format png. Le nom du tileset n'est pas important maintenant. 
+
+
+# 5. Create the default layers
+
+
+Vous aurez besoin de 6 couches :
+
+ 2 couches informations : la couche 'info' pour les événements et la couche 'type' pour la zone du joueur.
+
+ 2 couches premier plan : elles seront affichées au dessus du personnage.
+ 
+ 2 couches arrière plan : elles seront affichées en dessous du personnage
+
+
+Vous êtes libre de choisir les noms de ces couches. Faites attention à l'ordre dans le logiciel, puisqu'ils seront affichés dans cet ordre (pas dans le jeu).
+
+
+[](img/layers.png)
+
+
+# 6. Place your tiles
+
+A présent, vous pouvez commencer à créer votre carte dans les couches premier plan et arrière plan.
+
+
+[](img/example_map1.png)
+
+
+# 7. Limit the player area
+
+Vous devez maintenant délimiter la zone du joueur dans laquelle il pourra se déplacer librement. Pour cela il faut utiliser le tileset 'type' et la couche 'type'. Les tiles avec la valeur '1' seront libres alors que les autres (void or 2) bloqueront les déplacements du joueur. L'opacité de la couche dans le logiciel Tiled peut vous aider à créer cela. 
+
+
+[](img/example_map2.png)
+
+
+# 8. Create and place events
+
+onfigure your 'info' tileset to add events. To do so, add a new string property named 'event' (or another name but remember it for later). Write the script of your event using the events (read [Events](Events.md#events) for the list of available commands).
+
+Configurez votre tileset 'info' pour ajouter des événements. Pour cela, ajouter une nouvelle chaine de caractères (string) nommée 'event' (ou un autre nom que vous devrez retenir). Ecrivez le script de votre événement en utilisant les événements (lire [Events](Events.md#events) for the list of available commands).
+
+[](img/add_event.png)
+
+
+Vous pouvez ensuite placer votre événement nouvellement créé dans la carte dans la couche 'info'.
+
+
+[](img/example_map3.png)
+
+
+# 9. You are done
+
+ Vous avez terminé, vous pouvez soit créer d'autres cartes ou finir votre jeu en créant le fichier de configuration (lire [The Configuration File](Config.md#the-configuration-file)) et le compiler (lire [Build the Game](Build.md#build-the-game)).
+
+# 9. Additionnal information for maps
+
+
+Votre personnage apparaitra dans la tile [0,0]. Vous devriez placer un événement ici qui le déplacera au bon endroit (cet événement sera pris en compte avant quoi que ce soit d'autre au lancement de la carte). 
 
 
 [Back to Table of Contents](Documentation.md#table-of-contents)
