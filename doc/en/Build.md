@@ -12,7 +12,7 @@ You should have also some characters tilesets (at least the default for the play
 
 ![character tileset example](img/character_tileset.png)
 
-Respect the orientation of the character, otherwise the player will not look forward when walking. Also the walking animation are one the 1st and 3rd columns.
+Respect the orientation of the character, otherwise the player will not look forward when walking. Also the walking animation are on the 1st and 3rd columns.
 
 There is another file you need : the dialog tileset, it while make the dialogs and messages background. It is composed of 4x3 tiles. The first 3x3 block is the frame and the last up right tile is the cursor.
 
