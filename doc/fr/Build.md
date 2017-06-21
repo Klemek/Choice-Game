@@ -2,7 +2,7 @@
 ## 1. Requirements
 Vous aurez besoin d'un gestionnaire d'archive (Comme WinRAR) et du programme choicegame. (lire [Get Started](Get_started.md#get-started) pour vous renseigner)
 
-Pour chacune des étapes précédente vous devez avoir config.cfg qui met en place les noms de fichiers et certains fichiers
+Pour chacune des étapes précédente vous devez avoir config.cfg qui met en place les noms de dossiers et certains dossiers
 ### The maps folder
 Toutes les cartes que vous avez créée doivent être au format .tmx. Chaque tileset référencé dans chaque carte doit être dans le dossier des tilesets à proximiter de ce dossier.
 ### The tilesets folder
@@ -15,7 +15,9 @@ Respectez l'orientation du personnage, sinon le joueur ne regardera pas face à 
 Vous aurez besoin en plus : le tileset des dialogues, cela créera le fond des dialogues et des messages. Il se compose en tiles de 4x3. La première partie 3x3 est le contour et le dernier tile en haut à droite est le curseur/pointeur.
 
 ![dialog.png example](img/dialog.png)
-## The fonts folder
+### The sounds folder
+Vous devez y avoir tous les sons que vous voulez jouer au **format .ogg**
+### The fonts folder
 Si vous avez votre propre police de caractère vous devez le mettre dans ce fichier. Attention seul les .ttf (TrueTypeFonts) sont valides.
 ## 2. Add the resources
 Ouvrir choicegame.jar en tant qu'archive.

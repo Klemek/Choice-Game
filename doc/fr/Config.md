@@ -1,48 +1,20 @@
 # The Configuration File
 ## Introduction
-Le fichier de configuration s'appelle 'config.cfg'. Il faut écrire à l'intérieur la totalité des spécifications du jeu et les détails des cartes. Voilà un exemple 'config.cfg', chaque propriété est détaillée.
-## Example 'config.cfg'
-	[Resources]
-	tile_size : 32
-	start_map : start
-	player_tileset : character1
-	tilesets_folder : tilesets
-	maps_folder : maps
-	fonts_folder : fonts
-	font_file : Roboto-Black.ttf
-	font_name : Roboto Bk
-	dialog_tileset : dialog
-	
-	[Characters]
-	character_speed = 0.1
-	hitbox_start_x = 0.25
-	hitbox_start_y = 0.7
-	hitbox_size_x = 0.5
-	hitbox_size_y = 0.3
-	
-	[Maps]
-	background_1_layer : bg1
-	background_2_layer : bg2
-	foreground_1_layer : fg1
-	foreground_2_layer : fg2
-	type_layer : type
-	info_layer : info
-	type_tileset : type
-	type_property : type
-	info_tileset : info
-	event_property : event
+Le fichier de configuration s'appelle 'config.cfg'. Il faut écrire à l'intérieur la totalité des spécifications du jeu et les détails des cartes.
+
 
 ## Properties list
-
+Voici la liste des propriétés disponibles à l'édition
 ### Resources
 | Propriété | Info | Valeur par défaut |
 |-|-|-:|
 | tile_size | la taille des tiles dans tous les tilesets | 32 |
 | start_map | le nom du fichier de la première carte |  |
 | player_tileset | le nom du tileset de départ du joueur |  |
-| tilesets_folder | le nom du fichier des tilesets | tilesets |
-| maps_folder | le nom du fichier des cartes | maps |
-| fonts_folder | le nom du fichier des polices| fonts |
+| tilesets_folder | le nom du dossier des tilesets | tilesets |
+| maps_folder | le nom du dossier des sons | maps |
+| sounds_folder | le nom du dossier des sons | sounds |
+| fonts_folder | le nom du dossier des polices| fonts |
 | font_file | le nom du fichier des polices personnalisées |  |
 | font_name | le nom de la police personnalisée dans le système | Consolas |
 | dialog_tileset | le nom du tileset de dialogue |  |
@@ -70,5 +42,38 @@ Le fichier de configuration s'appelle 'config.cfg'. Il faut écrire à l'intéri
 | info_tileset | the name of the info tileset in the maps | info |
 | event_property | tileset le nom de la propriété event dans le tileset info| event |
 
+## Example 'config.cfg'
+Voici un exemple de 'config.cfg'
+
+	[Resources]
+	tile_size : 32
+	start_map : start
+	player_tileset : character1
+	tilesets_folder : tilesets
+	maps_folder : maps
+	fonts_folder : fonts
+	font_file : Roboto-Black.ttf
+	font_name : Roboto Bk
+	dialog_tileset : dialog
+	sounds_folder : sounds
+	
+	[Characters]
+	character_speed = 0.1
+	hitbox_start_x = 0.25
+	hitbox_start_y = 0.7
+	hitbox_size_x = 0.5
+	hitbox_size_y = 0.3
+	
+	[Maps]
+	background_1_layer : bg1
+	background_2_layer : bg2
+	foreground_1_layer : fg1
+	foreground_2_layer : fg2
+	type_layer : type
+	info_layer : info
+	type_tileset : type
+	type_property : type
+	info_tileset : info
+	event_property : event
 
 [Back to Table of Contents](Documentation.md#table-of-contents)
