@@ -23,7 +23,7 @@ Events are the main part of the game edition. This is where you will set your st
 ### Visual effects:
 
 * SAY (TEXT) {IMAGEID} #Show text (pause game)
-* DIALOG (TEXT) (VARNAME) (OPTION1) (OPTION2) ... #Show a choice and return result on a viariable
+* DIALOG (TEXT) (VARNAME) (OPTION1) (OPTION2) ... #Show a choice and return result on a viariable (start at 1)
 * FILTER (R) (G) (B) (A) {TIME} / OFF {TIME} # Apply filter to game (rgba values in range 0 to 1) default time 0.5 second
 
 ### Sound effects :

@@ -24,7 +24,7 @@ Les événements sont les principaux éléments d'édition du jeu. C'est ici que
 ### Visual effects:
 
 * SAY (TEXT) {IMAGEID} #Affiche du texte (met le jeu en pause)
-* DIALOG (TEXT) (VARNAME) (OPTION1) (OPTION2) ... #Affiche un choix et retourne le résultat dans une variable
+* DIALOG (TEXT) (VARNAME) (OPTION1) (OPTION2) ... #Affiche un choix et retourne le résultat dans une variable (commence à 1)
 * FILTER (R) (G) (B) (A) {TIME} / OFF {TIME} #Ajoute un filtre au jeu (valeur rgba entre 0 et 1), durée par défaut 0.5 seconde
 
 
