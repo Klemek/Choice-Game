@@ -1,50 +1,48 @@
 # Build the Game
 ## 1. Requirements
-You will need an archive manager (like WinRAR) and the choicegame soft. (read [Get Started](Get_started.md#get-started) to see how).
+Vous aurez besoin d'un gestionnaire d'archive (Comme WinRAR) et du programme choicegame. (lire [Get Started](Get_started.md#get-started) pour vous renseigner)
 
-From every previous steps you should a config.cfg that set every folders name and some folders
+Pour chacune des étapes précédente vous devez avoir config.cfg qui met en place les noms de fichiers et certains fichiers
 ### The maps folder
-You should have every maps you created in it in a .tmx format. Each tileset referenced in each map should be in the tilesets folder next to this folder.
+Toutes les cartes que vous avez créée doivent être au format .tmx. Chaque tileset référencé dans chaque carte doit être dans le dossier des tilesets à proximiter de ce dossier.
 ### The tilesets folder
-You should have every tilesets you used to create your maps **in png format** other formats will crash the game.
+Vous devez avoir tous les tilesets utilisés pour vos cartes **au format png** tous autres formats provoque l'arrêt du jeu.
 
-You should have also some characters tilesets (at least the default for the player) that will be in this format :
-
+Vous devez également quelques tilesets de personnages (au moins un par défault pour le joueur) qui sera mis à ce format :
 ![character tileset example](img/character_tileset.png)
 
-Respect the orientation of the character, otherwise the player will not look forward when walking. Also the walking animation are one the 1st and 3rd columns.
-
-There is another file you need : the dialog tileset, it while make the dialogs and messages background. It is composed of 4x3 tiles. The first 3x3 block is the frame and the last up right tile is the cursor.
+Respectez l'orientation du personnage, sinon le joueur ne regardera pas face à lui en marchant. De plus l'animation de la marche est sur la première et la troisième colonnes.
+Vous aurez besoin en plus : le tileset des dialogues, cela créera le fond des dialogues et des messages. Il se compose en tiles de 4x3. La première partie 3x3 est le contour et le dernier tile en haut à droite est le curseur/pointeur.
 
 ![dialog.png example](img/dialog.png)
 ## The fonts folder
-If you have a custom font you should put it in this folder. Be aware that only TrueTypeFonts (.ttf) are supported.
+Si vous avez votre propre police de caractère vous devez le mettre dans ce fichier. Attention seul les .ttf (TrueTypeFonts) sont valides.
 ## 2. Add the resources
-Open choicegame.jar as an archive.
+Ouvrir choicegame.jar en tant qu'archive.
 
-You should delete the maps, tilesets, fonts folders and the config file in it.
+Vous devez supprimer les dossiers de cartes, tilesets, polices de caractère et le fichier config contenu dedans.
 
-Then, you can put in the archive your own maps, tilesets, fonts folders and the config file into it.
+Ensuite, vous pouvez mettre dans l'archive vos propres cartes, tilesets, polices de caractère et le fichier config contenu dedans.
 ## 3. Test the resources
-Open a command prompt and go to the folder you have the .jar archive.
+Ouvrez un invité de commande and placé vous dans le dossier contenant l'archive .jar.
 
-Then try to launch it with (replace 'choicegame.jar' with your archive name):
+Puis essayer de le lancer avec (rempalcer 'choicegame.jar' par le nom de l'archive):
 	
 	java -jar choicegame.jar
 
-If all is in place, the game should launch normally and you see the start map and the character. Otherwise you can see the error in the logs. They should be indicated with a '#'.
+Si tout est correct, le jeu doit normalement se démarrer avec la carte de départ et le personnage. Dans le cas contraire une erreur va s'afficher dans l'invité de commande. Elles seront indiquées par un '#'.
 ## 4. Troubleshooting
 
-| Error log | Why |
+| Error log | Explication |
 |-|-|
-| No config file found | There is no config.cfg file at the root of the archive |
-| Error reading folder ... | Try look if there isn't wrong format files (like .jpg files) |
-| Font file ... in wrong format | Your custom font is not TrueTypeFont |
-| Font file ... not found | The custom font specified in the config.cfg is not in the fonts folder |
-| Font ... not found on the Local Graphics Environment | The real name of your custom font is wrong in the config.cfg |
-| Error on reading ... | Well... at least you can read why |
-| [n] errors with event | Seems like you are not respecting the syntax of events, see [Events](Events.md#events) |
-| Invalid map : ... orientation is not orthogonal | Your map seems wrongly created, see [Map Creation](Map_creation.md#map-creation) |
+| No config file found | Le fichier config.cfg n'a pas été trouvé à la racine de l'archive |
+| Error reading folder ... | Regarder si tous les fichiers ont le bon format (aucun .jpg ne doit être présent) |
+| Font file ... in wrong format | Votre police de caractère n'est pas au format TrueTypeFonts |
+| Font file ... not found | La police de caractère spécifiée dans config.cfg n'est pas dans le dossier associé. |
+| Font ... not found on the Local Graphics Environment | Le nom de votre police de caractère n'est pas correct dans config.cfg. |
+| Error on reading ... | Ceci est une erreur ... Google est ton ami. |
+| [n] errors with event | Erreur de syntaxe dans les évènements, se référer à [Events](Events.md#events) |
+| Invalid map : ... orientation is not orthogonal | Votre carte à mal été faite, se référer à [Map Creation](Map_creation.md#map-creation) |
 | Invalid map : ... renderorder is not right-down | // |
 | Invalid map : ... non existing layer | // |
 | Invalid layer : ... no data | // |
@@ -52,6 +50,6 @@ If all is in place, the game should launch normally and you see the start map an
 | Invalid layer : ... encoding is not CSV | // |
 
 ## 5. Build for other operating systems
-When your game is ready and working, you can build the game for other operating systems, download the pre-built archive in the [builds folder](https://github.com/kalioz/Choice-Game/tree/master/builds) and replace files like you did before.
+Quand votre jeu est opérationnel, vous pouvez compiler votre jeu pour d'autres systèmes d'exploitation, téléchargez l'archive déjà réalisée dans [builds folder](https://github.com/kalioz/Choice-Game/tree/master/builds) et remplacer les fichiers comme précédemment.
 
 [Back to Table of Contents](Documentation.md#table-of-contents)
