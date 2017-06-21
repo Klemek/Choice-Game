@@ -72,11 +72,11 @@ Events are the main part of the game edition. This is where you will set your st
 	PAUSE 0.5 # Pause everything the time the filter fade out
 ### Example 3 (Bed):
 	DIALOG "What do you want to do ?" CHOICE1 "Sleep until morning"  "Sleep until night"  "Cancel"
-	IF CHOICE1 == 0
+	IF CHOICE1 == 1
 	   SAY "You sleep until morning"
 	   TRIGGER DAY ON
 	END
-	IF CHOICE1 == 1
+	IF CHOICE1 == 2
 	   SAY "You sleep until night"
 	   TRIGGER DAY OFF
 	END

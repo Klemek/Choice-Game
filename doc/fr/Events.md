@@ -70,11 +70,11 @@ Lorsqu'un événement comme RANDOM ou DIALOG place une valeur dans une variable,
 	PAUSE 0.5 # Tout mettre en pause le temps que le filtre noir s'enlève
 ### Example 3 (Lit):
 	DIALOG "Que voulez-vous faire ?" CHOICE1 "Dormir jusqu'au matin"  "Dormir jusqu'au soir"  "Annuler"
-	IF CHOICE1 == 0
+	IF CHOICE1 == 1
 	   SAY "Vous dormez jusqu'au matin"
 	   TRIGGER DAY ON
 	END
-	IF CHOICE1 == 1
+	IF CHOICE1 == 2
 	   SAY "Vous dormez jusqu'au soir"
 	   TRIGGER DAY OFF
 	END
