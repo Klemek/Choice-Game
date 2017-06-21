@@ -70,11 +70,11 @@ Lorsqu'un événement comme RANDOM ou DIALOG place une valeur dans une variable,
 	PAUSE 0.5 # Tout mettre en pause le temps que le filtre noir s'enlève
 ### Example 3 (Lit):
 	DIALOG "Que voulez-vous faire ?" CHOICE1 "Dormir jusqu'au matin"  "Dormir jusqu'au soir"  "Annuler"
-	IF CHOICE1==0
+	IF CHOICE1 == 0
 	   SAY "Vous dormez jusqu'au matin"
 	   TRIGGER DAY ON
 	END
-	IF CHOICE1==1
+	IF CHOICE1 == 1
 	   SAY "Vous dormez jusqu'au soir"
 	   TRIGGER DAY OFF
 	END
@@ -83,9 +83,9 @@ Lorsqu'un événement comme RANDOM ou DIALOG place une valeur dans une variable,
 	   IFT KEY152 # Trigger de la clé du coffre
 	      MAPR 0 0 1 CHEST1 1 # Change la tile pour montrer le coffre ouvert
 	      RANDOM VAL 1 3 # Génère un nombre aléatoire
-	      IF VAL==1
+	      IF VAL == 1
 		      SAY "Vous avez trouvé de la nourriture"
-		      IF FOOD==0 #La variable globale n'existe peut etre pas
+		      IF FOOD == 0 #La variable globale n'existe peut etre pas
 		      		VARG FOOD 0 #Crée la variable globale
 		      END
 		      ICZ FOOD 1 # Augmente la variable globale nourriture

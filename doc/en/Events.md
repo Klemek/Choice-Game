@@ -72,11 +72,11 @@ Events are the main part of the game edition. This is where you will set your st
 	PAUSE 0.5 # Pause everything the time the filter fade out
 ### Example 3 (Bed):
 	DIALOG "What do you want to do ?" CHOICE1 "Sleep until morning"  "Sleep until night"  "Cancel"
-	IF CHOICE1==0
+	IF CHOICE1 == 0
 	   SAY "You sleep until morning"
 	   TRIGGER DAY ON
 	END
-	IF CHOICE1==1
+	IF CHOICE1 == 1
 	   SAY "You sleep until night"
 	   TRIGGER DAY OFF
 	END
@@ -85,9 +85,9 @@ Events are the main part of the game edition. This is where you will set your st
 	   IFT KEY152 # chest's key trigger
 	      MAPR 0 0 1 CHEST1 1 # Change the tile to set it open
 	      RANDOM VAL 1 3 # Generate a random number
-	      IF VAL==1
+	      IF VAL == 1
 		      SAY "You find some food"
-		      IF FOOD==0 # the global variable food might not exist
+		      IF FOOD == 0 # the global variable food might not exist
 		      		VARG FOOD 0 #Create the global variable
 		      END
 		      ICZ FOOD 1 # Augmente la variable globale nourriture
