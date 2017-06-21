@@ -1,21 +1,22 @@
 # Get Started
 ## Requirements
-You will obviously need a Java Runtime Environnement to run the game ([here to get one](https://www.java.com/download/)) and an archive manager (like WinRAR).
+Vous avez nécéssairement besoin de Java Runtime Environnement pour lancer le jeu ([here to get one](https://www.java.com/download/)) et un gestionnaire d'archive (comme WinRAR).
 ## 1. Download code from the repository
-You need the base code to work. To do so, you should either build it yourself with gradle or download a build for your operating system from the [builds folder](https://github.com/kalioz/Choice-Game/tree/master/builds). At the end, you have a .jar file that can run and you can play the given demo in it.
+Vous avez besoin du code d'origine pour travailler. Pour ce faire, vous devez soit le compiler par vous même avec Gradle soit en téléchargeant un compilateur pour votre système d'exploitation venant de [builds folder](https://github.com/kalioz/Choice-Game/tree/master/builds). Au final, vous avez un fichier .jar exécutable et vous pouvez jouer à la démonstration du contenu.
 ## 2. Create your maps
 To create your map you will need [Tiled](http://www.mapeditor.org/) a free map editor wich will generate the good map format for this software. Maps will be created in two steps :
+Afin de créer vos propre carte vous aurez besoin de [Tiled](http://www.mapeditor.org/) un éditeur de carte gratuit qui va générer des cartes adaptées pour ce programme. Les cartes seront créées en deux étapes :
 
-* Create the main look of the map : read [Creating the map](Map_creation.md#map-creation)
-* Create scripts/events that will be your main story : read [Events](Events.md#events)
+* Créer l'apparence générale de la carte : à lire [Creating the map](Map_creation.md#map-creation)
+* Créer les évènements et les scripts qui serviront d'hisoire principale : à lire[Events](Events.md#events)
 
 ## 3. Build the game with your story
-The final step is to load every resources you have into the game and configure it. You will need to :
+L'étape finale est de charger toutes les ressources que vous avez dans le jeu et de les configurer. Vous avez besoin :
 
-* Create the configuration file : read [The Configuration File](Config.md#the-configuration-file)
-* Load ressources into the game : read [Build the Game](Build.md#build-the-game)
+* Créer le fichier de configuration : à lire[The Configuration File](Config.md#the-configuration-file)
+* Charger les ressources dans le jeu : à lire[Build the Game](Build.md#build-the-game)
 
 ## 4. That's it
-Now you can freely send it to others for them to play your game.
+Maintenant vous pouvez librement l'envoyer pour les autres joueurs pour qu'ils puissent y jouer.
 
 [Back to Table of Contents](Documentation.md#table-of-contents)
