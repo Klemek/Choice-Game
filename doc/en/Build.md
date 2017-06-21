@@ -2,7 +2,7 @@
 ## 1. Requirements
 You will need an archive manager (like WinRAR) and the choicegame soft. (read [Get Started](Get_started.md#get-started) to see how).
 
-From every previous steps you should a config.cfg that set every folders name and some folders
+From every previous steps you should have a config.cfg that set every folders name and some folders
 ### The maps folder
 You should have every maps you created in it in a .tmx format. Each tileset referenced in each map should be in the tilesets folder next to this folder.
 ### The tilesets folder
