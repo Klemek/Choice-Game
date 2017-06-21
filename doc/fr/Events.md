@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Events are the main part of the game edition. This is where you will set your story through every interactions your player can make. They should be in the properties of the info tiles in your [map creation](Map_creation.md#map-creation).
+Les événements sont les principaux éléments d'édition du jeu. C'est ici que vous pourrez créer toutes les intéractions que pourra faire votre personnage. Ils devraient être dans les propriétés de la tile info dans votre [map creation](Map_creation.md#map-creation).
 
 ## Format:
 	EVENT (PARAM) {OPTIONAL PARAM}
@@ -10,63 +10,65 @@ Events are the main part of the game edition. This is where you will set your st
 ## List :
 ### Logical :
 
-* TRIGGER (TRIGNAME) {ON/OFF} #Create/edit trigger
-* IFT {NOT} (TRIGNAME) ... {ELSE ...} END #Test trigger
-* VAR (VARNAME) (VALUE) #Create/edit local variable
-* VARG (VARNAME) (VALUE) #Create/edit global variable
-* IF (VARNAME) (==/!=/>/</>=/<=) (VALUE) ... {ELSE ...} END #Test variable
-* IFC {TRUE/FALSE} ... {ELSE ...} END #Test if collision event (TRUE) or interact (FALSE)
-* ICZ (VARNAME) {VALUE} #Increase var from 1 or value 
-* DCZ (VARNAME) {VALUE} #Decrease var from 1 or value 
-* INVVAR (ITEMID) (VARNAME) #Get the quantity of an item in the player inventory and put it in a var
-* RANDOM (VARNAME) (MINVALUE) (MAXVALUE) #Generate random number between min and max and put it in a var
+* TRIGGER (TRIGNAME) {ON/OFF} #Créer/éditer trigger
+* IFT {NOT} (TRIGNAME) ... {ELSE ...} END #Tester trigger
+* VAR (VARNAME) (VALUE) #Créer/éditer variable locale 
+* VARG (VARNAME) (VALUE) #Créer/éditer variable globale
+* IF (VARNAME) (==/!=/>/</>=/<=) (VALUE) ... {ELSE ...} END #Tester variable
+* IFC {TRUE/FALSE} ... {ELSE ...} END #Tester la collision (TRUE) ou l'intéraction (FALSE)
+* ICZ (VARNAME) {VALUE} #Augmenter var de 1 ou value 
+* DCZ (VARNAME) {VALUE} #Diminuer var de 1 ou value 
+* INVVAR (ITEMID) (VARNAME) #Obtenir la quantité d'un item dans l'inventaire du joueur et l'associe à une var
+* RANDOM (VARNAME) (MINVALUE) (MAXVALUE) #Génère un nombre aléatoire entre min et max et l'associe à une var
+
 
 ### Visual effects:
 
-* SAY (TEXT) {IMAGEID} #Show text (pause game)
-* DIALOG (TEXT) (VARNAME) (OPTION1) (OPTION2) ... #Show a choice and return result on a viariable
-* SHAKE (ON/OFF) {TIME} #Toggle shake screen for a time or until off
-* FILTER (R) (G) (B) (A) {TIME} / OFF {TIME} # Apply filter to game (rgba values in range 0 to 1) default time 0.5 second
+* SAY (TEXT) {IMAGEID} #Affiche texte (met le jeu en pause)
+* DIALOG (TEXT) (VARNAME) (OPTION1) (OPTION2) ... #Affiche un choix et retourne le résultat dans une variable
+* SHAKE (ON/OFF) {TIME} #Active le tremblement de l'écran pour un temps puis le désactive
+* FILTER (R) (G) (B) (A) {TIME} / OFF {TIME} #Ajoute un filtre au jeu (valeur rgba entre 0 et 1), durée par défaut 0.5 seconde
+
 
 ### Game interaction:
 
-* INVADD (ITEMID) {NUM} {MSG} #Add 1 or NUM item(s) to the player and display it (optional)(pause)
-* INVDEL (ITEMID) {NUM} {MSG} #Remove all or NUM item(s) to the player and display it (optional)(pause)
-* MAP (X) (Y) (LAYER) (TILESET) (ID) #Edit one map's tile
-* MAPR (DX) (DY) (LAYER) (TILESET) (ID) #Edit one map's tile relatively to event's source
-* PLAYERTILESET (TILESET) #Change Player tileset
-* NPCTILESET (SOUTH/WEST/NORTH/EAST) {STOP/MARCH} #Change NPC animation
-* NPCTILESET (NPCID) (TILESET) #Change NPC tileset
-* CHGMAP (MAPNAME) {PLAYERX} {PLAYERY} #Change map and (optional) move player in it
-* MVPLAYER (PLAYERX) (PLAYERY) #Move player in current map
-* MVRPLAYER (PLAYERDX) (PLAYERDY) #Move player relatively in current map
-* STOP {ON/OFF} #Prevent player from moving
-* WAIT (TIME) #Wait a amount of time before other event
-* PAUSE (TIME) #Pause game (wait + prevent player from moving)
+* INVADD (ITEMID) {NUM} {MSG} #Ajoute 1 ou NUM objet(s) au joueur and l'affiche (optionnel)(pause)
+* INVDEL (ITEMID) {NUM} {MSG} #Retire tout ou NUM objet(s) au joueur et l'affiche (optionnel)(pause)
+* MAP (X) (Y) (LAYER) (TILESET) (ID) #Editer une tile de la carte
+* MAPR (DX) (DY) (LAYER) (TILESET) (ID) #Editer une tile de la map relativement à la source de l'évènement
+* PLAYERTILESET (TILESET) #Change le tileset du joueur
+* NPCTILESET (SOUTH/WEST/NORTH/EAST) {STOP/MARCH} #Change l'animation du PNJ
+* NPCTILESET (NPCID) (TILESET) #Change le tileset du PNJ
+* CHGMAP (MAPNAME) {PLAYERX} {PLAYERY} #Change la carte et (optionnel) déplace le joueur dessus
+* MVPLAYER (PLAYERX) (PLAYERY) #Déplace le joueur sur la carte
+* MVRPLAYER (PLAYERDX) (PLAYERDY) #Déplace le joueur relativement à la carte
+* STOP {ON/OFF} #Empêche le joueur de bouger
+* WAIT (TIME) #Attend un certain temps avant un autre événement
+* PAUSE (TIME) #Met le jeu en pause (attente + empêche le joueur de bouger)
 
 ## Informations
 
-* When a event like RANDOM, INVVAR or DIALOG set a value in a variable, it will test if a global variable exist before registering it in a temporary variable. So, you can register theses events in a variable like that :
+Lorsqu'un événement comme RANDOM, INVAR ou DIALOG place une valeur dans une variable, il va tester si la variable globale existe avant de l'enregistrer dans une variable temporaire. Donc vous pouvez enregistrer ces événements dans une variable ainsi :
 
 
 	VARG IMPORTANTCHOICE 0
 	DIALOG "What do you want ?" IMPORTANTCHOICE "Pizza" "Icecream"
 
 
-* Check logs when running the game to see if some commands are wrong, they will not be registered to not corrupt the game.
+* Vérifier les logs lorsque le jeu tourne pour voir si certaines commandes sont mauvaises, elles ne seront pas enregistrées pour ne pas corrompre le jeu. 
 
 ## Examples
-### Example 1 (Change map):
+### Example 1 (Change carte):
 	IFC  # If the player walks on it
 	   FILTER 0 0 0 1  # Add a black filter
 	   PAUSE 0.5  # Pause everything the time the filter fade in
 	   CHGMAP "othermap" 1 0  # Change map at given coordinates
 	END	
-### Example 2 (Enter the map):
+### Example 2 (Entrer la carte):
 	MVPLAYER 9 13 # Move the player to right spot
 	FILTER OFF # Remove black filter if any
 	PAUSE 0.5 # Pause everything the time the filter fade out
-### Example 3 (Bed):
+### Example 3 (Lit):
 	DIALOG "What do you want to do ?" CHOICE1 "Sleep until morning"  "Sleep until night"  "Cancel"
 	IF CHOICE1==0
 	   SAY "You sleep until morning"
@@ -76,7 +78,7 @@ Events are the main part of the game edition. This is where you will set your st
 	   SAY "You sleep until night"
 	   TRIGGER DAY OFF
 	END
-### Example 4 (Chest):
+### Example 4 (Coffre):
 	IF NOT CHEST152 # One time event
 	   INVVAR 152 KEY152
 	   IF KEY152>=1
