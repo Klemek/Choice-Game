@@ -115,6 +115,10 @@ public class Game implements IGameLogic, KeyEventListener {
 		return soundmanager;
 	}
 
+	public Renderer getRenderer() {
+		return renderer;
+	}
+
 	public Player getPlayer() {
 		return player;
 	}
@@ -142,7 +146,7 @@ public class Game implements IGameLogic, KeyEventListener {
 				}
 			}
 		}else{
-			System.out.println("Unknown map : '"+name+"'");
+			System.out.println("#Unknown map : '"+name+"'");
 		}
 	}
 

@@ -203,14 +203,8 @@ public class EventComputer implements GameEventListener {
 						game.setWaitInput(true);
 						pause(event,x,y,i,vars,collide);
 						return;
-					case "SHAKE": //SHAKE (ON/OFF) [TIME] #Toggle shake screen for a time or until off
-						//TODO EVENT SHAKE
-						switch(args.length){
-						case 1: //SHAKE (ON/OFF)
-							break;
-						case 2://SHAKE (ON/OFF) (TIME)
-							break;
-						}
+					case "SHAKE": //SHAKE (INTENSITY) #Shake screen with intensity : (0 for stop)
+						this.game.getRenderer().setShake(Float.parseFloat(args[0]));
 						break;
 					case "FILTER": //FILTER (R) (G) (B) (A) {TIME} / OFF {TIME} # Apply filter to game (values in range 0 to 1) default time 1 second
 						switch(args.length){
@@ -493,8 +487,8 @@ public class EventComputer implements GameEventListener {
 					}
 					testArgs(i,action,errors,args, new String[][]{argstype});
 					break;
-				case "SHAKE": //SHAKE (ON/OFF) [TIME] #Toggle shake screen for a time or until off
-					testArgs(i,action,errors,args, new String[][]{{"ON/OFF"},{"ON/OFF",VALUE}});
+				case "SHAKE": ////SHAKE (INTENSITY) #Shake screen with intensity : (0 for stop)
+					testArgs(i,action,errors,args, new String[][]{{VALUE}});
 					break;
 				case "FILTER": //FILTER (R) (G) (B) (A) {TIME} / OFF # Apply filter to game (rgba values in range 0 to 1)
 					testArgs(i,action,errors,args, new String[][]{

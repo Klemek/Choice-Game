@@ -25,6 +25,7 @@ Les événements sont les principaux éléments d'édition du jeu. C'est ici que
 
 * SAY (TEXT) {IMAGEID} #Affiche du texte (met le jeu en pause)
 * DIALOG (TEXT) (VARNAME) (OPTION1) (OPTION2) ... #Affiche un choix et retourne le résultat dans une variable (commence à 1)
+* SHAKE (INTENSITY) #Secoue l'écran avec un certaine intensité (0 pour arreter)
 * FILTER (R) (G) (B) (A) {TIME} / OFF {TIME} #Ajoute un filtre au jeu (valeur rgba entre 0 et 1), durée par défaut 0.5 seconde
 
 

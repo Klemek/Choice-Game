@@ -38,6 +38,7 @@ public class Renderer {
 	private final Camera camera;
 	private float scale = 0.2f;
 	private float updateTimer = 0f;
+	private float shake = 0f;
 	
 	private static final float CAMERA_DEPTH = -1f;
 	private static final float MAP_DEPTH = 1f;
@@ -106,7 +107,7 @@ public class Renderer {
 						getTexture("/" + Config.getValue(Config.TILESETS_FOLDER) + "/" + ti.getTileset() + ".png"),
 						ti.getId());
 				item.setPosition(npc.getPosX() * scale, (m.getHeight() - npc.getPosY()) * scale);
-				item.setScale(scale);
+				item.setScale(scale*0.999f);
 				npcTileItems.add(item);
 			}
 
@@ -186,7 +187,7 @@ public class Renderer {
 		Matrix4f projectionMatrix = transformation.getProjectionMatrix(window.getWidth(), window.getHeight());
 		shaderProgram.setUniform("projectionMatrix", projectionMatrix);
 
-		Matrix4f viewMatrix = transformation.getViewMatrix(camera, CAMERA_DEPTH);
+		Matrix4f viewMatrix = transformation.getViewMatrix(camera.shake(shake), CAMERA_DEPTH);
 
 		// Render each tileItem level by level
 
@@ -295,6 +296,10 @@ public class Renderer {
 	
 	public void setTextures(HashMap<String, Texture> textures) {
 		this.textures = textures;
+	}
+
+	public void setShake(float shake) {
+		this.shake = shake;
 	}
 
 }

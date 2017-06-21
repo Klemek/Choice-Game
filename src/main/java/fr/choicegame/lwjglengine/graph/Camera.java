@@ -1,5 +1,7 @@
 package fr.choicegame.lwjglengine.graph;
 
+import java.util.Random;
+
 import org.joml.Vector2f;
 
 public class Camera {
@@ -37,6 +39,18 @@ public class Camera {
 
 	public void setRotation(float rotation){
 		this.rotation = rotation;
+	}
+	
+	public Camera shake(float intensity){
+		if(intensity <= 0){
+			return this;
+		}else{
+			Random r = new Random();
+			Camera clone = new Camera();
+			clone.setPosition(position.x+(r.nextFloat()-0.5f)*intensity,position.y+(r.nextFloat()-0.5f)*intensity);
+			clone.setRotation(rotation);
+			return clone;
+		}
 	}
 	
 }
