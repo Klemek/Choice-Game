@@ -13,6 +13,7 @@ import fr.choicegame.event.EventComputer;
 import fr.choicegame.lwjglengine.IGameLogic;
 import fr.choicegame.lwjglengine.Window;
 import fr.choicegame.lwjglengine.Window.KeyEventListener;
+import fr.choicegame.lwjglengine.sound.SoundManager;
 
 public class Game implements IGameLogic, KeyEventListener {
 
@@ -27,6 +28,7 @@ public class Game implements IGameLogic, KeyEventListener {
 	private Player player;
 
 	private final Renderer renderer;
+	private final SoundManager soundmanager;
 	private Hud hud;
 	private final JFrame splash;
 
@@ -47,6 +49,8 @@ public class Game implements IGameLogic, KeyEventListener {
 		hud = new Hud();
 
 		renderer = new Renderer(loader);
+		
+		soundmanager = new SoundManager(loader);
 
 		if (loader != null) {
 
@@ -105,6 +109,10 @@ public class Game implements IGameLogic, KeyEventListener {
 
 	public Map getCurrentMap() {
 		return this.maps.get(this.currentMap);
+	}
+
+	public SoundManager getSoundmanager() {
+		return soundmanager;
 	}
 
 	public Player getPlayer() {
@@ -174,6 +182,8 @@ public class Game implements IGameLogic, KeyEventListener {
 		System.out.println("Initializing renderer and Loading textures ...");
 		renderer.init(window);
 		
+		System.out.println("Initializing sounds ...");
+		soundmanager.init();
 		
 		System.out.println("Creating map...");
 		renderer.updateMap(getCurrentMap());
@@ -334,6 +344,7 @@ public class Game implements IGameLogic, KeyEventListener {
 	public void cleanup() {
 		renderer.cleanup();
 		hud.cleanup();
+		soundmanager.cleanup();
 	}
 
 	public void setWaitInput(boolean pause) {

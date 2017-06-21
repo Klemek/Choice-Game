@@ -6,7 +6,9 @@
    <properties>
     <property name="event">IFC
    FILTER 0 0 0 1
+   SOUND "door" P
    PAUSE 0.5
+   SOUND OFF
    CHGMAP &quot;maison&quot;
 END</property>
    </properties>
@@ -17,6 +19,7 @@ END</property>
     FILTER 0 0 0 1 0
     MVPLAYER 15 18
 	SAY &quot;?&quot;
+	SOUND "music" R
 	FILTER OFF 0.5
 	PAUSE 0.5</property>
    </properties>
@@ -24,6 +27,8 @@ END</property>
   <tile id="2">
    <properties>
     <property name="event">MVPLAYER 20 15
+SOUND "door" R
+SOUND "music" P
 FILTER OFF
 PAUSE 0.5</property>
    </properties>

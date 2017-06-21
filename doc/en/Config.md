@@ -1,39 +1,9 @@
 # The Configuration File
 ## Introduction
-The configuration file is named 'config.cfg', you will write in it every specifications for your game and about the maps details. Here is an example 'config.cfg', every properties are detailled.
-## Example 'config.cfg'
-	[Resources]
-	tile_size : 32
-	start_map : start
-	player_tileset : character1
-	tilesets_folder : tilesets
-	maps_folder : maps
-	fonts_folder : fonts
-	font_file : Roboto-Black.ttf
-	font_name : Roboto Bk
-	dialog_tileset : dialog
-	
-	[Characters]
-	character_speed = 0.1
-	hitbox_start_x = 0.25
-	hitbox_start_y = 0.7
-	hitbox_size_x = 0.5
-	hitbox_size_y = 0.3
-	
-	[Maps]
-	background_1_layer : bg1
-	background_2_layer : bg2
-	foreground_1_layer : fg1
-	foreground_2_layer : fg2
-	type_layer : type
-	info_layer : info
-	type_tileset : type
-	type_property : type
-	info_tileset : info
-	event_property : event
+The configuration file is named 'config.cfg', you will write in it every specifications for your game and about the maps details. 
 
 ## Properties list
-
+Here's the list of available properties
 ### Resources
 | Property | Info | Default value |
 |-|-|-:|
@@ -42,6 +12,7 @@ The configuration file is named 'config.cfg', you will write in it every specifi
 | player_tileset | the name of the player tileset at start |  |
 | tilesets_folder | the name of the tilesets folder  | tilesets |
 | maps_folder | the name of the maps folder | maps |
+| sounds_folder | the name of the sounds folder | sounds |
 | fonts_folder | the name of the fonts folder | fonts |
 | font_file | the name of your custom font file |  |
 | font_name | the name of your custom font in the system | Consolas |
@@ -69,6 +40,40 @@ The configuration file is named 'config.cfg', you will write in it every specifi
 | type_property | the name of the type property in the type tileset | type |
 | info_tileset | the name of the info tileset in the maps | info |
 | event_property | the name of the event property in the info tileset | event |
+
+## Example 'config.cfg'
+Here is an example 'config.cfg'
+
+	[Resources]
+	tile_size : 32
+	start_map : start
+	player_tileset : character1
+	tilesets_folder : tilesets
+	maps_folder : maps
+	fonts_folder : fonts
+	font_file : Roboto-Black.ttf
+	font_name : Roboto Bk
+	dialog_tileset : dialog
+	sounds_folder : sounds
+	
+	[Characters]
+	character_speed = 0.1
+	hitbox_start_x = 0.25
+	hitbox_start_y = 0.7
+	hitbox_size_x = 0.5
+	hitbox_size_y = 0.3
+	
+	[Maps]
+	background_1_layer : bg1
+	background_2_layer : bg2
+	foreground_1_layer : fg1
+	foreground_2_layer : fg2
+	type_layer : type
+	info_layer : info
+	type_tileset : type
+	type_property : type
+	info_tileset : info
+	event_property : event
 
 
 [Back to Table of Contents](Documentation.md#table-of-contents)

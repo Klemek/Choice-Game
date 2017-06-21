@@ -34,14 +34,17 @@ import org.xml.sax.SAXException;
 import fr.choicegame.event.Event;
 import fr.choicegame.event.EventComputer;
 import fr.choicegame.lwjglengine.graph.Texture;
+import fr.choicegame.lwjglengine.sound.SoundManager;
 
 public class Loader {
 
-	private static final ArrayList<String> IMAGE_EXT = new ArrayList<>(Arrays.asList(new String[] { "png" }));
+	private static final String IMAGE_EXT = "png";
 	private static final ArrayList<String> TEXT_EXT = new ArrayList<>(
 			Arrays.asList(new String[] { "txt", "xml", "tmx", "cfg" }));
+	private static final String SOUND_EXT = "ogg" ;
 
 	private ArrayList<String> imageResources = new ArrayList<>();
+	private ArrayList<String> soundResources = new ArrayList<>();
 	private HashMap<String, String> textResources = new HashMap<>();
 
 	private boolean ide;
@@ -74,7 +77,8 @@ public class Loader {
 		Config.loadValues(getTextResource(Config.CONFIG_FILE));
 
 		String[] folders = { "/", "/" + Config.getValue(Config.MAPS_FOLDER),
-				"/" + Config.getValue(Config.TILESETS_FOLDER) };
+				"/" + Config.getValue(Config.TILESETS_FOLDER),
+				"/" + Config.getValue(Config.SOUNDS_FOLDER)};
 
 		for (String folderPath : folders) {
 			try {
@@ -161,9 +165,12 @@ public class Loader {
 
 	private void loadFile(String path) {
 		String ext = getExtension(path);
-		if (IMAGE_EXT.contains(ext)) {
+		if (IMAGE_EXT.equals(ext)) {
 			imageResources.add(path);
 			System.out.println("Image File '" + path + "' detected");
+		} else if(SOUND_EXT.equals(ext)){
+			soundResources.add(path);
+			System.out.println("Sound File '" + path + "' detected");
 		} else if (TEXT_EXT.contains(ext)) {
 			String textFile = loadTextAsset(path);
 			if (textFile != null) {
@@ -186,6 +193,17 @@ public class Loader {
 			}
 		}
 		return textures;
+	}
+	
+	public void loadSounds(SoundManager m){
+		for (String path : soundResources) {
+			try {
+				m.addSoundBuffer(path);
+				System.out.println("Sound File '" + path + "' loaded");
+			} catch (Exception e) {
+				System.out.println("#Error on reading '" + path + "': " + e.getMessage());
+			}
+		}
 	}
 
 	public HashMap<String, BufferedImage> loadGameAssets() {

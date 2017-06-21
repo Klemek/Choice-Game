@@ -17,6 +17,8 @@ Respect the orientation of the character, otherwise the player will not look for
 There is another file you need : the dialog tileset, it will make the dialogs and messages background. It is composed of 4x3 tiles. The first 3x3 block is the frame and the last up right tile is the cursor.
 
 ![dialog.png example](img/dialog.png)
+## The sounds folder
+You should have every sounds you want to use in your events in the **.ogg format**
 ## The fonts folder
 If you have a custom font you should put it in this folder. Be aware that only TrueTypeFonts (.ttf) are supported.
 ## 2. Add the resources

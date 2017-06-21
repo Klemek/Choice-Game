@@ -18,6 +18,7 @@
   <tile id="0">
    <properties>
     <property name="event">MVPLAYER 9 13
+SOUND "door" P
 FILTER OFF
 PAUSE 0.5</property>
    </properties>
@@ -25,6 +26,7 @@ PAUSE 0.5</property>
   <tile id="1">
    <properties>
     <property name="event">MVPLAYER 9 2
+SOUND "door" P
 FILTER OFF
 PAUSE 0.5</property>
    </properties>
@@ -33,7 +35,9 @@ PAUSE 0.5</property>
    <properties>
     <property name="event">IFC
    FILTER 0 0 0 1
+   SOUND "door" P
    PAUSE 0.5
+   SOUND OFF
    CHGMAP &quot;start&quot; 1 0
 END</property>
    </properties>
@@ -42,7 +46,9 @@ END</property>
    <properties>
     <property name="event">IFC
    FILTER 0 0 0 1
+   SOUND "door" P
    PAUSE 0.5
+   SOUND OFF
    CHGMAP &quot;sous-sol&quot;
 END</property>
    </properties>
@@ -51,7 +57,9 @@ END</property>
    <properties>
     <property name="event">IFC
    FILTER 0 0 0 1
+   SOUND "door" P
    PAUSE 0.5
+   SOUND OFF
    CHGMAP &quot;1er-etage&quot;
 END</property>
    </properties>

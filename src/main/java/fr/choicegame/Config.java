@@ -19,6 +19,9 @@ public class Config {
 	public static final String MAPS_FOLDER = "maps_folder";
 	private static final String MAPS_FOLDER_DEFAULT = "maps";
 	
+	public static final String SOUNDS_FOLDER = "sounds_folder";
+	private static final String SOUNDS_FOLDER_DEFAULT = "sounds";
+	
 	public static final String TILE_SIZE = "tile_size";
 	private static final int TILE_SIZE_DEFAULT = 32;
 	
@@ -105,6 +108,7 @@ public class Config {
 		defaultValues.putAll(defaultValues);
 		defaultValues.put(TILESETS_FOLDER, TILESETS_FOLDER_DEFAULT);
 		defaultValues.put(MAPS_FOLDER, MAPS_FOLDER_DEFAULT);
+		defaultValues.put(SOUNDS_FOLDER, SOUNDS_FOLDER_DEFAULT);
 		defaultValues.put(FONTS_FOLDER, FONTS_FOLDER_DEFAULT);
 		defaultValues.put(ITEMS_TILESET, ITEMS_TILESET_DEFAULT);
 		defaultValues.put(PLAYER_TILESET, PLAYER_TILESET_DEFAULT);

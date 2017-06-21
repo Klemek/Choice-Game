@@ -8,6 +8,7 @@ import fr.choicegame.Game;
 import fr.choicegame.Hud;
 import fr.choicegame.Tile;
 import fr.choicegame.TileImage;
+import fr.choicegame.character.Direction;
 
 public class EventComputer implements GameEventListener {
 	
@@ -236,6 +237,23 @@ public class EventComputer implements GameEventListener {
 						}
 						break;
 						
+					/* Sound effects */
+						
+					case "SOUND": //SOUND (NAME) (R/P) / OFF #Play sound from name, use R to repeat, use OFF to remove all sounds
+						switch(args.length){
+						case 1: //SOUND OFF
+							this.game.getSoundmanager().removeAllSoundSources();
+							break;
+						case 2://SOUND (NAME) (R/P)
+							if(args[1].equals("R")){
+								this.game.getSoundmanager().playSound(getStringArg(args[0]), true);
+							}else{
+								this.game.getSoundmanager().playSound(getStringArg(args[0]), false);
+							}
+							break;
+						}
+						break;
+						
 					/* Game interaction */
 					
 					case "INVADD": //INVADD (ITEMID) [NUM] [MSG] #Add 1 or NUM item(s) to the player and display it (optional)(pause)
@@ -364,6 +382,22 @@ public class EventComputer implements GameEventListener {
 						this.game.setWaitTime(Float.parseFloat(args[0]), true);
 						pause(event,x,y,i,vars,collide);
 						return;
+					case "PLAYERFACE": // PLAYERFACE (WEST/SOUTH/NORTH/EAST) #Change player facing
+						switch(args[0]){
+						case "WEST":
+							this.game.getPlayer().setFacing(Direction.WEST);
+							break;
+						case "SOUTH":
+							this.game.getPlayer().setFacing(Direction.SOUTH);
+							break;
+						case "NORTH":
+							this.game.getPlayer().setFacing(Direction.NORTH);
+							break;
+						case "EAST":
+							this.game.getPlayer().setFacing(Direction.EAST);
+							break;
+						}
+						break;
 					}
 				}else if((jump == 1 && cmd.equals("ELSE")) || cmd.equals("END")){
 					jump--;
@@ -469,6 +503,12 @@ public class EventComputer implements GameEventListener {
 						{FLOATVALUE,FLOATVALUE,FLOATVALUE,FLOATVALUE},
 						{FLOATVALUE,FLOATVALUE,FLOATVALUE,FLOATVALUE,VALUE}});
 					break;
+				
+				/* Sound effects */
+					
+				case "SOUND": // SOUND (NAME) (R/P) / OFF #Play sound from name, use R to repeat, use OFF to remove all sounds
+					testArgs(i,action,errors,args, new String[][]{{TEXT,"R/P"},{"OFF"}});
+					break;
 					
 				/* Game interaction */
 					
@@ -511,7 +551,9 @@ public class EventComputer implements GameEventListener {
 				case "PAUSE": // PAUSE (TIME) #Pause game (wait + prevent player from moving)
 					testArgs(i,action,errors,args, new String[][]{{VALUE}});
 					break;
-				
+				case "PLAYERFACE": // PLAYERFACE (WEST/SOUTH/NORTH/EAST) #Change player facing
+					testArgs(i,action,errors,args, new String[][]{{"WEST/SOUTH/NORTH/EAST"}});
+					break;
 				default:
 					errors.add("Unknown event action : ["+i+"]"+action);
 					break;
