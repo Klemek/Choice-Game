@@ -69,7 +69,7 @@ You can then place your newly created events into the map in the 'info' layer.
 Now you can either create new maps or finish the game by creating the configuration file (read [The Configuration File](Config.md#the-configuration-file)) and building it (read [Build the Game](Build.md#build-the-game)).
 
 
-## 9. Additionnal information for maps
+## 10. Additional information for maps
 
 * Your player will spawn in the [0,0] tile. You should place an event here that will move him to the right spot (this event will be computed before everything at the start of the map)
 
