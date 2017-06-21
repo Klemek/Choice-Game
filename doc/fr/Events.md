@@ -63,6 +63,9 @@ Lorsqu'un événement comme RANDOM ou DIALOG place une valeur dans une variable,
 	END	
 ### Example 2 (Entrer la carte):
 	MVPLAYER 9 13 # Déplacer le joueur au bon endroit
+	SOUND "doorclose" P # Joue le son de la porte qui se ferme
+	SOUND "music" R # Joue la musique de la map
+	PLAYERFACE WEST # Change l'orientation du joueur
 	FILTER OFF # Enlever le filtre noir si il y a
 	PAUSE 0.5 # Tout mettre en pause le temps que le filtre noir s'enlève
 ### Example 3 (Lit):
