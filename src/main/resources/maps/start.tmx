@@ -8,6 +8,7 @@
    FILTER 0 0 0 1
    SOUND "door" P
    PAUSE 0.5
+   SHAKE 0
    SOUND OFF
    CHGMAP &quot;maison&quot;
 END</property>
@@ -19,6 +20,7 @@ END</property>
     FILTER 0 0 0 1 0
     MVPLAYER 15 18
 	SAY &quot;?&quot;
+	SHAKE 0.01
 	SOUND "music" R
 	FILTER OFF 0.5
 	PAUSE 0.5</property>
@@ -27,8 +29,9 @@ END</property>
   <tile id="2">
    <properties>
     <property name="event">MVPLAYER 20 15
-SOUND "door" R
-SOUND "music" P
+SOUND "door" P
+SOUND "music" R
+SHAKE 0.01
 FILTER OFF
 PAUSE 0.5</property>
    </properties>

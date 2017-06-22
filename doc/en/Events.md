@@ -16,6 +16,7 @@ Events are the main part of the game edition. This is where you will set your st
 * VARG (VARNAME) (VALUE) #Create/edit global variable
 * IF (VARNAME) (==/!=/>/</>=/<=) (VALUE) ... {ELSE ...} END #Test variable
 * IFC {TRUE/FALSE} ... {ELSE ...} END #Test if collision event (TRUE) or interact (FALSE)
+* IFO (WEST/SOUTH/NORTH/EAST) ...  {ELSE ...} END #If player facing is ...
 * ICZ (VARNAME) {VALUE} #Increase var from 1 or value 
 * DCZ (VARNAME) {VALUE} #Decrease var from 1 or value 
 * RANDOM (VARNAME) (MINVALUE) (MAXVALUE) #Generate random number between min and max and put it in a variable

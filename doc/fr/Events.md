@@ -15,6 +15,7 @@ Les événements sont les principaux éléments d'édition du jeu. C'est ici que
 * VAR (VARNAME) (VALUE) #Créer/éditer une variable locale 
 * VARG (VARNAME) (VALUE) #Créer/éditer une variable globale
 * IF (VARNAME) (==/!=/>/</>=/<=) (VALUE) ... {ELSE ...} END #Tester une variable
+* IFO (WEST/SOUTH/NORTH/EAST) ...  {ELSE ...} END #Teste l'orientation du joueur
 * IFC {TRUE/FALSE} ... {ELSE ...} END #Tester la collision (TRUE) ou l'intéraction (FALSE)
 * ICZ (VARNAME) {VALUE} #Augmenter var de 1 ou value 
 * DCZ (VARNAME) {VALUE} #Diminuer var de 1 ou value 

@@ -124,6 +124,26 @@ public class EventComputer implements GameEventListener {
 							}
 						}
 						break;
+					case "IFO": //IFO (WEST/SOUTH/NORTH/EAST) ... [ELSE ...] END #If player facing is ...
+						switch(args[0]){
+						case "WEST":
+							if(this.game.getPlayer().getFacing() != Direction.WEST)
+								jump++;
+							break;
+						case "SOUTH":
+							if(this.game.getPlayer().getFacing() != Direction.SOUTH)
+								jump++;
+							break;
+						case "NORTH":
+							if(this.game.getPlayer().getFacing() != Direction.NORTH)
+								jump++;
+							break;
+						case "EAST":
+							if(this.game.getPlayer().getFacing() != Direction.EAST)
+								jump++;
+							break;
+						}
+						break;
 					case "ELSE":
 						jump++;
 						break;
@@ -454,9 +474,13 @@ public class EventComputer implements GameEventListener {
 					jumplvl++;
 					testArgs(i,action,errors,args, new String[][]{{VARIABLE,"==/!=/>/</>=/<=", VALUE}});
 					break;
-				case "IFC": //IFC [TRUE/FALSE] #Test event touched (true) or interacted (false)
+				case "IFC": //IFC [TRUE/FALSE] ... [ELSE ...] END #Test event touched (true) or interacted (false)
 					jumplvl++;
 					testArgs(i,action,errors,args, new String[][]{{},{"TRUE/FALSE"}});
+					break;
+				case "IFO": //IFO (WEST/SOUTH/NORTH/EAST) ... [ELSE ...] END #If player facing is ...
+					jumplvl++;
+					testArgs(i,action,errors,args, new String[][]{{},{"SOUTH/WEST/NORTH/EAST"}});
 					break;
 				case "ICZ": //ICZ (VARNAME) [VALUE] # Increase var from 1 or value 
 					testArgs(i,action,errors,args, new String[][]{{VARIABLE},{VARIABLE, VALUE}});
@@ -546,7 +570,7 @@ public class EventComputer implements GameEventListener {
 					testArgs(i,action,errors,args, new String[][]{{VALUE}});
 					break;
 				case "PLAYERFACE": // PLAYERFACE (WEST/SOUTH/NORTH/EAST) #Change player facing
-					testArgs(i,action,errors,args, new String[][]{{"WEST/SOUTH/NORTH/EAST"}});
+					testArgs(i,action,errors,args, new String[][]{{"SOUTH/WEST/NORTH/EAST"}});
 					break;
 				default:
 					errors.add("Unknown event action : ["+i+"]"+action);
