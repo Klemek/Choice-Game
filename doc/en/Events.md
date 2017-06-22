@@ -13,7 +13,7 @@ Events are the main part of the game edition. This is where you will set your st
 * TRIGGER (TRIGNAME) {ON/OFF} #Create/edit trigger
 * IFT {NOT} (TRIGNAME) ... {ELSE ...} END #Test trigger
 * VAR (VARNAME) (VALUE) #Create/edit local variable
-* VARG (VARNAME) (VALUE) #Create/edit global variable
+* VARG (VARNAME) {VALUE} #Create/edit global variable
 * IF (VARNAME) (==/!=/>/</>=/<=) (VALUE) ... {ELSE ...} END #Test variable
 * IFC {TRUE/FALSE} ... {ELSE ...} END #Test if collision event (TRUE) or interact (FALSE)
 * IFO (WEST/SOUTH/NORTH/EAST) ...  {ELSE ...} END #If player facing is ...
@@ -89,9 +89,7 @@ Events are the main part of the game edition. This is where you will set your st
 	      RANDOM VAL 1 3 # Generate a random number
 	      IF VAL == 1
 		      SAY "You find some food"
-		      IF FOOD == 0 # the global variable food might not exist
-		      		VARG FOOD 0 #Create the global variable
-		      END
+		      VARG FOOD # Create global variable if it not exists
 		      ICZ FOOD 1 # Augmente la variable globale nourriture
 	      ELSE
 	      		SAY "This chest is empty"

@@ -13,7 +13,7 @@ Les événements sont les principaux éléments d'édition du jeu. C'est ici que
 * TRIGGER (TRIGNAME) {ON/OFF} #Créer/éditer un trigger
 * IFT {NOT} (TRIGNAME) ... {ELSE ...} END #Tester un trigger
 * VAR (VARNAME) (VALUE) #Créer/éditer une variable locale 
-* VARG (VARNAME) (VALUE) #Créer/éditer une variable globale
+* VARG (VARNAME) {VALUE} #Créer/éditer une variable globale
 * IF (VARNAME) (==/!=/>/</>=/<=) (VALUE) ... {ELSE ...} END #Tester une variable
 * IFO (WEST/SOUTH/NORTH/EAST) ...  {ELSE ...} END #Teste l'orientation du joueur
 * IFC {TRUE/FALSE} ... {ELSE ...} END #Tester la collision (TRUE) ou l'intéraction (FALSE)
@@ -87,9 +87,7 @@ Lorsqu'un événement comme RANDOM ou DIALOG place une valeur dans une variable,
 	      RANDOM VAL 1 3 # Génère un nombre aléatoire
 	      IF VAL == 1
 		      SAY "Vous avez trouvé de la nourriture"
-		      IF FOOD == 0 #La variable globale n'existe peut etre pas
-		      		VARG FOOD 0 #Crée la variable globale
-		      END
+			   VARG FOOD #Crée la variable globale si elle n'existe pas
 		      ICZ FOOD 1 # Augmente la variable globale nourriture
 	      ELSE
 	      		SAY "Ce coffre est vide"

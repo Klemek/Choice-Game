@@ -82,8 +82,16 @@ public class EventComputer implements GameEventListener {
 					case "VAR": //VAR (VARNAME) (VALUE) #Create/edit local variable
 						vars.put(args[0], Integer.parseInt(args[1]));
 						break;
-					case "VARG": //VARG (VARNAME) (VALUE) #Create/edit global variable
-						game.setGlobalVariable(args[0], Integer.parseInt(args[1]));
+					case "VARG": //VARG (VARNAME) {VALUE} #Create/edit global variable
+						switch(args.length){
+						case 1: //VARG (VARNAME)
+							if(!game.hasGlobalVariable(args[0]))
+								game.setGlobalVariable(args[0], 0);
+							break;
+						case 2: //VARG (VARNAME) {VALUE}
+							game.setGlobalVariable(args[0], Integer.parseInt(args[1]));
+							break;
+						}
 						break;
 					case "IF": //IF (VARNAME) (==/!=/>/</>=/<=) (VALUE) ... [ELSE ...] END #Test variable
 						switch(args[1]){
@@ -502,7 +510,7 @@ public class EventComputer implements GameEventListener {
 					testArgs(i,action,errors,args, new String[][]{{VARIABLE, VALUE}});
 					break;
 				case "VARG": //VARG (VARNAME) (VALUE) #Create/edit global variable
-					testArgs(i,action,errors,args, new String[][]{{VARIABLE, VALUE}});
+					testArgs(i,action,errors,args, new String[][]{{VARIABLE},{VARIABLE, VALUE}});
 					break;
 				case "IF": //IF (VARNAME) (==/!=/>/</>=/<=) (VALUE) ... [ELSE ...] END #Test variable
 					jumplvl++;
