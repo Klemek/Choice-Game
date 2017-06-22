@@ -65,11 +65,19 @@ You can then place your newly created events into the map in the 'info' layer.
 
 ![](img/example_map3.png)
 
-## 9. You are done
+## 9. Create and place npcs
+Npcs are like events, you create them on the 'info' tileset. To do so you need 3 properties :
+* **npc** : The name of your npc
+* **tileset** : The tileset of your npc
+* **event** : the event of your npc
+
+![](img/npc_properties.png)
+
+## 10. You are done
 Now you can either create new maps or finish the game by creating the configuration file (read [The Configuration File](Config.md#the-configuration-file)) and building it (read [Build the Game](Build.md#build-the-game)).
 
 
-## 10. Additional information for maps
+## 11. Additional information for maps
 
 * Your player will spawn in the [0,0] tile. You should place an event here that will move him to the right spot (this event will be computed before everything at the start of the map)
 

@@ -1,11 +1,11 @@
-# The Configuration File
+# Le fichier de configuration
 ## Introduction
 Le fichier de configuration s'appelle 'config.cfg'. Il faut écrire à l'intérieur la totalité des spécifications du jeu et les détails des cartes.
 
 
-## Properties list
+## Liste des propriétés
 Voici la liste des propriétés disponibles à l'édition
-### Resources
+### Ressources
 | Propriété | Info | Valeur par défaut |
 |-|-|-:|
 | tile_size | la taille des tiles dans tous les tilesets | 32 |
@@ -19,7 +19,7 @@ Voici la liste des propriétés disponibles à l'édition
 | font_name | le nom de la police personnalisée dans le système | Consolas |
 | dialog_tileset | le nom du tileset de dialogue |  |
 
-### Characters
+### Personnages
 | Propriété | Info | Valeur par défaut |
 |-|-|-:|
 | character_speed | la vitesse du personnage en blocks/3ms (*30 = blocks/s) | 0.1 |
@@ -39,10 +39,12 @@ Voici la liste des propriétés disponibles à l'édition
 | info_layer | le nom de la couche info de l'arriere plan dans les cartes | info |
 | type_tileset | le nom du tileset type dans les cartes | type |
 | type_property | le nom de la propriété type dans le tileset type | type |
-| info_tileset | the name of the info tileset in the maps | info |
-| event_property | tileset le nom de la propriété event dans le tileset info| event |
+| info_tileset | le nom du tileset info dans les cartes | info |
+| event_property | le nom de la propriété event dans le tileset info | event |
+| npc_property | le nom de la propriété npc dans le tileset info | npc |
+| tileset_property | le nom de la propriété tileset dans le tileset info | tileset |
 
-## Example 'config.cfg'
+## Exemple de 'config.cfg'
 Voici un exemple de 'config.cfg'
 
 	[Resources]
@@ -75,5 +77,7 @@ Voici un exemple de 'config.cfg'
 	type_property : type
 	info_tileset : info
 	event_property : event
+	npc_property : npc
+	tileset_property : tileset
 
-[Back to Table of Contents](Documentation.md#table-of-contents)
+[Retour au sommaire](Documentation.md#sommaire)

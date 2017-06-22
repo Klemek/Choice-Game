@@ -1,14 +1,14 @@
-# Events
+# Les événements
 
 ## Introduction
 
-Les événements sont les principaux éléments d'édition du jeu. C'est ici que vous pourrez créer toutes les intéractions que pourra faire votre personnage. Ils devraient être dans les propriétés de la tile info dans votre [map creation](Map_creation.md#map-creation).
+Les événements sont les principaux éléments d'édition du jeu. C'est ici que vous pourrez créer toutes les intéractions que pourra faire votre personnage. Ils devraient être dans les propriétés de la tile info dans votre [Créer une carte](Map_creation.md#créer-une-carte).
 
 ## Format:
 	EVENT (PARAM) {OPTIONAL PARAM}
 
-## List :
-### Logical :
+## Liste :
+### Logique :
 
 * TRIGGER (TRIGNAME) {ON/OFF} #Créer/éditer un trigger
 * IFT {NOT} (TRIGNAME) ... {ELSE ...} END #Tester un trigger
@@ -22,7 +22,7 @@ Les événements sont les principaux éléments d'édition du jeu. C'est ici que
 * RANDOM (VARNAME) (MINVALUE) (MAXVALUE) #Génère un nombre aléatoire entre min et max et l'associe à une variable
 
 
-### Visual effects:
+### Effets visuels:
 
 * SAY (TEXT) {IMAGEID} #Affiche du texte (met le jeu en pause)
 * DIALOG (TEXT) (VARNAME) (OPTION1) (OPTION2) ... #Affiche un choix et retourne le résultat dans une variable (commence à 1)
@@ -30,7 +30,7 @@ Les événements sont les principaux éléments d'édition du jeu. C'est ici que
 * FILTER (R) (G) (B) (A) {TIME} / OFF {TIME} #Ajoute un filtre au jeu (valeur rgba entre 0 et 1), durée par défaut 0.5 seconde
 
 
-### Game interaction:
+### Interaction en jeu:
 
 * MAP (X) (Y) (LAYER) {TILESET} {ID} #Editer une tile de la carte
 * MAPR (DX) (DY) (LAYER) {TILESET} {ID} #Editer une tile de la map relativement à la source de l'évènement
@@ -60,8 +60,8 @@ Lorsqu'un événement comme RANDOM ou DIALOG place une valeur dans une variable,
 * Les sons joués depuis le dossier des sons sont en **format .ogg**
 * Vérifiez les logs lorsque le jeu tourne pour voir si certaines commandes sont mauvaises, elles ne seront pas enregistrées pour ne pas corrompre le jeu. 
 
-## Examples
-### Example 1 (Change carte):
+## Exemples
+### Exemple 1 (Changer de carte):
 	IFC  # Si le joueur marche dessus
 	   FILTER 0 0 0 1  # ajouter un filtre noir
 	   SOUND "dooropen" P # Jouer le son de la porte qui s'ouvre
@@ -69,14 +69,14 @@ Lorsqu'un événement comme RANDOM ou DIALOG place une valeur dans une variable,
 	   SOUND OFF # Enlever la musique de la map
 	   CHGMAP "othermap" 1 0  # Changer de map au coordonnées fournies
 	END	
-### Example 2 (Entrer la carte):
+### Exemple 2 (Entrer sur la carte):
 	MVPLAYER 9 13 # Déplacer le joueur au bon endroit
 	SOUND "doorclose" P # Joue le son de la porte qui se ferme
 	SOUND "music" R # Joue la musique de la map
 	PLAYERFACE WEST # Change l'orientation du joueur
 	FILTER OFF # Enlever le filtre noir si il y a
 	PAUSE 0.5 # Tout mettre en pause le temps que le filtre noir s'enlève
-### Example 3 (Lit):
+### Exemple 3 (Lit):
 	DIALOG "Que voulez-vous faire ?" CHOICE1 "Dormir jusqu'au matin"  "Dormir jusqu'au soir"  "Annuler"
 	IF CHOICE1 == 1
 	   SAY "Vous dormez jusqu'au matin"
@@ -86,7 +86,7 @@ Lorsqu'un événement comme RANDOM ou DIALOG place une valeur dans une variable,
 	   SAY "Vous dormez jusqu'au soir"
 	   TRIGGER DAY OFF
 	END
-### Example 4 (Coffre):
+### Exemple 4 (Coffre):
 	IFT NOT CHEST152 # Event unique
 	   IFT KEY152 # Trigger de la clé du coffre
 	      MAPR 0 0 1 CHEST1 1 # Change la tile pour montrer le coffre ouvert
@@ -106,6 +106,5 @@ Lorsqu'un événement comme RANDOM ou DIALOG place une valeur dans une variable,
 	ELSE
 	   SAY "Vous avez déjà fouillé ce coffre."
 	END
-
 	
-[Back to Table of Contents](Documentation.md#table-of-contents)
+[Retour au sommaire](Documentation.md#sommaire)

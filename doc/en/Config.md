@@ -40,6 +40,8 @@ Here's the list of available properties
 | type_property | the name of the type property in the type tileset | type |
 | info_tileset | the name of the info tileset in the maps | info |
 | event_property | the name of the event property in the info tileset | event |
+| npc_property | the name of the npc property in the info tileset | npc |
+| tileset_property | the name of the tileset property in the info tileset | tileset |
 
 ## Example 'config.cfg'
 Here is an example 'config.cfg'
@@ -74,6 +76,7 @@ Here is an example 'config.cfg'
 	type_property : type
 	info_tileset : info
 	event_property : event
-
+	npc_property : npc
+	tileset_property : tileset
 
 [Back to Table of Contents](Documentation.md#table-of-contents)

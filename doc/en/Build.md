@@ -1,6 +1,6 @@
 # Build the Game
 ## 1. Requirements
-You will need an archive manager (like WinRAR) and the choicegame soft. (read [Get Started](Get_started.md#get-started) to see how).
+You will need an archive manager (like WinRAR) and the choicegame soft. (read [Get Started](Documentation.md#get-started) to see how).
 
 From every previous steps you should have a config.cfg that set every folders name and some folders
 ### The maps folder
