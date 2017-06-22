@@ -315,41 +315,60 @@ public class EventComputer implements GameEventListener {
 					case "MAP": //MAP (X) (Y) (LAYER) [TILESET] [ID] #Edit one map's tile
 						int x0 = Integer.parseInt(args[0]);
 						int y0 = Integer.parseInt(args[1]);
-						int layer = Integer.parseInt(args[2]);
-						Tile t = game.getCurrentMap().getTile(x0,y0);
-						TileImage[] ti = t.getImages();
-						switch(args.length){
-						case 3: //MAP (X) (Y) (LAYER)
-							ti[layer] = null;
-							t.setImages(ti);
-							break;
-						case 5: //MAP (X) (Y) (LAYER) [TILESET] [ID]
-							String tileset = getStringArg(args[3]);
-							int id = Integer.parseInt(args[4]);
-							ti[layer] = new TileImage(id,tileset);
-							t.setImages(ti);
-							break;
+						
+						if(x0<0 || x0>=this.game.getCurrentMap().getWidth() || y0<0 || y0>=this.game.getCurrentMap().getHeight()){
+							System.out.println("#Position out of bounds");
+						}else{
+							int layer = Integer.parseInt(args[2]);
+							
+							if(layer<0 || layer >4){
+								System.out.println("#Invalid layer");
+							}else{
+								Tile t = game.getCurrentMap().getTile(x0,y0);
+								TileImage[] ti = t.getImages();
+								switch(args.length){
+								case 3: //MAP (X) (Y) (LAYER)
+									ti[layer] = null;
+									t.setImages(ti);
+									break;
+								case 5: //MAP (X) (Y) (LAYER) [TILESET] [ID]
+									String tileset = getStringArg(args[3]);
+									int id = Integer.parseInt(args[4]);
+									ti[layer] = new TileImage(id,tileset);
+									t.setImages(ti);
+									break;
+								}
+							}
 						}
 						break;
 					case "MAPR": //MAPR (DX) (DY) (LAYER) [TILESET] [ID] #Edit one map's tile relatively to event's source
 						int dx = Integer.parseInt(args[0]);
 						int dy = Integer.parseInt(args[1]);
-						int layer1 = Integer.parseInt(args[2]);
-						Tile t1 = game.getCurrentMap().getTile(x+dx,y+dy);
-						TileImage[] ti1 = t1.getImages();
-						switch(args.length){
-						case 3: //MAPR (DX) (DY) (LAYER)
-							ti1[layer1] = null;
-							t1.setImages(ti1);
-							game.updateMap();
-							break;
-						case 5: //MAPR (DX) (DY) (LAYER) [TILESET] [ID]
-							String tileset = getStringArg(args[3]);
-							int id = Integer.parseInt(args[4]);
-							ti1[layer1] = new TileImage(id,tileset);
-							t1.setImages(ti1);
-							game.updateMap();
-							break;
+						if(x+dx<0 || x+dx>=this.game.getCurrentMap().getWidth() || y+dy<0 || y+dy>=this.game.getCurrentMap().getHeight()){
+							System.out.println("#Position out of bounds");
+						}else{
+							int layer1 = Integer.parseInt(args[2]);
+							
+							if(layer1<0 || layer1 >4){
+								System.out.println("#Invalid layer");
+							}else{
+								Tile t1 = game.getCurrentMap().getTile(x+dx,y+dy);
+								TileImage[] ti1 = t1.getImages();
+								switch(args.length){
+								case 3: //MAPR (DX) (DY) (LAYER)
+									ti1[layer1] = null;
+									t1.setImages(ti1);
+									game.updateMap();
+									break;
+								case 5: //MAPR (DX) (DY) (LAYER) [TILESET] [ID]
+									String tileset = getStringArg(args[3]);
+									int id = Integer.parseInt(args[4]);
+									ti1[layer1] = new TileImage(id,tileset);
+									t1.setImages(ti1);
+									game.updateMap();
+									break;
+								}
+							}
 						}
 						break;
 					case "PLAYERTILESET": //PLAYERTILESET (TILESET) #Change Player tileset
@@ -373,10 +392,25 @@ public class EventComputer implements GameEventListener {
 						}
 						break;
 					case "MVPLAYER": //MVPLAYER (PLAYERX) (PLAYERY) #Move player in current map
-						game.getPlayer().setPosition(Integer.parseInt(args[0]),Integer.parseInt(args[1]));
+						
+						int x01 = Integer.parseInt(args[0]);
+						int y01 = Integer.parseInt(args[1]);
+						
+						if(x01<0 || x01>=this.game.getCurrentMap().getWidth() || y01<0 || y01>=this.game.getCurrentMap().getHeight()){
+							System.out.println("#Position out of bounds");
+						}else{
+							game.getPlayer().setPosition(x01,y01);
+						}
 						break;
 					case "MVRPLAYER": //MVRPLAYER (PLAYERDX) (PLAYERDY) #Move player relativelyin current map
-						game.getPlayer().setPosition(Integer.parseInt(x+args[0]),Integer.parseInt(y+args[1]));
+						
+						int dx1 = Integer.parseInt(args[0]);
+						int dy1 = Integer.parseInt(args[1]);
+						if(x+dx1<0 || x+dx1>=this.game.getCurrentMap().getWidth() || y+dy1<0 || y+dy1>=this.game.getCurrentMap().getHeight()){
+							System.out.println("#Position out of bounds");
+						}else{
+							game.getPlayer().setPosition(x+dx1,y+dy1);
+						}
 						break;
 					case "STOP": // STOP {ON/OFF} #Prevent player from moving
 						switch(args.length){
