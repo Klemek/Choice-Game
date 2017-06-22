@@ -38,6 +38,7 @@ Les événements sont les principaux éléments d'édition du jeu. C'est ici que
 * CHGMAP (MAPNAME) {PLAYERX} {PLAYERY} #Change la carte et (optionnel) déplace le joueur dessus
 * MVPLAYER (PLAYERX) (PLAYERY) #Déplace le joueur sur la carte
 * MVRPLAYER (PLAYERDX) (PLAYERDY) #Déplace le joueur relativement à la carte
+* WALKPLAYER (ON/OFF) #Fait marcher le joueur dans la direction qu'il regarde (si l'orientation change, la direction non)
 * PLAYERFACE (WEST/SOUTH/NORTH/EAST) #Change la direction du joueur
 * STOP {ON/OFF} #Empêche le joueur de bouger
 * WAIT (TIME) #Attend un certain temps avant un autre événement

@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" tiledversion="1.0.1" orientation="orthogonal" renderorder="right-down" width="12" height="10" tilewidth="32" tileheight="32" nextobjectid="1">
+ <tileset firstgid="1" name="type" tilewidth="32" tileheight="32" tilecount="2" columns="2">
+  <image source="typetilseset.png" width="64" height="32"/>
+  <tile id="0">
+   <properties>
+    <property name="type" type="int" value="1"/>
+   </properties>
+  </tile>
+  <tile id="1">
+   <properties>
+    <property name="type" type="int" value="2"/>
+   </properties>
+  </tile>
+ </tileset>
+ <tileset firstgid="3" name="info" tilewidth="32" tileheight="32" tilecount="20" columns="10">
+  <image source="infotileset.png" width="320" height="64"/>
+  <tile id="0">
+   <properties>
+    <property name="event">FILTER 0 0 0 1 0
+MVPLAYER 7 7
+FILTER OFF
+PAUSE 0.5</property>
+   </properties>
+  </tile>
+  <tile id="1">
+   <properties>
+    <property name="event">SOUND &quot;door&quot; P
+MAPR 0 -1 1 &quot;doors2&quot; 48
+MAPR 0 0 1 &quot;doors2&quot; 60
+FILTER 0 0 0 1
+PAUSE 0.5
+SOUND OFF
+MAPR 0 -1 1 &quot;doors2&quot; 0
+MAPR 0 0 1 &quot;doors2&quot; 12
+CHGMAP &quot;example_2&quot;
+</property>
+   </properties>
+  </tile>
+  <tile id="2">
+   <properties>
+    <property name="event">DIALOG &quot;Composer quel numéro ?&quot; NUM &quot;Au hasard&quot; &quot;18&quot; &quot;3630&quot; &quot;Raccrocher&quot;
+
+IF NUM == 1
+   SAY &quot;'Allo ?'&quot;
+   FILTER 0 0 0 0.5 0.1
+   SHAKE 0.001
+   SAY &quot;...&quot;
+   SHAKE 0.0
+   FILTER OFF 0.1
+   SAY &quot;Il n'y a personne...&quot;
+END
+
+IF NUM == 2
+   SAY &quot;'Allo ?'&quot;
+   FILTER 0 0 0 0.5 0.1
+   SAY &quot;*musique des pompiers*&quot;
+   FILTER OFF 0.1
+   SAY &quot;Ca ne s'arrête pas...&quot;
+END
+
+IF NUM == 3
+   SAY &quot;'Allo père nöel ?'&quot;
+   FILTER 0 0 0 0.5 0.1
+   SAY &quot;Le père nöel n'existe pas !&quot;
+   FILTER OFF 0.1
+   SAY &quot;Il a raccroché !&quot;
+END
+
+SAY &quot;Vous raccrochez le téléphone&quot;</property>
+   </properties>
+  </tile>
+  <tile id="3">
+   <properties>
+    <property name="event">FILTER 0 0 0 1 0
+MVPLAYER 7 3
+SOUND &quot;door&quot; P
+FILTER OFF
+PAUSE 0.5</property>
+   </properties>
+  </tile>
+  <tile id="4">
+   <properties>
+    <property name="event" value=""/>
+   </properties>
+  </tile>
+  <tile id="5">
+   <properties>
+    <property name="event" value=""/>
+   </properties>
+  </tile>
+  <tile id="6">
+   <properties>
+    <property name="event" value=""/>
+   </properties>
+  </tile>
+  <tile id="7">
+   <properties>
+    <property name="event" value=""/>
+   </properties>
+  </tile>
+  <tile id="8">
+   <properties>
+    <property name="event" value=""/>
+   </properties>
+  </tile>
+  <tile id="9">
+   <properties>
+    <property name="event" value=""/>
+   </properties>
+  </tile>
+  <tile id="10">
+   <properties>
+    <property name="npc" value=""/>
+   </properties>
+  </tile>
+  <tile id="11">
+   <properties>
+    <property name="npc" value=""/>
+   </properties>
+  </tile>
+  <tile id="12">
+   <properties>
+    <property name="npc" value=""/>
+   </properties>
+  </tile>
+  <tile id="13">
+   <properties>
+    <property name="npc" value=""/>
+   </properties>
+  </tile>
+  <tile id="14">
+   <properties>
+    <property name="npc" value=""/>
+   </properties>
+  </tile>
+  <tile id="15">
+   <properties>
+    <property name="npc" value=""/>
+   </properties>
+  </tile>
+  <tile id="16">
+   <properties>
+    <property name="npc" value=""/>
+   </properties>
+  </tile>
+  <tile id="17">
+   <properties>
+    <property name="npc" value=""/>
+   </properties>
+  </tile>
+  <tile id="18">
+   <properties>
+    <property name="npc" value=""/>
+   </properties>
+  </tile>
+  <tile id="19">
+   <properties>
+    <property name="npc" value=""/>
+   </properties>
+  </tile>
+ </tileset>
+ <tileset firstgid="23" name="Futuristic_A3_2" tilewidth="32" tileheight="32" tilecount="512" columns="32">
+  <image source="../tilesets/Futuristic_A3_2.png" width="1024" height="512"/>
+ </tileset>
+ <tileset firstgid="535" name="doors2" tilewidth="32" tileheight="32" tilecount="192" columns="12">
+  <image source="../tilesets/doors2.png" width="384" height="512"/>
+ </tileset>
+ <tileset firstgid="727" name="future-joy-tilee" tilewidth="32" tileheight="32" tilecount="256" columns="16">
+  <image source="../tilesets/future-joy-tilee.png" width="512" height="512"/>
+ </tileset>
+ <tileset firstgid="983" name="Futuristic_A1_2" tilewidth="32" tileheight="32" tilecount="768" columns="32">
+  <image source="../tilesets/Futuristic_A1_2.png" width="1024" height="768"/>
+ </tileset>
+ <tileset firstgid="1751" name="Futuristic_A2_2" tilewidth="32" tileheight="32" tilecount="768" columns="32">
+  <image source="../tilesets/Futuristic_A2_2.png" width="1024" height="768"/>
+ </tileset>
+ <tileset firstgid="2519" name="Futuristic_A4_2" tilewidth="32" tileheight="32" tilecount="960" columns="32">
+  <image source="../tilesets/Futuristic_A4_2.png" width="1024" height="960"/>
+ </tileset>
+ <tileset firstgid="3479" name="Futuristic_A5" tilewidth="32" tileheight="32" tilecount="128" columns="8">
+  <image source="../tilesets/Futuristic_A5.png" width="256" height="512"/>
+ </tileset>
+ <tileset firstgid="3607" name="Futuristic_TileB" tilewidth="32" tileheight="32" tilecount="256" columns="16">
+  <image source="../tilesets/Futuristic_TileB.png" width="512" height="512"/>
+ </tileset>
+ <tileset firstgid="3863" name="Futuristic_TileC" tilewidth="32" tileheight="32" tilecount="256" columns="16">
+  <image source="../tilesets/Futuristic_TileC.png" width="512" height="512"/>
+ </tileset>
+ <tileset firstgid="4119" name="Futuristic_TileD" tilewidth="32" tileheight="32" tilecount="256" columns="16">
+  <image source="../tilesets/Futuristic_TileD.png" width="512" height="512"/>
+ </tileset>
+ <tileset firstgid="4375" name="Futuristic_TileE" tilewidth="32" tileheight="32" tilecount="256" columns="16">
+  <image source="../tilesets/Futuristic_TileE.png" width="512" height="512"/>
+ </tileset>
+ <layer name="bg1" width="12" height="10">
+  <data encoding="csv">
+2582,2708,2708,2708,2708,2708,2708,2708,2708,2708,2708,2581,
+2646,2740,2741,2742,2739,2740,2741,2742,2739,2740,2741,2643,
+2646,2836,2837,2838,2835,2836,2837,2838,2835,2836,2837,2675,
+2646,3505,3505,3505,3505,3505,3505,3505,3505,3505,3505,2675,
+2646,3505,3505,3505,3505,3505,3505,3505,3505,3505,3505,2675,
+2646,3505,3505,3505,3505,3505,3505,3505,3505,3505,3505,2675,
+2646,3505,3505,3505,3505,3505,3505,3505,3505,3505,3505,2675,
+2646,3505,3505,3505,3505,3505,3505,3505,3505,3505,3505,2675,
+2646,3505,3505,3505,3505,3505,3505,3505,3505,3505,3505,2675,
+2550,2612,2612,2612,2612,2612,2612,2612,2612,2612,2613,2549
+</data>
+ </layer>
+ <layer name="bg2" width="12" height="10">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,4381,0,535,738,0,0,0,
+0,0,0,0,0,0,0,547,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,3863,3864,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <layer name="fg1" width="12" height="10">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,4573,4558,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <layer name="fg2" width="12" height="10">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <layer name="type" width="12" height="10" opacity="0.46">
+  <data encoding="csv">
+2,2,2,2,2,2,2,2,2,2,2,2,
+2,2,2,2,2,2,2,2,2,2,2,2,
+2,2,2,2,2,2,2,2,2,2,2,2,
+2,1,1,1,1,1,1,1,1,1,1,2,
+2,1,1,1,1,1,1,1,1,1,1,2,
+2,1,1,2,2,1,1,1,1,1,1,2,
+2,1,1,1,1,1,1,1,1,1,1,2,
+2,1,1,1,1,1,1,1,1,1,1,2,
+2,1,1,1,1,1,1,1,1,1,1,2,
+2,1,1,1,1,1,1,1,1,1,1,2
+</data>
+ </layer>
+ <layer name="info" width="12" height="10">
+  <data encoding="csv">
+3,6,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,4,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,5,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+</map>

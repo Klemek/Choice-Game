@@ -420,13 +420,17 @@ public class EventComputer implements GameEventListener {
 							game.getPlayer().setPosition(x+dx1,y+dy1);
 						}
 						break;
+					case "WALKPLAYER": //WALKPLAYER (ON/OFF) # Set player walking
+						this.game.getPlayer().setMoving(this.game.getPlayer().getFacing());
+						this.game.getPlayer().setWalking(args[0].equals("ON"));
+						break;
 					case "STOP": // STOP {ON/OFF} #Prevent player from moving
 						switch(args.length){
 						case 0:
 							this.game.setStopPlayer(true);
 							break;
 						case 1:
-							this.game.setStopPlayer(args[1].equals("ON"));
+							this.game.setStopPlayer(args[0].equals("ON"));
 							break;
 						}
 						break;
@@ -601,6 +605,9 @@ public class EventComputer implements GameEventListener {
 					break;
 				case "MVRPLAYER": //MVRPLAYER (PLAYERDX) (PLAYERDY) #Move player relatively in current map
 					testArgs(i,action,errors,args, new String[][]{{INTVALUE,INTVALUE}});
+					break;
+				case "WALKPLAYER": //WALKPLAYER (ON/OFF) # Set player walking
+					testArgs(i,action,errors,args, new String[][]{{},{"ON/OFF"}});
 					break;
 				case "STOP": // STOP {ON/OFF} #Prevent player from moving
 					testArgs(i,action,errors,args, new String[][]{{},{"ON/OFF"}});

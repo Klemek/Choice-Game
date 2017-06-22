@@ -40,6 +40,7 @@ Events are the main part of the game edition. This is where you will set your st
 * CHGMAP (MAPNAME) {PLAYERX} {PLAYERY} #Change map and (optional) move player in it
 * MVPLAYER (PLAYERX) (PLAYERY) #Move player in current map
 * MVRPLAYER (PLAYERDX) (PLAYERDY) #Move player relatively in current map
+* WALKPLAYER (ON/OFF) #Set player to walk in the direction he is facing (if facing change, same direction)
 * PLAYERFACE (WEST/SOUTH/NORTH/EAST) #Change player facing
 * STOP {ON/OFF} #Prevent player from moving
 * WAIT (TIME) #Wait a amount of time before other event

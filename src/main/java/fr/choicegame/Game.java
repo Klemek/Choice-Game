@@ -313,8 +313,6 @@ public class Game implements IGameLogic, KeyEventListener {
 					}
 				}
 			}
-		}else{
-			player.setWalking(false);
 		}
 	}
 
@@ -353,15 +351,21 @@ public class Game implements IGameLogic, KeyEventListener {
 
 	public void setWaitInput(boolean pause) {
 		this.wait_input = pause;
+		if(this.wait_input)
+			player.setWalking(false);
 	}
 	
 	public void setStopPlayer(boolean stop){
 		this.player_stopped = stop;
+		if(this.player_stopped)
+			player.setWalking(false);
 	}
 
 	public void setWaitTime(float time, boolean wait){
 		this.wait = wait;
 		this.wait_time_left = time;
+		if(this.wait)
+			player.setWalking(false);
 	}
 	
 	@Override

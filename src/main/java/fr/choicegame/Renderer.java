@@ -287,6 +287,8 @@ public class Renderer {
 	}
 
 	public Texture getTexture(String name) {
+		if(!textures.containsKey(name))
+			System.out.println("#No texture named : "+name);
 		return textures.get(name);
 	}
 

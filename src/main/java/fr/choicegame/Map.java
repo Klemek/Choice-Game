@@ -38,7 +38,9 @@ public class Map {
 	}
 	
 	public void action(int x, int y, boolean collide){
-		tileMap[x][y].action(x, y, collide);
+		if(x>=0 && x<this.getWidth() && y>=0 && y<this.getHeight()){
+			tileMap[x][y].action(x, y, collide);
+		}
 	}
 	
 	public int getWidth() {
