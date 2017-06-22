@@ -1,6 +1,6 @@
 # Compiler le jeu
 ## 1. Pré-requis
-Vous aurez besoin d'un gestionnaire d'archive (Comme WinRAR) et du programme choicegame. (lire [Bien démarrer](Documentation.md#bien-demarrer) pour vous renseigner)
+Vous aurez besoin d'un gestionnaire d'archive (Comme WinRAR) et du programme choicegame. (lire [Bien démarrer](Documentation.md#bien-démarrer) pour vous renseigner)
 
 Pour chacune des étapes précédente vous devez avoir config.cfg qui met en place les noms de dossiers et certains dossiers
 ### Le dossier maps
@@ -43,8 +43,8 @@ Si tout est correct, le jeu doit normalement se démarrer avec la carte de dépa
 | Font file ... not found | La police de caractère spécifiée dans config.cfg n'est pas dans le dossier associé. |
 | Font ... not found on the Local Graphics Environment | Le nom de votre police de caractère n'est pas correct dans config.cfg. |
 | Error on reading ... | Ceci est une erreur ... Google est ton ami. |
-| [n] errors with event | Erreur de syntaxe dans les évènements, se référer à [Events](Events.md#events) |
-| Invalid map : ... orientation is not orthogonal | Votre carte à mal été faite, se référer à [Map Creation](Map_creation.md#map-creation) |
+| [n] errors with event | Erreur de syntaxe dans les évènements, se référer à [Les événements](Events.md#les-événements) |
+| Invalid map : ... orientation is not orthogonal | Votre carte à mal été faite, se référer à [Créer une carte](Map_creation.md#créer-une-carte) |
 | Invalid map : ... renderorder is not right-down | // |
 | Invalid map : ... non existing layer | // |
 | Invalid layer : ... no data | // |

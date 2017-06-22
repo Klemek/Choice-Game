@@ -5,8 +5,8 @@
 Choice-game est un moteur de jeu personnalisable où vous pouvez jouer l'histoire que vous voulez.
 
 ## Sommaire
-* [Map Creation](Map_creation.md#map-creation)
-* [Events](Events.md#les-evenements)
+* [Créer une carte](Map_creation.md#créer-une-carte)
+* [Les événements](Events.md#les-événements)
 * [Le fichier de configuration](Config.md#le-fichier-de-configuration)
 * [Compiler le jeu](Build.md#compiler-le-jeu)
 

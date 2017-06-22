@@ -79,7 +79,7 @@ Vous devez maintenant délimiter la zone du joueur dans laquelle il pourra se d�
 
 
 # 8. Créer et placer des événements
-Configurez votre tileset 'info' pour ajouter des événements. Pour cela, ajouter une nouvelle chaine de caractères (string) nommée 'event' (ou un autre nom que vous devrez retenir). Ecrivez le script de votre événement en utilisant les événements (lire [Les événements](Events.md#les-evenements) for the list of available commands).
+Configurez votre tileset 'info' pour ajouter des événements. Pour cela, ajouter une nouvelle chaine de caractères (string) nommée 'event' (ou un autre nom que vous devrez retenir). Ecrivez le script de votre événement en utilisant les événements (lire [Les événements](Events.md#les-événements) for the list of available commands).
 
 [](img/add_event.png)
 
