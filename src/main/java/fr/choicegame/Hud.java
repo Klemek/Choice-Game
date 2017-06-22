@@ -18,7 +18,7 @@ import fr.choicegame.lwjglengine.graph.Texture;
 public class Hud implements IHud {
 
 	
-	private static final String TITLE = "Choice-Game Beta 1.5";
+	private static final String TITLE = "Choice-Game Beta 1.6";
 	
 	private GameItem[] gameItems;
 

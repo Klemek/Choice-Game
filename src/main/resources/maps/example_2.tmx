@@ -72,7 +72,7 @@ DELETEMSG</property>
   </tile>
   <tile id="5">
    <properties>
-    <property name="event" value=""/>
+    <property name="event" value="STOP"/>
    </properties>
   </tile>
   <tile id="6">

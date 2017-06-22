@@ -397,7 +397,7 @@ public class EventComputer implements GameEventListener {
 							game.setCurrentMap(getStringArg(args[0]),Integer.parseInt(args[1]),Integer.parseInt(args[2]));
 							break;
 						}
-						break;
+						return; //end of script
 					case "MVPLAYER": //MVPLAYER (PLAYERX) (PLAYERY) #Move player in current map
 						
 						int x01 = Integer.parseInt(args[0]);
@@ -803,6 +803,8 @@ public class EventComputer implements GameEventListener {
 	public void resume(){
 		if(savedEvent != null){
 			this.eventCalled(savedEvent, savedx, savedy, savedi, savedvars, savedc);
+		}else{
+			System.out.println("#No saved event, can't resume !");
 		}
 	}
 	

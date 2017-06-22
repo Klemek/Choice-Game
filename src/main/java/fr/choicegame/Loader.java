@@ -189,7 +189,6 @@ public class Loader {
 				textures.put(path, new Texture(path));
 				System.out.println("Image File '" + path + "' loaded");
 			} catch (IOException e) {
-				e.printStackTrace();
 				System.out.println("#Error on reading '" + path + "': " + e.getMessage());
 			}
 		}

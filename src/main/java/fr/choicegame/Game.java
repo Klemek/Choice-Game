@@ -327,7 +327,6 @@ public class Game implements IGameLogic, KeyEventListener {
 		}
 		
 		hud.update(interval);
-		
 		if(wait_time_left>0){
 			wait_time_left -= interval;
 			if(wait_time_left<=0){
