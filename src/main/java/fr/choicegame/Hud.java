@@ -17,6 +17,9 @@ import fr.choicegame.lwjglengine.graph.Texture;
 
 public class Hud implements IHud {
 
+	
+	private static final String TITLE = "Choice-Game Beta 1.3";
+	
 	private GameItem[] gameItems;
 
 	private TextItem infoTextItem;
@@ -47,7 +50,7 @@ public class Hud implements IHud {
 				Color.RED);
 		FontTexture msgFont = new FontTexture(new Font(Config.getValue(Config.FONT_NAME), Font.BOLD, msgFontSize), "ISO-8859-1",
 				Color.WHITE);
-		this.infoTextItem = new TextItem("Choice-Game Beta 1.2", infoFont);
+		this.infoTextItem = new TextItem(TITLE, infoFont);
 		
 		this.msgTextItem = new TextItem("", msgFont);
 		this.msgTextItem.setVisible(false);

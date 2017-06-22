@@ -237,7 +237,14 @@ public class Game implements IGameLogic, KeyEventListener {
 					}else if(key == GLFW_KEY_DOWN || key == GLFW_KEY_S){
 						hud.down();
 					}else if(key == GLFW_KEY_E || key == GLFW_KEY_SPACE || key == GLFW_KEY_ENTER){
-						if(hud.hasDialog()){
+						if(!hud.hasDialog()){
+							hud.clearMenu();
+							if(!hud.hasMsg())
+								wait_input = false;
+							if(hud.getMenuChoice()==2){
+								shouldClose = true;
+							}
+						}else{
 							wait_input = false;
 							hud.clearMsg();
 							
@@ -247,13 +254,6 @@ public class Game implements IGameLogic, KeyEventListener {
 								evComputer.setTempVar(hud.getDialogvar(),hud.getDialogchoice());
 							}
 							evComputer.resume();
-						}else{
-							hud.clearMenu();
-							if(!hud.hasMsg())
-								wait_input = false;
-							if(hud.getMenuChoice()==2){
-								shouldClose = true;
-							}
 						}
 					}
 				}else if(key == GLFW_KEY_E || key == GLFW_KEY_SPACE || key == GLFW_KEY_ENTER){
