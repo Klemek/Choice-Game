@@ -32,14 +32,19 @@ Les événements sont les principaux éléments d'édition du jeu. C'est ici que
 
 ### Game interaction:
 
-* MAP (X) (Y) (LAYER) (TILESET) (ID) #Editer une tile de la carte
-* MAPR (DX) (DY) (LAYER) (TILESET) (ID) #Editer une tile de la map relativement à la source de l'évènement
+* MAP (X) (Y) (LAYER) {TILESET} {ID} #Editer une tile de la carte
+* MAPR (DX) (DY) (LAYER) {TILESET} {ID} #Editer une tile de la map relativement à la source de l'évènement
 * PLAYERTILESET (TILESET) #Change le tileset du joueur
 * CHGMAP (MAPNAME) {PLAYERX} {PLAYERY} #Change la carte et (optionnel) déplace le joueur dessus
 * MVPLAYER (PLAYERX) (PLAYERY) #Déplace le joueur sur la carte
-* MVRPLAYER (PLAYERDX) (PLAYERDY) #Déplace le joueur relativement à la carte
+* MVRPLAYER (PLAYERDX) (PLAYERDY) #Déplace le joueur relativement sur la carte
 * WALKPLAYER (ON/OFF) #Fait marcher le joueur dans la direction qu'il regarde (si l'orientation change, la direction non)
 * PLAYERFACE (WEST/SOUTH/NORTH/EAST) #Change la direction du joueur
+* MVNPC (NPCNAME) (NPCX) (NPCY) #Déplace un pnj sur la carte
+* MVRNPC (NPCNAME) (NPCDX) (NPCDY) #Déplace un pnj relativement sur la carte
+* NPCWALK (NPCNAME) (ON/OFF) #Fait marcher un npc dans la direction qu'il regarde (si l'orientation change, la direction non)
+* NPCFACE (NPCNAME) (WEST/SOUTH/NORTH/EAST) #Change la direction d'un npc
+* NPCTILESET (NPCNAME) (TILESET) #Change le tileset d'un npc
 * STOP {ON/OFF} #Empêche le joueur de bouger
 * WAIT (TIME) #Attend un certain temps avant un autre événement
 * PAUSE (TIME) #Met le jeu en pause (attente + empêche le joueur de bouger)

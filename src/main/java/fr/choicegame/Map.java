@@ -1,7 +1,9 @@
 package fr.choicegame;
 
+import java.awt.Rectangle;
 import java.util.HashMap;
 import fr.choicegame.character.NPC;
+import fr.choicegame.character.Player;
 import fr.choicegame.event.GameEventListener;
 
 public class Map {
@@ -27,6 +29,10 @@ public class Map {
 				}
 			}
 		}
+		
+		for(NPC npc : npcs.values()){
+			npc.getEvent().setListener(listener);
+		}
 	}
 	
 	public void setTile(int x, int y, Tile tile) {
@@ -38,8 +44,26 @@ public class Map {
 	}
 	
 	public void action(int x, int y, boolean collide){
+		
+		//TODO detect npc at this case
+		if(!collide){
+			Rectangle tile = new Rectangle(x,y,1,1);
+			for(NPC npc : npcs.values()){
+				if(tile.intersects(npc.getHitBox())){
+					npc.getEvent().action(x, y, collide);
+					break;
+				}
+			}
+		}
+		
 		if(x>=0 && x<this.getWidth() && y>=0 && y<this.getHeight()){
 			tileMap[x][y].action(x, y, collide);
+		}
+	}
+	
+	public void npcUpdate(Player p){
+		for(NPC npc : npcs.values()){
+			npc.update(this, p);
 		}
 	}
 	
@@ -53,6 +77,12 @@ public class Map {
 
 	public HashMap<String, NPC> getNpcs() {
 		return npcs;
+	}
+	
+	public NPC getNpc(String name){
+		if(!npcs.containsKey(name))
+			System.out.println("#Unkown npc : "+name);
+		return npcs.get(name);
 	}
 
 	public void setNpcs(HashMap<String, NPC> npcs) {

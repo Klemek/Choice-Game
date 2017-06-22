@@ -98,6 +98,9 @@ public class Config {
 	public static final String NPC_PROPERTY = "npc_property";
 	private static final String NPC_PROPERTY_DEFAULT = "npc";
 	
+	public static final String TILESET_PROPERTY = "tileset_property";
+	private static final String TILESET_PROPERTY_DEFAULT = "tileset";
+	
 	private Config(){
 		values = new HashMap<>();
 		defaultValues = new HashMap<>();
@@ -133,6 +136,7 @@ public class Config {
 		defaultValues.put(INFO_TILESET, INFO_TILESET_DEFAULT);
 		defaultValues.put(EVENT_PROPERTY, EVENT_PROPERTY_DEFAULT);
 		defaultValues.put(NPC_PROPERTY, NPC_PROPERTY_DEFAULT);
+		defaultValues.put(TILESET_PROPERTY, TILESET_PROPERTY_DEFAULT);
 		values.putAll(defaultValues);
 	}
 	

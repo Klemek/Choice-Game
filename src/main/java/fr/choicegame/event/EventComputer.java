@@ -9,6 +9,7 @@ import fr.choicegame.Hud;
 import fr.choicegame.Tile;
 import fr.choicegame.TileImage;
 import fr.choicegame.character.Direction;
+import fr.choicegame.character.NPC;
 
 public class EventComputer implements GameEventListener {
 	
@@ -206,20 +207,18 @@ public class EventComputer implements GameEventListener {
 					
 					/* Visual effects */	
 						
-					case "SAY": //SAY (TEXT) [IMAGEID] #Show text (pause game)
+					case "SAY": //SAY (TEXT) [CONTINUE] #Show text (pause game if not continue)
 						switch(args.length){
 						case 1: //SAY (TEXT)
-							game.getHud().setMsg(getStringArg(args[0]));
+							game.getHud().setMsg(getStringArg(args[0]),true);
 							game.setWaitInput(true);
 							pause(event,x,y,i,vars,collide);
 							return;
-						case 2://SAY (TEXT) (IMAGID)
-							//TODO Image
-							game.getHud().setMsg(getStringArg(args[0]));
-							game.setWaitInput(true);
-							pause(event,x,y,i,vars,collide);
-							return;
+						case 2://SAY (TEXT) CONTINUE
+							game.getHud().setMsg(getStringArg(args[0]),false);
+							break;
 						}
+						break;
 					case "DIALOG": //DIALOG (TEXT) (VARNAME) (OPTION1) (OPTION2) ... #Show a choice and return result on a viariable
 						//TODO EVENT DIALOG
 						String[] dial = new String[args.length-1];
@@ -258,6 +257,10 @@ public class EventComputer implements GameEventListener {
 							break;
 						}
 						break;
+					case "DELETEMSG": //DELETEMSG #Delete current message
+						game.getHud().clearMsg();
+						game.setWaitInput(false);
+						break;
 						
 					/* Sound effects */
 						
@@ -293,7 +296,7 @@ public class EventComputer implements GameEventListener {
 							break;
 						case 3://INVADD (ITEMID) (NUM) (MSG)
 							game.getPlayer().getInventory().put(itemid1,itemcount1+Integer.parseInt(args[1]));
-							game.getHud().setMsg(getStringArg(args[2]));
+							game.getHud().setMsg(getStringArg(args[2]),true);
 							game.setWaitInput(true);
 							pause(event,x,y,i,vars,collide);
 							return;
@@ -314,7 +317,7 @@ public class EventComputer implements GameEventListener {
 							break;
 						case 3://INVDEL (ITEMID) (NUM) (MSG)
 							game.getPlayer().getInventory().put(itemid2,Math.max(0,itemcount2-Integer.parseInt(args[1])));
-							game.getHud().setMsg(getStringArg(args[2]));
+							game.getHud().setMsg(getStringArg(args[2]),true);
 							game.setWaitInput(true);
 							pause(event,x,y,i,vars,collide);
 							return;
@@ -382,12 +385,8 @@ public class EventComputer implements GameEventListener {
 					case "PLAYERTILESET": //PLAYERTILESET (TILESET) #Change Player tileset
 						game.getPlayer().setTileset(getStringArg(args[0]));
 						break;
-					case "NPCTILESET": //NPCTILESET (NPCID) (TILESET) #Change NPC tileset
-						//TODO EVENT NPCTILESET
+					case "NPCTILESET": //NPCTILESET (NPCNAME) (TILESET) #Change NPC tileset
 						game.getCurrentMap().getNpcs().get(getStringArg(args[0])).setTileset(getStringArg(args[1]));
-						break;
-					case "NPCANIMATION": //NPCTILESET (NPCID) (SOUTH/WEST/NORTH/EAST) (STOP/MARCH) #Change NPC animation
-						//TODO EVENT NPCANIMATION
 						break;
 					case "CHGMAP": //CHGMAP (MAPNAME) [PLAYERX] [PLAYERY]
 						switch(args.length){
@@ -420,9 +419,41 @@ public class EventComputer implements GameEventListener {
 							game.getPlayer().setPosition(x+dx1,y+dy1);
 						}
 						break;
-					case "WALKPLAYER": //WALKPLAYER (ON/OFF) # Set player walking
+					case "PLAYERWALK": //PLAYERWALK (ON/OFF) # Set player walking
 						this.game.getPlayer().setMoving(this.game.getPlayer().getFacing());
 						this.game.getPlayer().setWalking(args[0].equals("ON"));
+						break;
+					case "MVNPC": //MVNPC (NPCNAME) (NPCX) (NPCY) #Move npc in current map
+						NPC npc = this.game.getCurrentMap().getNpc(getStringArg(args[0]));
+						if(npc != null){
+							int x02 = Integer.parseInt(args[1]);
+							int y02 = Integer.parseInt(args[2]);
+							
+							if(x02<0 || x02>=this.game.getCurrentMap().getWidth() || y02<0 || y02>=this.game.getCurrentMap().getHeight()){
+								System.out.println("#Position out of bounds");
+							}else{
+								npc.setPosition(x02,y02);
+							}
+						}
+						break;
+					case "MVRNPC": //MVRNPC (NPCNAME) (NPCDX) (NPCDY) #Move npc relatively in current map
+						NPC npc1 = this.game.getCurrentMap().getNpc(getStringArg(args[0]));
+						if(npc1 != null){
+							int dx2 = Integer.parseInt(args[1]);
+							int dy2 = Integer.parseInt(args[2]);
+							if(x+dx2<0 || x+dx2>=this.game.getCurrentMap().getWidth() || y+dy2<0 || y+dy2>=this.game.getCurrentMap().getHeight()){
+								System.out.println("#Position out of bounds");
+							}else{
+								npc1.setPosition(x+dx2,y+dy2);
+							}
+						}
+						break;
+					case "NPCWALK": //NPCWALK (NPCNAME) (ON/OFF) # Set npc walking
+						NPC npc2 = this.game.getCurrentMap().getNpc(getStringArg(args[0]));
+						if(npc2 != null){
+							npc2.setMoving(npc2.getFacing());
+							npc2.setWalking(args[1].equals("ON"));
+						}
 						break;
 					case "STOP": // STOP {ON/OFF} #Prevent player from moving
 						switch(args.length){
@@ -456,6 +487,25 @@ public class EventComputer implements GameEventListener {
 						case "EAST":
 							this.game.getPlayer().setFacing(Direction.EAST);
 							break;
+						}
+						break;
+					case "NPCFACE": // NPCFACE (NPCNAME) (WEST/SOUTH/NORTH/EAST) #Change npc facing
+						NPC npc3 = this.game.getCurrentMap().getNpc(getStringArg(args[0]));
+						if(npc3 != null){
+							switch(args[1]){
+							case "WEST":
+								npc3.setFacing(Direction.WEST);
+								break;
+							case "SOUTH":
+								npc3.setFacing(Direction.SOUTH);
+								break;
+							case "NORTH":
+								npc3.setFacing(Direction.NORTH);
+								break;
+							case "EAST":
+								npc3.setFacing(Direction.EAST);
+								break;
+							}
 						}
 						break;
 					}
@@ -543,8 +593,8 @@ public class EventComputer implements GameEventListener {
 					
 				/* Visual effects */	
 					
-				case "SAY": //SAY (TEXT) [IMAGEID] #Show text (pause game)
-					testArgs(i,action,errors,args, new String[][]{{TEXT},{TEXT,ID}});
+				case "SAY": //SAY (TEXT) [CONTINUE] #Show text (pause game if not continue)
+					testArgs(i,action,errors,args, new String[][]{{TEXT},{TEXT,"CONTINUE"}});
 					break;
 				case "DIALOG": //DIALOG (TEXT) (VARNAME) (OPTION1) (OPTION2) ... #Show a choice and return result on a viariable
 					String[] argstype = {TEXT,VARIABLE,TEXT,TEXT};
@@ -557,7 +607,7 @@ public class EventComputer implements GameEventListener {
 					}
 					testArgs(i,action,errors,args, new String[][]{argstype});
 					break;
-				case "SHAKE": ////SHAKE (INTENSITY) #Shake screen with intensity : (0 for stop)
+				case "SHAKE": //SHAKE (INTENSITY) #Shake screen with intensity : (0 for stop)
 					testArgs(i,action,errors,args, new String[][]{{VALUE}});
 					break;
 				case "FILTER": //FILTER (R) (G) (B) (A) {TIME} / OFF # Apply filter to game (rgba values in range 0 to 1)
@@ -567,7 +617,10 @@ public class EventComputer implements GameEventListener {
 						{FLOATVALUE,FLOATVALUE,FLOATVALUE,FLOATVALUE},
 						{FLOATVALUE,FLOATVALUE,FLOATVALUE,FLOATVALUE,VALUE}});
 					break;
-				
+				case "DELETEMSG": //DELETEMSG # Delete current msg
+					testArgs(i,action,errors,args, new String[][]{{}});
+					break;
+					
 				/* Sound effects */
 					
 				case "SOUND": // SOUND (NAME) (R/P) / OFF #Play sound from name, use R to repeat, use OFF to remove all sounds
@@ -591,11 +644,8 @@ public class EventComputer implements GameEventListener {
 				case "PLAYERTILESET": //PLAYERTILESET (TILESET) #Change Player tileset
 					testArgs(i,action,errors,args, new String[][]{{TEXT}});
 					break;
-				case "NPCANIMATION": //NPCTILESET (SOUTH/WEST/NORTH/EAST) [STOP/MARCH] #Change NPC animation
-					testArgs(i,action,errors,args, new String[][]{{"SOUTH/WEST/NORTH/EAST"},{"SOUTH/WEST/NORTH/EAST","STOP/MARCH"}});
-					break;
-				case "NPCTILESET": //NPCTILESET (NPCID) (TILESET) #Change NPC tileset
-					testArgs(i,action,errors,args, new String[][]{{ID,TEXT}});
+				case "NPCTILESET": //NPCTILESET (NPCNAME) (TILESET) #Change NPC tileset
+					testArgs(i,action,errors,args, new String[][]{{TEXT,TEXT}});
 					break;
 				case "CHGMAP": //CHGMAP (MAPNAME) [PLAYERX] [PLAYERY]
 					testArgs(i,action,errors,args, new String[][]{{TEXT},{TEXT,INTVALUE,INTVALUE}});
@@ -603,11 +653,20 @@ public class EventComputer implements GameEventListener {
 				case "MVPLAYER": //MVPLAYER (PLAYERX) (PLAYERY) #Move player in current map
 					testArgs(i,action,errors,args, new String[][]{{INTVALUE,INTVALUE}});
 					break;
+				case "MVNPC": //MVRNPC (NPCNAME) (NAMEX) (NAMEY) #Move npc in current map
+					testArgs(i,action,errors,args, new String[][]{{TEXT,INTVALUE,INTVALUE}});
+					break;
 				case "MVRPLAYER": //MVRPLAYER (PLAYERDX) (PLAYERDY) #Move player relatively in current map
 					testArgs(i,action,errors,args, new String[][]{{INTVALUE,INTVALUE}});
 					break;
-				case "WALKPLAYER": //WALKPLAYER (ON/OFF) # Set player walking
+				case "MVRNPC": //MVNPC (NPCNAME) (NPCDX) (NPCDY) #Move npc relatively in current map
+					testArgs(i,action,errors,args, new String[][]{{TEXT,INTVALUE,INTVALUE}});
+					break;
+				case "PLAYERWALK": //PLAYERWALK (ON/OFF) # Set player walking
 					testArgs(i,action,errors,args, new String[][]{{},{"ON/OFF"}});
+					break;
+				case "NPCWALK": //NPCWALK (NPCNAME) (ON/OFF) # Set npc  walking
+					testArgs(i,action,errors,args, new String[][]{{},{TEXT,"ON/OFF"}});
 					break;
 				case "STOP": // STOP {ON/OFF} #Prevent player from moving
 					testArgs(i,action,errors,args, new String[][]{{},{"ON/OFF"}});
@@ -620,6 +679,9 @@ public class EventComputer implements GameEventListener {
 					break;
 				case "PLAYERFACE": // PLAYERFACE (WEST/SOUTH/NORTH/EAST) #Change player facing
 					testArgs(i,action,errors,args, new String[][]{{"SOUTH/WEST/NORTH/EAST"}});
+					break;
+				case "NPCFACE": // NPCFACE (NPCNAME) (WEST/SOUTH/NORTH/EAST) #Change npc facing
+					testArgs(i,action,errors,args, new String[][]{{TEXT,"SOUTH/WEST/NORTH/EAST"}});
 					break;
 				default:
 					errors.add("Unknown event action : ["+i+"]"+action);

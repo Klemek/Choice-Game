@@ -23,7 +23,8 @@ Events are the main part of the game edition. This is where you will set your st
 
 ### Visual effects:
 
-* SAY (TEXT) {IMAGEID} #Show text (pause game)
+* SAY (TEXT) {CONTINUE} #Show text (pause game if not continue)
+* DELETEMSG #Delete current message
 * DIALOG (TEXT) (VARNAME) (OPTION1) (OPTION2) ... #Show a choice and return result on a viariable (start at 1)
 * SHAKE (INTENSITY) #Shake screen with intensity : (0 for stop)
 * FILTER (R) (G) (B) (A) {TIME} / OFF {TIME} # Apply filter to game (rgba values in range 0 to 1) default time 0.5 second
@@ -34,14 +35,19 @@ Events are the main part of the game edition. This is where you will set your st
 
 ### Game interaction:
 
-* MAP (X) (Y) (LAYER) (TILESET) (ID) #Edit one map's tile
-* MAPR (DX) (DY) (LAYER) (TILESET) (ID) #Edit one map's tile relatively to event's source
+* MAP (X) (Y) (LAYER) {TILESET} {ID} #Edit one map's tile
+* MAPR (DX) (DY) (LAYER) {TILESET} {ID} #Edit one map's tile relatively to event's source
 * PLAYERTILESET (TILESET) #Change Player tileset
 * CHGMAP (MAPNAME) {PLAYERX} {PLAYERY} #Change map and (optional) move player in it
 * MVPLAYER (PLAYERX) (PLAYERY) #Move player in current map
 * MVRPLAYER (PLAYERDX) (PLAYERDY) #Move player relatively in current map
-* WALKPLAYER (ON/OFF) #Set player to walk in the direction he is facing (if facing change, same direction)
+* PLAYERWALK (ON/OFF) #Set player to walk in the direction he is facing (if facing change, same direction)
 * PLAYERFACE (WEST/SOUTH/NORTH/EAST) #Change player facing
+* MVNPC (NPCNAME) (NPCX) (NPCY) #Move npc in current map
+* MVRNPC (NPCNAME) (NPCDX) (NPCDY) #Move npc relatively in current map
+* NPCWALK (NPCNAME) (ON/OFF) #Set npc to walk in the direction he is facing (if facing change, same direction)
+* NPCFACE (NPCNAME) (WEST/SOUTH/NORTH/EAST) #Change npc facing
+* NPCTILESET (NPCNAME) (TILESET) #Change npc tileset
 * STOP {ON/OFF} #Prevent player from moving
 * WAIT (TIME) #Wait a amount of time before other event
 * PAUSE (TIME) #Pause game (wait + prevent player from moving)
@@ -86,7 +92,7 @@ Events are the main part of the game edition. This is where you will set your st
 ### Example 4 (Chest):
 	IFT NOT CHEST152 # One time event
 	   IFT KEY152 # chest's key trigger
-	      MAPR 0 0 1 CHEST1 1 # Change the tile to set it open
+	      MAPR 0 0 1 "chest1" 1 # Change the tile to set it open
 	      RANDOM VAL 1 3 # Generate a random number
 	      IF VAL == 1
 		      SAY "You find some food"
@@ -95,7 +101,7 @@ Events are the main part of the game edition. This is where you will set your st
 	      ELSE
 	      		SAY "This chest is empty"
 	      END
-	      MAPR 0 0 1 CHEST1 0 # Change the tile to set it close
+	      MAPR 0 0 1 "chest1" 0 # Change the tile to set it close
 	      TRIGGER CHEST152 ON
 	   ELSE
 	      SAY "You don't have the key of this chest."

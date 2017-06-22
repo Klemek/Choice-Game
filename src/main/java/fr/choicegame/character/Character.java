@@ -26,6 +26,8 @@ public abstract class Character {
 
 	// Getters & Setters
 
+
+	
 	public void setPosition(float posX, float posY) {
 		this.posX = posX;
 		this.posY = posY;
@@ -98,6 +100,10 @@ public abstract class Character {
 	protected abstract void updateChar(Map m);
 
 	public void update(Map m) {
+		update(m, null);
+	}
+	
+	public void update(Map m, Player p) {
 		if (m != null) {
 
 			float char_spd = Config.getFloatValue(Config.CHARACTER_SPEED);
@@ -138,14 +144,23 @@ public abstract class Character {
 					break;
 				}
 
-				if (!collision(m, newx, newy)) {
+				if (!collision(p, m, newx, newy)) {
 					setPosition(newx, newy);
 				}
 			}
 		}
 	}
 
-	private boolean collision(Map m, float newx, float newy) {
+	public Rectangle.Float getHitBox(){
+		float hitboxstartx = Config.getFloatValue(Config.HITBOX_START_X);
+		float hitboxstarty = Config.getFloatValue(Config.HITBOX_START_Y);
+		float hitboxsizex = Config.getFloatValue(Config.HITBOX_SIZE_X);
+		float hitboxsizey = Config.getFloatValue(Config.HITBOX_SIZE_Y);
+		
+		return new Rectangle.Float(getPosX() + hitboxstartx, getPosY() + hitboxstarty, hitboxsizex, hitboxsizey);
+	}
+	
+	private boolean collision(Player p, Map m, float newx, float newy) {
 		// TODO continue
 
 		float hitboxstartx = Config.getFloatValue(Config.HITBOX_START_X);
@@ -155,18 +170,32 @@ public abstract class Character {
 
 		int inewx = (int) Math.floor(newx);
 		int inewy = (int) Math.floor(newy);
-		if (inewx >= 0 && inewy >= 0 && inewx + 1 < m.getWidth() && inewy + 1 < m.getHeight()) {
+		
+		Rectangle.Float newHitBox = new Rectangle.Float(newx + hitboxstartx, newy + hitboxstarty, hitboxsizex, hitboxsizey);
+		
+		if (inewx >= 0 && inewy >= 0 && inewx + 1 < m.getWidth() && inewy + 1 < m.getHeight()) { //borders of map
 			for (int dx = 0; dx <= 1; dx += 1) {
 				for (int dy = 0; dy <= 1; dy += 1) {
 					if (m.getTile(inewx + dx, inewy + dy).getType() != TileType.FLAT) {
-						if (new Rectangle.Float(newx + hitboxstartx, newy + hitboxstarty, hitboxsizex, hitboxsizey)
-								.intersects(new Rectangle.Float(inewx + dx, inewy + dy, 1f, 1f))) {
+						if (newHitBox.intersects(new Rectangle.Float(inewx + dx, inewy + dy, 1f, 1f))) {
 							// TODO tile size < 1 like rocks,etc
 							return true;
 						}
 					}
 				}
 			}
+			
+			for(NPC npc:m.getNpcs().values()){
+				if(!npc.equals(this))
+					if(npc.getHitBox().intersects(newHitBox))
+						return true;
+			}
+			
+			if(p != null && !p.equals(this)){
+				if(p.getHitBox().intersects(newHitBox))
+					return true;
+			}
+			
 			return false;
 		}
 		return true;

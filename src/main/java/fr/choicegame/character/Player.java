@@ -41,6 +41,7 @@ public class Player extends Character {
 		float posy = getPosY()+hitboxstarty;
 		float posx2 = getPosX()+hitboxstartx+hitboxsizex;
 		float posy2 = getPosY()+hitboxstarty+hitboxsizey;
+
 		if(lastPos[0] >= 0){
 			float dx = getPosX()-lastPos[0];
 			float dy = getPosY()-lastPos[1];

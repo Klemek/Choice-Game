@@ -32,7 +32,8 @@ public class Renderer {
 	private final Loader loader;
 
 	private TileItem playerTileItem;
-	private List<TileItem> npcTileItems;
+	private List<TileItem> npcTileItemsBefore;
+	private List<TileItem> npcTileItemsAfter;
 	private List<TileItem> mapTileItems;
 	private IHud hud;
 	private final Camera camera;
@@ -50,7 +51,8 @@ public class Renderer {
 		transformation = new Transformation();
 		camera = new Camera();
 		mapTileItems = new ArrayList<>();
-		npcTileItems = new ArrayList<>();
+		npcTileItemsBefore = new ArrayList<>();
+		npcTileItemsAfter = new ArrayList<>();
 	}
 
 	public void init(Window window) throws Exception {
@@ -94,10 +96,13 @@ public class Renderer {
 			camera.setPosition(p.getPosX() * scale, (m.getHeight() - p.getPosY()) * scale);
 		}
 
-		for (TileItem item : npcTileItems)
+		for (TileItem item : npcTileItemsBefore)
 			item.cleanup();
-		npcTileItems.clear();
-
+		npcTileItemsBefore.clear();
+		for (TileItem item : npcTileItemsAfter)
+			item.cleanup();
+		npcTileItemsAfter.clear();
+		
 		if (m != null) {
 
 			for (String key : m.getNpcs().keySet()) {
@@ -108,7 +113,13 @@ public class Renderer {
 						ti.getId());
 				item.setPosition(npc.getPosX() * scale, (m.getHeight() - npc.getPosY()) * scale);
 				item.setScale(scale*0.999f);
-				npcTileItems.add(item);
+				if(p == null || npc.getPosY()<p.getPosY()){
+					npcTileItemsBefore.add(item);
+				}else{
+					npcTileItemsAfter.add(item);
+				}
+				
+				
 			}
 
 		}
@@ -199,14 +210,19 @@ public class Renderer {
 		for (TileItem tileItem : mapTileItems) {
 			renderTileItem(tileItem, viewMatrix, 1);
 		}
-		// render npcs
-		for (TileItem tileItem : npcTileItems) {
+		// render npcs before player
+		for (TileItem tileItem : npcTileItemsBefore) {
 			// Set world matrix for this item
 			renderTileItem(tileItem, viewMatrix);
 		}
 		// render player
 		if (playerTileItem != null) {
 			renderTileItem(playerTileItem, viewMatrix);
+		}
+		// render npcs after player
+		for (TileItem tileItem : npcTileItemsAfter) {
+			// Set world matrix for this item
+			renderTileItem(tileItem, viewMatrix);
 		}
 		// render foreground 0
 		for (TileItem tileItem : mapTileItems) {

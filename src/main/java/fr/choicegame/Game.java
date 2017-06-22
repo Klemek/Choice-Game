@@ -322,6 +322,10 @@ public class Game implements IGameLogic, KeyEventListener {
 			player.update(getCurrentMap());
 			renderer.updateCharacters(interval, player, getCurrentMap());
 		}
+		if(getCurrentMap() != null){
+			getCurrentMap().npcUpdate(player);
+		}
+		
 		hud.update(interval);
 		
 		if(wait_time_left>0){

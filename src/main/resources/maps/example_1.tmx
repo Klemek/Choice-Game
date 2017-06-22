@@ -17,7 +17,8 @@
   <image source="infotileset.png" width="320" height="64"/>
   <tile id="0">
    <properties>
-    <property name="event">FILTER 0 0 0 1 0
+    <property name="event">STOP OFF
+FILTER 0 0 0 1 0
 MVPLAYER 7 7
 FILTER OFF
 PAUSE 0.5</property>
@@ -81,7 +82,27 @@ PAUSE 0.5</property>
   </tile>
   <tile id="4">
    <properties>
-    <property name="event" value=""/>
+    <property name="event">SAY &quot;Hello !&quot;
+RANDOM DIR 1 4
+IF DIR == 1
+   NPCFACE &quot;npc1&quot; WEST
+END
+IF DIR == 2
+   NPCFACE &quot;npc1&quot; EAST
+END
+IF DIR == 3
+   NPCFACE &quot;npc1&quot; NORTH
+END
+IF DIR == 4
+   NPCFACE &quot;npc1&quot; SOUTH
+END
+NPCWALK &quot;npc1&quot; ON
+WAIT 0.2
+NPCWALK &quot;npc1&quot; OFF
+ NPCFACE &quot;npc1&quot; SOUTH
+</property>
+    <property name="npc" value="npc1"/>
+    <property name="tileset" value="cool_guy"/>
    </properties>
   </tile>
   <tile id="5">
@@ -269,7 +290,7 @@ PAUSE 0.5</property>
 0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,4,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,
-0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,7,0,0,
 0,0,0,5,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,

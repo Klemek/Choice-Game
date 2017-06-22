@@ -18,7 +18,7 @@ import fr.choicegame.lwjglengine.graph.Texture;
 public class Hud implements IHud {
 
 	
-	private static final String TITLE = "Choice-Game Beta 1.4";
+	private static final String TITLE = "Choice-Game Beta 1.5";
 	
 	private GameItem[] gameItems;
 
@@ -101,9 +101,11 @@ public class Hud implements IHud {
 		}
 	}
 	
-	public void setMsg(String msg) {
+	public void setMsg(String msg, boolean cursor) {
 		this.msgTextItem.setVisible(true);
 		this.dialogBg.setVisible(true);
+		this.dialogBg.showCursor(cursor);
+		this.dialog = !cursor; //to remove cursor
 		this.msgTextItem.setText(msg);
 		updatePos();
 	}

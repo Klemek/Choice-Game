@@ -31,6 +31,7 @@ import org.w3c.dom.Node;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import fr.choicegame.character.NPC;
 import fr.choicegame.event.Event;
 import fr.choicegame.event.EventComputer;
 import fr.choicegame.lwjglengine.graph.Texture;
@@ -297,7 +298,7 @@ public class Loader {
 						HashMap<Integer, String> tilesets = new HashMap<>();
 						HashMap<String, Integer> tilesetsAll = new HashMap<>();
 						HashMap<Integer, Event> events = new HashMap<>();
-						HashMap<Integer, String> npcs = new HashMap<>();
+						HashMap<Integer, String[]> npcs = new HashMap<>();
 						HashMap<Integer, TileType> types = new HashMap<>();
 
 						for (int i1 = 0; i1 < root.getChildNodes().getLength(); i1++) {
@@ -335,9 +336,37 @@ public class Loader {
 										if (child2.getNodeName().equals("tile")) {
 											int tileId = Integer.parseInt(getAttribute(child2, "id", "0"));
 											HashMap<String, String> props = getTileProperties(child2);
-											if (props.containsKey(Config.getValue(Config.EVENT_PROPERTY))) {
+											if (props.containsKey(Config.getValue(Config.NPC_PROPERTY))) {
+												
+												if(!props.containsKey(Config.getValue(Config.TILESET_PROPERTY))){
+													System.out.println("#NPC "+tileId+" has no tileset");
+												}else if(!props.containsKey(Config.getValue(Config.EVENT_PROPERTY))){
+													System.out.println("#NPC "+tileId+" has no event");
+												}else{
+												
+													String ev = props.get(Config.getValue(Config.EVENT_PROPERTY));
+													ArrayList<String> errors = EventComputer.testEvent(ev);
+													if (errors.size() > 0) {
+														System.out.println("#" + errors.size() + " errors with npc event "
+																+ tileId + " : ");
+														for (String error : errors) {
+															System.out.println(error);
+														}
+														
+														ev = "";
+													}
+													
+													String[] npc = new String[]{
+															props.get(Config.getValue(Config.NPC_PROPERTY)),
+															props.get(Config.getValue(Config.TILESET_PROPERTY)),
+															ev
+													};
+													
+													npcs.put(firstid + tileId,npc);
+												}
+												
+											}else if (props.containsKey(Config.getValue(Config.EVENT_PROPERTY))) {
 												String ev = props.get(Config.getValue(Config.EVENT_PROPERTY));
-
 												ArrayList<String> errors = EventComputer.testEvent(ev);
 												if (errors.size() > 0) {
 													System.out.println("#" + errors.size() + " errors with event "
@@ -348,9 +377,6 @@ public class Loader {
 												} else {
 													events.put(firstid + tileId, new Event(ev));
 												}
-											} else if (props.containsKey(Config.getValue(Config.NPC_PROPERTY))) {
-												npcs.put(firstid + tileId,
-														props.get(Config.getValue(Config.NPC_PROPERTY)));
 											}
 										}
 									}
@@ -423,7 +449,8 @@ public class Loader {
 									}
 									if (info != 0) {
 										if (npcs.containsKey(info)) {
-											// TODO create NPC
+											NPC npc = new NPC(x,y,npcs.get(info)[1],new Event(npcs.get(info)[2]));
+											map.getNpcs().put(npcs.get(info)[0], npc);
 										}
 										if (events.containsKey(info)) {
 											event = events.get(info);
