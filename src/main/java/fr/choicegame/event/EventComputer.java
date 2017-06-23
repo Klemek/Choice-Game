@@ -341,12 +341,14 @@ public class EventComputer implements GameEventListener {
 								case 3: //MAP (X) (Y) (LAYER)
 									ti[layer] = null;
 									t.setImages(ti);
+									game.updateMap();
 									break;
 								case 5: //MAP (X) (Y) (LAYER) [TILESET] [ID]
 									String tileset = getStringArg(args[3]);
 									int id = Integer.parseInt(args[4]);
 									ti[layer] = new TileImage(id,tileset);
 									t.setImages(ti);
+									game.updateMap();
 									break;
 								}
 							}
